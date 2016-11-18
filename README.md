@@ -23,7 +23,7 @@ DotNet20 用于xp系统的客户端
 
 如果您有任何关于我们文档或产品的建议和想法，欢迎到我们的Github发起issue参与讨论。
 
-或直接联系我们的开发者 [chenhaowen](mailto:chenhaowen01@qq.com)
+或直接联系我们的开发者 [chenhaowen](mailto:chenhaowen01@qq.com) [Jim Jiang](mailto:jim@lotlab.org) [lindexi](mailto:lindexi_gd@163.com)
 
 
 ####贡献代码
