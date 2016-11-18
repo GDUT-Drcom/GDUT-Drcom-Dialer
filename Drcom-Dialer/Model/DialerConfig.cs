@@ -81,7 +81,7 @@ namespace Drcom_Dialer.Model
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Utils.Log4Net.WriteLog(e.Message, e);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Drcom_Dialer.Model
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Utils.Log4Net.WriteLog(e.Message, e);
             }
         }
         
@@ -126,7 +126,7 @@ namespace Drcom_Dialer.Model
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Utils.Log4Net.WriteLog(e.Message, e);
             }
         }
     }
