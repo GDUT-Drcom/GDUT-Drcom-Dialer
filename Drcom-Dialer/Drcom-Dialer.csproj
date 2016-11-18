@@ -61,6 +61,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\DialerConfig.cs" />
+    <Compile Include="Model\PPPoE.cs" />
     <Compile Include="Model\Utils\Log4Net.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
