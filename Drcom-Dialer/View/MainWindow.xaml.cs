@@ -11,13 +11,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+// To access MetroWindow, add the following reference
+using MahApps.Metro.Controls;
 
 namespace Drcom_Dialer.View
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         /// <summary>
         /// 拨号器配置
@@ -75,13 +77,24 @@ namespace Drcom_Dialer.View
         }
 
         /// <summary>
-        /// 用户名输入处理
+        /// 账号输入处理
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void tb_username_TextChanged(object sender, TextChangedEventArgs e)
         {
             DialerCfg.username = tb_username.Text;
+        }
+
+        /// <summary>
+        /// 关于按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow about = new AboutWindow();
+            about.ShowDialog();
         }
     }
 }
