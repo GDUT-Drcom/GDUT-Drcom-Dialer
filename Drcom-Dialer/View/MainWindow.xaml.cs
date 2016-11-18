@@ -19,6 +19,11 @@ namespace Drcom_Dialer.View
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// 拨号器配置
+        /// </summary>
+        Model.DialerConfig DialerCfg = new Model.DialerConfig();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,16 +32,56 @@ namespace Drcom_Dialer.View
         private void btn_dial_Click(object sender, RoutedEventArgs e)
         {
             //TODO:add code here
+            DialerCfg.SaveConfig();
+        }
+        /// <summary>
+        /// 自动登录点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cb_autoLogin_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(bool)cb_remember.IsChecked && (bool)cb_autoLogin.IsChecked)
+            {
+                cb_remember.IsChecked = true;
+                cb_remember_Click(null, null);
+            }
+                
+            DialerCfg.isAutoLogin = (bool)cb_autoLogin.IsChecked;
+        }
+        /// <summary>
+        /// 记住密码点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cb_remember_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(bool)cb_remember.IsChecked && (bool)cb_autoLogin.IsChecked)
+            {
+                cb_autoLogin.IsChecked = false;
+                cb_autoLogin_Click(null,null);
+            }
+            DialerCfg.isRememberPassword = (bool)cb_remember.IsChecked;
         }
 
-        private void cb_autoLogin_Checked(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 密码输入处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pb_password_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            //TODO:add code here
+            DialerCfg.password = pb_password.Password;
         }
 
-        private void cb_remember_Checked(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 用户名输入处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tb_username_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //TODO:add code here
+            DialerCfg.username = tb_username.Text;
         }
     }
 }

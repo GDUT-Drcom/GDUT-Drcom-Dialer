@@ -11,15 +11,15 @@
             <Image x:Name="image" Source="/Drcom-Dialer;component/Resource/banner.png"/>
             <StackPanel Height="30" Orientation="Horizontal" Margin="10,15,10,5">
                 <Label x:Name="lbl_username" Content="账户:" VerticalAlignment="Center" Margin="10,0,10,0"/>
-                <TextBox x:Name="tb_username" Width="180px" VerticalAlignment="Center" Margin="0,1,0,0" BorderThickness="0,0,0,1" />
+                <TextBox x:Name="tb_username" Width="180px" VerticalAlignment="Center" Margin="0,1,0,0" BorderThickness="0,0,0,1" TextChanged="tb_username_TextChanged" />
             </StackPanel>
             <StackPanel Height="30" Orientation="Horizontal" Margin="10,0,10,5">
                 <Label x:Name="lbl_password" Content="密码:" VerticalAlignment="Center"  Margin="10,0,10,0"/>
-                <PasswordBox x:Name="pb_password" Width="180px" VerticalAlignment="Center" Margin="0,1,0,0" BorderThickness="0,0,0,1" />
+                <PasswordBox x:Name="pb_password" Width="180px" VerticalAlignment="Center" Margin="0,1,0,0" BorderThickness="0,0,0,1" PasswordChanged="pb_password_PasswordChanged" />
             </StackPanel>
             <StackPanel Height="25" Orientation="Horizontal" Margin="10,0,10,5" HorizontalAlignment="Center">
-                <CheckBox x:Name="cb_remember" Content="记住密码" VerticalAlignment="Center" Margin="30,0,30,0" Checked="cb_remember_Checked"/>
-                <CheckBox x:Name="cb_autoLogin" Content="自动登录" VerticalAlignment="Center" Margin="30,0,30,0" Checked="cb_autoLogin_Checked" />
+                <CheckBox x:Name="cb_remember" Content="记住密码" VerticalAlignment="Center" Margin="30,0,30,0" Click="cb_remember_Click"/>
+                <CheckBox x:Name="cb_autoLogin" Content="自动登录" VerticalAlignment="Center" Margin="30,0,30,0" Click="cb_autoLogin_Click"/>
             </StackPanel>
             <StackPanel Height="25" Orientation="Horizontal" Margin="10,0,10,5" HorizontalAlignment="Center" Visibility="Hidden">
                 <CheckBox x:Name="cb_startup" Content="开机启动" VerticalAlignment="Center" Margin="30,0,30,0" />
