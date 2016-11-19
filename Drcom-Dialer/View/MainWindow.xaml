@@ -6,7 +6,8 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
         mc:Ignorable="d"
-        Title="GDUT-DRCOM" Height="330" Width="300" ResizeMode="CanMinimize">
+        Title="Title" Height="330" Width="300" ResizeMode="CanMinimize"
+        Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" StateChanged="MetroWindow_StateChanged" >
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>

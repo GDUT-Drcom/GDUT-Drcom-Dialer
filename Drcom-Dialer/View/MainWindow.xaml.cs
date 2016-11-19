@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -21,6 +22,9 @@ namespace Drcom_Dialer.View
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+
+        private NotifyIcon trayIcon;
+
         /// <summary>
         /// 拨号器配置
         /// </summary>
@@ -29,8 +33,14 @@ namespace Drcom_Dialer.View
         public MainWindow()
         {
             InitializeComponent();
+            initTrayIcon();
         }
 
+        /// <summary>
+        /// 拨号按钮点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_dial_Click(object sender, RoutedEventArgs e)
         {
             //TODO:add code here
@@ -48,7 +58,7 @@ namespace Drcom_Dialer.View
                 cb_remember.IsChecked = true;
                 cb_remember_Click(null, null);
             }
-                
+
             DialerCfg.isAutoLogin = (bool)cb_autoLogin.IsChecked;
         }
         /// <summary>
@@ -61,7 +71,7 @@ namespace Drcom_Dialer.View
             if (!(bool)cb_remember.IsChecked && (bool)cb_autoLogin.IsChecked)
             {
                 cb_autoLogin.IsChecked = false;
-                cb_autoLogin_Click(null,null);
+                cb_autoLogin_Click(null, null);
             }
             DialerCfg.isRememberPassword = (bool)cb_remember.IsChecked;
         }
@@ -95,6 +105,62 @@ namespace Drcom_Dialer.View
         {
             AboutWindow about = new AboutWindow();
             about.ShowDialog();
+        }
+        /// <summary>
+        /// 将要关闭的事件
+        /// 处理关闭前的工作
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //TODO:add code here
+        }
+        /// <summary>
+        /// 关闭事件
+        /// 处理最后一步的工作
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MetroWindow_Closed(object sender, EventArgs e)
+        {
+            trayIcon.Visible = false;
+        }
+        /// <summary>
+        /// 窗口位置改变事件
+        /// 处理最小化事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MetroWindow_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == WindowState.Minimized)
+            {
+                this.Hide();
+            }
+        }
+
+        /// <summary>
+        /// 初始化托盘图标
+        /// </summary>
+        private void initTrayIcon()
+        {
+            trayIcon = new NotifyIcon();
+            trayIcon.Text = Properties.Resources.ProgramTitle;
+
+            trayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
+            trayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler((obj, e) =>
+            {
+
+                if (e.Button == MouseButtons.Left && this.WindowState == WindowState.Minimized)
+                {
+                    this.Show();
+                    this.Activate();
+                    this.WindowState = WindowState.Normal;
+                }
+
+            });
+            trayIcon.Visible = true;
         }
     }
 }

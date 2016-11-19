@@ -61,6 +61,24 @@ namespace Drcom_Dialer.Properties {
         }
         
         /// <summary>
+        ///   查找类似 广东工业大学DrCOM三方客户端 的本地化字符串。
+        /// </summary>
+        internal static string ProgramDesc {
+            get {
+                return ResourceManager.GetString("ProgramDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 GDUT-Dialer 的本地化字符串。
+        /// </summary>
+        internal static string ProgramTitle {
+            get {
+                return ResourceManager.GetString("ProgramTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 GDUT-Dialer 的本地化字符串。
         /// </summary>
         internal static string RasConnectionName {
