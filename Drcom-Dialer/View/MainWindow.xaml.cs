@@ -101,7 +101,7 @@ namespace Drcom_Dialer.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void About_Button_Click(object sender, RoutedEventArgs e)
         {
             AboutWindow about = new AboutWindow();
             about.ShowDialog();
@@ -161,6 +161,16 @@ namespace Drcom_Dialer.View
 
             });
             trayIcon.Visible = true;
+        }
+        /// <summary>
+        /// 设置按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Setting_Button_Click(object sender, RoutedEventArgs e)
+        {
+            SettingWindow setting = new SettingWindow();
+            setting.ShowDialog();
         }
     }
 }

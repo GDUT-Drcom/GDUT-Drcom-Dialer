@@ -6,13 +6,31 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
         mc:Ignorable="d"
+                                   
         Title="Title" Height="330" Width="300" ResizeMode="CanMinimize"
         Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" StateChanged="MetroWindow_StateChanged" >
 
+    <Window.Resources>
+        <ResourceDictionary>
+            <Image x:Key="setting" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="关于" Click="Button_Click"/>
+            <Button Content="关于" Click="About_Button_Click"/>
+            <Button Click="Setting_Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource setting}"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+            </Button>
         </Controls:WindowCommands>
+        
     </Controls:MetroWindow.RightWindowCommands>
 
     <Grid>
@@ -31,8 +49,7 @@
                 <CheckBox x:Name="cb_autoLogin" Content="自动登录" VerticalAlignment="Center" Margin="30,0,30,0" Click="cb_autoLogin_Click"/>
             </StackPanel>
             <StackPanel Height="25" Orientation="Horizontal" Margin="10,0,10,5" HorizontalAlignment="Center" Visibility="Hidden">
-                <CheckBox x:Name="cb_startup" Content="开机启动" VerticalAlignment="Center" Margin="30,0,30,0" />
-                <CheckBox x:Name="cb_redial" Content="断线重连" VerticalAlignment="Center" Margin="30,0,30,0" />
+
             </StackPanel>
             <StackPanel Height="36" Orientation="Horizontal" Margin="10,0,10,5" HorizontalAlignment="Center">
                 <Button x:Name="btn_dial" Content="拨号" Width="150" Click="btn_dial_Click" Style="{StaticResource AccentedSquareButtonStyle}"/>
