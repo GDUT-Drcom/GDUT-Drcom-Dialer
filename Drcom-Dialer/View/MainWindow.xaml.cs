@@ -25,15 +25,13 @@ namespace Drcom_Dialer.View
 
         private NotifyIcon trayIcon;
 
-        /// <summary>
-        /// 拨号器配置
-        /// </summary>
-        Model.DialerConfig DialerCfg = new Model.DialerConfig();
-
         public MainWindow()
         {
             InitializeComponent();
+            Model.Utils.Log4Net.SetConfig();
             initTrayIcon();
+            
+            Model.DialerConfig.Init();
         }
 
         /// <summary>
@@ -44,7 +42,7 @@ namespace Drcom_Dialer.View
         private void btn_dial_Click(object sender, RoutedEventArgs e)
         {
             //TODO:add code here
-            DialerCfg.SaveConfig();
+            Model.DialerConfig.SaveConfig();
         }
         /// <summary>
         /// 自动登录点击事件
@@ -59,7 +57,7 @@ namespace Drcom_Dialer.View
                 cb_remember_Click(null, null);
             }
 
-            DialerCfg.isAutoLogin = (bool)cb_autoLogin.IsChecked;
+            Model.DialerConfig.isAutoLogin = (bool)cb_autoLogin.IsChecked;
         }
         /// <summary>
         /// 记住密码点击事件
@@ -73,7 +71,7 @@ namespace Drcom_Dialer.View
                 cb_autoLogin.IsChecked = false;
                 cb_autoLogin_Click(null, null);
             }
-            DialerCfg.isRememberPassword = (bool)cb_remember.IsChecked;
+            Model.DialerConfig.isRememberPassword = (bool)cb_remember.IsChecked;
         }
 
         /// <summary>
@@ -83,7 +81,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void pb_password_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            DialerCfg.password = pb_password.Password;
+            Model.DialerConfig.password = pb_password.Password;
         }
 
         /// <summary>
@@ -93,7 +91,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void tb_username_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DialerCfg.username = tb_username.Text;
+            Model.DialerConfig.username = tb_username.Text;
         }
 
         /// <summary>

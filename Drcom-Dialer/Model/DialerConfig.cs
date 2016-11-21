@@ -6,45 +6,62 @@ namespace Drcom_Dialer.Model
     /// <summary>
     /// 拨号器配置类
     /// </summary>
-    class DialerConfig
+    static class DialerConfig
     {
         /// <summary>
         /// 用户名
         /// </summary>
-        public string username;
+        public static string username;
         /// <summary>
         /// 密码
         /// </summary>
-        public string password;
+        public static string password;
 
         /// <summary>
         /// 是否记住密码
         /// </summary>
-        public bool isRememberPassword;
+        public static bool isRememberPassword;
         /// <summary>
         /// 是否自动登录
         /// </summary>
-        public bool isAutoLogin;
-        
-        /*
+        public static bool isAutoLogin;
+
         /// <summary>
         /// 是否开机启动
         /// </summary>
-        public bool isRunOnStartup;
+        public static bool isRunOnStartup;
         /// <summary>
         /// 是否断线重连
         /// </summary>
-        public bool isReDialOnFail;
-        */
+        public static bool isReDialOnFail;
+        /// <summary>
+        /// VPN修复
+        /// </summary>
+        public static bool isFixVPN;
+        /// <summary>
+        /// 校区枚举项
+        /// </summary>
+        public enum Campus
+        {
+            HEMC = 0,
+            LongDong = 1,
+            DongfengRd = 2,
+            Panyu = 3
+        }
+        /// <summary>
+        /// 校区选择
+        /// </summary>
+        public static Campus zone;
+
         /// <summary>
         /// 配置类引用
         /// </summary>
-        private Configuration cfa;
+        private static Configuration cfa;
 
         /// <summary>
         /// 拨号器配置类
         /// </summary>
-        public DialerConfig()
+        public static void Init()
         {
             cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             readConfig();
@@ -53,7 +70,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 保存配置
         /// </summary>
-        public void SaveConfig()
+        public static void SaveConfig()
         {
             if (cfa.AppSettings.Settings.Count > 0)
                 saveConfig();
@@ -64,7 +81,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 保存配置文件
         /// </summary>
-        private void saveConfig()
+        private static void saveConfig()
         {
             try
             {
@@ -72,10 +89,10 @@ namespace Drcom_Dialer.Model
                 cfa.AppSettings.Settings["password"].Value = isRememberPassword ? password : "";
                 cfa.AppSettings.Settings["autoLogin"].Value = isAutoLogin ? "Y" : "N";
                 cfa.AppSettings.Settings["rememberPassword"].Value = isRememberPassword ? "Y" : "N";
-                /**
                 cfa.AppSettings.Settings["runOnStartup"].Value = isRunOnStartup ? "Y" : "N";
                 cfa.AppSettings.Settings["reDialOnFail"].Value = isReDialOnFail ? "Y" : "N";
-                **/
+                cfa.AppSettings.Settings["fixVPN"].Value = isFixVPN ? "Y" : "N";
+                cfa.AppSettings.Settings["campusZone"].Value = zone.ToString();
                 cfa.Save();
                 ConfigurationManager.RefreshSection("appSettings");
             }
@@ -88,7 +105,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 创建配置文件
         /// </summary>
-        private void createConfig()
+        private static void createConfig()
         {
             try
             {
@@ -96,10 +113,10 @@ namespace Drcom_Dialer.Model
                 cfa.AppSettings.Settings.Add("password", isRememberPassword ? password : "");
                 cfa.AppSettings.Settings.Add("autoLogin", isAutoLogin ? "Y" : "N");
                 cfa.AppSettings.Settings.Add("rememberPassword", isRememberPassword ? "Y" : "N");
-                /**
                 cfa.AppSettings.Settings.Add("runOnStartup", isRunOnStartup ? "Y" : "N");
                 cfa.AppSettings.Settings.Add("reDialOnFail", isReDialOnFail ? "Y" : "N");
-                **/
+                cfa.AppSettings.Settings.Add("fixVPN", isFixVPN ? "Y" : "N");
+                cfa.AppSettings.Settings.Add("campusZone", ((int)zone).ToString());
                 cfa.Save();
             }
             catch (Exception e)
@@ -111,7 +128,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 读配置文件
         /// </summary>
-        private void readConfig()
+        private static void readConfig()
         {
             try
             {
@@ -119,10 +136,10 @@ namespace Drcom_Dialer.Model
                 password = cfa.AppSettings.Settings["password"].Value;
                 isAutoLogin = cfa.AppSettings.Settings["autoLogin"].Value == "Y";
                 isRememberPassword = cfa.AppSettings.Settings["rememberPassword"].Value == "Y";
-                /**
                 isRunOnStartup = cfa.AppSettings.Settings["runOnStartup"].Value == "Y";
                 isReDialOnFail = cfa.AppSettings.Settings["reDialOnFail"].Value == "Y";
-                **/
+                isFixVPN = cfa.AppSettings.Settings["fixVPN"].Value == "Y";
+                zone = (Campus)int.Parse(cfa.AppSettings.Settings["campusZone"].Value);
             }
             catch (Exception e)
             {

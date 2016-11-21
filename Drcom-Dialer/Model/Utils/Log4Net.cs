@@ -8,12 +8,24 @@ namespace Drcom_Dialer.Model.Utils
     class Log4Net
     {
         //log4net日志专用
-        public static readonly log4net.ILog loginfo = log4net.LogManager.GetLogger("loginfo");
-        public static readonly log4net.ILog logerror = log4net.LogManager.GetLogger("logerror");
+        private static readonly log4net.ILog loginfo = log4net.LogManager.GetLogger("loginfo");
+        private static readonly log4net.ILog logerror = log4net.LogManager.GetLogger("logerror");
 
         public static void SetConfig()
         {
-            log4net.Config.XmlConfigurator.Configure();
+            //log4net.Config.XmlConfigurator.Configure();
+            log4net.Appender.FileAppender fAppender = new log4net.Appender.FileAppender();
+            log4net.Layout.PatternLayout layout = new log4net.Layout.PatternLayout();
+
+            layout.ConversionPattern = "[%date] %thread -- %-5level -- %logger [%M] -- %message%newline";
+            layout.ActivateOptions();
+
+            fAppender.File = "DogCom.log";
+            fAppender.Layout = layout;
+            fAppender.AppendToFile = true;
+            fAppender.ActivateOptions();
+            log4net.Config.BasicConfigurator.Configure(fAppender);
+            
         }
 
         /// <summary>

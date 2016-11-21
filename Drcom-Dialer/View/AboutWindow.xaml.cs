@@ -23,7 +23,7 @@ namespace Drcom_Dialer.View
         public AboutWindow()
         {
             InitializeComponent();
-            Version.Content = "Drcom三方客户端广工大学城专版 " + Model.Utils.Version.getVersion();
+            Version.Content = "Dr.COM三方客户端广工大专版 " + Model.Utils.Version.getVersion();
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)

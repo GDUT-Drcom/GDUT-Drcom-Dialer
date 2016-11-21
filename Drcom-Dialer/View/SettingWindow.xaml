@@ -17,9 +17,9 @@
                 <ListBoxItem Content="番禺校区" IsEnabled="False"/>
             </ComboBox>
             <Label x:Name="lbl_title2" Content="功能项:"/>
-            <CheckBox x:Name="cb_startup" Content="开机启动" VerticalAlignment="Center" Margin="30,5,30,5" />
-            <CheckBox x:Name="cb_redial" Content="断线重连" VerticalAlignment="Center" Margin="30,5,30,5" />
-            <CheckBox x:Name="cb_vpnFix" Content="修复VPN" VerticalAlignment="Center" Margin="30,5,30,5" />
+            <CheckBox x:Name="cb_startup" Content="开机启动" VerticalAlignment="Center" Margin="30,5,30,5" Checked="cb_startup_Checked"/>
+            <CheckBox x:Name="cb_redial" Content="断线重连" VerticalAlignment="Center" Margin="30,5,30,5"  Checked="cb_redial_Checked"/>
+            <CheckBox x:Name="cb_vpnFix" Content="修复VPN" VerticalAlignment="Center" Margin="30,5,30,5" Checked="cb_vpnFix_Checked" />
             <Label x:Name="lbl_title3" Content="其他:"/>
             <CheckBox x:Name="cb_report" Content="加入用户体验改善计划" VerticalAlignment="Center" Margin="30,5,30,0" />
         </StackPanel>
