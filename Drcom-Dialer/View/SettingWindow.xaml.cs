@@ -36,6 +36,7 @@ namespace Drcom_Dialer.View
             if (StartupCheckBox.IsChecked != null)
             {
                 Model.DialerConfig.isRunOnStartup = (bool)StartupCheckBox.IsChecked;
+                Model.Utils.RunOnStartup.SetStartup(Model.DialerConfig.isRunOnStartup);
             }
         }
 

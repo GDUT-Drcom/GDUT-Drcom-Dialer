@@ -89,15 +89,14 @@ namespace Drcom_Dialer.Model
         {
             try
             {
-                //bug:如果写的和Read不同就炸了
-                cfa.AppSettings.Settings["username"].Value = username;
-                cfa.AppSettings.Settings["password"].Value = isRememberPassword ? password : "";
-                cfa.AppSettings.Settings["autoLogin"].Value = isAutoLogin ? "Y" : "N";
-                cfa.AppSettings.Settings["rememberPassword"].Value = isRememberPassword ? "Y" : "N";
-                cfa.AppSettings.Settings["runOnStartup"].Value = isRunOnStartup ? "Y" : "N";
-                cfa.AppSettings.Settings["reDialOnFail"].Value = isReDialOnFail ? "Y" : "N";
-                cfa.AppSettings.Settings["fixVPN"].Value = isFixVPN ? "Y" : "N";
-                cfa.AppSettings.Settings["campusZone"].Value = zone.ToString();
+                cfa.AppSettings.Settings[nameof(username)].Value = username;
+                cfa.AppSettings.Settings[nameof(password)].Value = isRememberPassword ? password : "";
+                cfa.AppSettings.Settings[nameof(isAutoLogin)].Value = isAutoLogin ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(isRememberPassword)].Value = isRememberPassword ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(isRunOnStartup)].Value = isRunOnStartup ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(isReDialOnFail)].Value = isReDialOnFail ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(isFixVPN)].Value = isFixVPN ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(zone)].Value = zone.ToString();
                 cfa.Save();
                 ConfigurationManager.RefreshSection("appSettings");
             }
@@ -114,15 +113,14 @@ namespace Drcom_Dialer.Model
         {
             try
             {
-                //bug:写的和上面不一样就炸了
-                cfa.AppSettings.Settings.Add("username", username);
-                cfa.AppSettings.Settings.Add("password", isRememberPassword ? password : "");
-                cfa.AppSettings.Settings.Add("autoLogin", isAutoLogin ? "Y" : "N");
-                cfa.AppSettings.Settings.Add("rememberPassword", isRememberPassword ? "Y" : "N");
-                cfa.AppSettings.Settings.Add("runOnStartup", isRunOnStartup ? "Y" : "N");
-                cfa.AppSettings.Settings.Add("reDialOnFail", isReDialOnFail ? "Y" : "N");
-                cfa.AppSettings.Settings.Add("fixVPN", isFixVPN ? "Y" : "N");
-                cfa.AppSettings.Settings.Add("campusZone", ((int)zone).ToString());
+                cfa.AppSettings.Settings.Add(nameof(username), username);
+                cfa.AppSettings.Settings.Add(nameof(isRememberPassword), isRememberPassword ? password : "");
+                cfa.AppSettings.Settings.Add(nameof(isAutoLogin), isAutoLogin ? "Y" : "N");
+                cfa.AppSettings.Settings.Add(nameof(isRememberPassword), isRememberPassword ? "Y" : "N");
+                cfa.AppSettings.Settings.Add(nameof(isRunOnStartup), isRunOnStartup ? "Y" : "N");
+                cfa.AppSettings.Settings.Add(nameof(isReDialOnFail), isReDialOnFail ? "Y" : "N");
+                cfa.AppSettings.Settings.Add(nameof(isFixVPN), isFixVPN ? "Y" : "N");
+                cfa.AppSettings.Settings.Add(nameof(zone), ((int)zone).ToString());
                 cfa.Save();
             }
             catch (Exception e)
@@ -138,16 +136,14 @@ namespace Drcom_Dialer.Model
         {
             try
             {
-                //建议：不要写字符串作为setting
-                //todo：这样写容易炸，建议nameof
-                username = cfa.AppSettings.Settings["username"].Value;
-                password = cfa.AppSettings.Settings["password"].Value;
-                isAutoLogin = cfa.AppSettings.Settings["autoLogin"].Value == "Y";
-                isRememberPassword = cfa.AppSettings.Settings["rememberPassword"].Value == "Y";
-                isRunOnStartup = cfa.AppSettings.Settings["runOnStartup"].Value == "Y";
-                isReDialOnFail = cfa.AppSettings.Settings["reDialOnFail"].Value == "Y";
-                isFixVPN = cfa.AppSettings.Settings["fixVPN"].Value == "Y";
-                zone = (Campus)int.Parse(cfa.AppSettings.Settings["campusZone"].Value);
+                username = cfa.AppSettings.Settings[nameof(username)].Value;
+                password = cfa.AppSettings.Settings[nameof(password)].Value;
+                isAutoLogin = cfa.AppSettings.Settings[nameof(isAutoLogin)].Value == "Y";
+                isRememberPassword = cfa.AppSettings.Settings[nameof(isRememberPassword)].Value == "Y";
+                isRunOnStartup = cfa.AppSettings.Settings[nameof(isRunOnStartup)].Value == "Y";
+                isReDialOnFail = cfa.AppSettings.Settings[nameof(isReDialOnFail)].Value == "Y";
+                isFixVPN = cfa.AppSettings.Settings[nameof(isFixVPN)].Value == "Y";
+                zone = (Campus)int.Parse(cfa.AppSettings.Settings[nameof(zone)].Value);
             }
             catch (Exception e)
             {
