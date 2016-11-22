@@ -5,12 +5,11 @@ namespace Drcom_Dialer.Model.Utils
     /// <summary>
     /// Log4Net日志记录类
     /// </summary>
-    class Log4Net
+    internal static class Log4Net
     {
-        //log4net日志专用
-        private static readonly log4net.ILog loginfo = log4net.LogManager.GetLogger("loginfo");
-        private static readonly log4net.ILog logerror = log4net.LogManager.GetLogger("logerror");
-
+        /// <summary>
+        /// 设置配置
+        /// </summary>
         public static void SetConfig()
         {
             //log4net.Config.XmlConfigurator.Configure();
@@ -34,11 +33,11 @@ namespace Drcom_Dialer.Model.Utils
         /// <param name="info">日志内容</param>
         public static void WriteLog(string info)
         {
-            if (loginfo.IsInfoEnabled)
+            if (LogInfo.IsInfoEnabled)
             {
                 try
                 {
-                    loginfo.Info(info);
+                    LogInfo.Info(info);
                     Console.WriteLine(info);
                 }
                 catch
@@ -55,11 +54,11 @@ namespace Drcom_Dialer.Model.Utils
         /// <param name="se">异常</param>
         public static void WriteLog(string info, Exception se)
         {
-            if (logerror.IsErrorEnabled)
+            if (LogError.IsErrorEnabled)
             {
                 try
                 {
-                    logerror.Error(info, se);
+                    LogError.Error(info, se);
                 }
                 catch
                 {
@@ -68,5 +67,10 @@ namespace Drcom_Dialer.Model.Utils
 
             }
         }
+
+        //log4net日志专用
+        private static readonly log4net.ILog LogInfo = log4net.LogManager.GetLogger("loginfo");
+        private static readonly log4net.ILog LogError = log4net.LogManager.GetLogger("logerror");
+
     }
 }

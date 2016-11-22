@@ -23,32 +23,41 @@ namespace Drcom_Dialer.View
         public SettingWindow()
         {
             InitializeComponent();
-            cb_startup.IsChecked = Model.DialerConfig.isRunOnStartup;
-            cb_redial.IsChecked = Model.DialerConfig.isReDialOnFail;
-            cb_vpnFix.IsChecked = Model.DialerConfig.isFixVPN;
-            comboBox.SelectedIndex = (int)Model.DialerConfig.zone;
+            StartupCheckBox.IsChecked = Model.DialerConfig.isRunOnStartup;
+            RedialCheckBox.IsChecked = Model.DialerConfig.isReDialOnFail;
+            VpnFixCheckBox.IsChecked = Model.DialerConfig.isFixVPN;
+            CampusComboBox.SelectedIndex = (int)Model.DialerConfig.zone;
 
-            comboBox.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
+            CampusComboBox.SelectionChanged += CampusComboBox_SelectionChanged;
         }
 
-        private void cb_startup_Checked(object sender, RoutedEventArgs e)
+        private void StartupCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Model.DialerConfig.isRunOnStartup = (bool)cb_startup.IsChecked;
+            if (StartupCheckBox.IsChecked != null)
+            {
+                Model.DialerConfig.isRunOnStartup = (bool)StartupCheckBox.IsChecked;
+            }
         }
 
         private void cb_redial_Checked(object sender, RoutedEventArgs e)
         {
-            Model.DialerConfig.isReDialOnFail = (bool)cb_redial.IsChecked;
+            if (RedialCheckBox.IsChecked != null)
+            {
+                Model.DialerConfig.isReDialOnFail = (bool)RedialCheckBox.IsChecked;
+            }
         }
 
         private void cb_vpnFix_Checked(object sender, RoutedEventArgs e)
         {
-            Model.DialerConfig.isFixVPN = (bool)cb_vpnFix.IsChecked;
+            if (VpnFixCheckBox.IsChecked != null)
+            {
+                Model.DialerConfig.isFixVPN = (bool)VpnFixCheckBox.IsChecked;
+            }
         }
 
-        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CampusComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Model.DialerConfig.zone = (Model.DialerConfig.Campus)comboBox.SelectedIndex;
+            Model.DialerConfig.zone = (Model.DialerConfig.Campus)CampusComboBox.SelectedIndex;
         }
     }
 }

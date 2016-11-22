@@ -6,7 +6,7 @@ namespace Drcom_Dialer.Model
     /// <summary>
     /// 拨号器配置类
     /// </summary>
-    static class DialerConfig
+    internal static class DialerConfig
     {
         /// <summary>
         /// 用户名
@@ -21,6 +21,7 @@ namespace Drcom_Dialer.Model
         /// 是否记住密码
         /// </summary>
         public static bool isRememberPassword;
+
         /// <summary>
         /// 是否自动登录
         /// </summary>
@@ -30,14 +31,17 @@ namespace Drcom_Dialer.Model
         /// 是否开机启动
         /// </summary>
         public static bool isRunOnStartup;
+
         /// <summary>
         /// 是否断线重连
         /// </summary>
         public static bool isReDialOnFail;
+
         /// <summary>
         /// VPN修复
         /// </summary>
         public static bool isFixVPN;
+
         /// <summary>
         /// 校区枚举项
         /// </summary>
@@ -85,6 +89,7 @@ namespace Drcom_Dialer.Model
         {
             try
             {
+                //bug:如果写的和Read不同就炸了
                 cfa.AppSettings.Settings["username"].Value = username;
                 cfa.AppSettings.Settings["password"].Value = isRememberPassword ? password : "";
                 cfa.AppSettings.Settings["autoLogin"].Value = isAutoLogin ? "Y" : "N";
@@ -109,6 +114,7 @@ namespace Drcom_Dialer.Model
         {
             try
             {
+                //bug:写的和上面不一样就炸了
                 cfa.AppSettings.Settings.Add("username", username);
                 cfa.AppSettings.Settings.Add("password", isRememberPassword ? password : "");
                 cfa.AppSettings.Settings.Add("autoLogin", isAutoLogin ? "Y" : "N");
@@ -132,6 +138,8 @@ namespace Drcom_Dialer.Model
         {
             try
             {
+                //建议：不要写字符串作为setting
+                //todo：这样写容易炸，建议nameof
                 username = cfa.AppSettings.Settings["username"].Value;
                 password = cfa.AppSettings.Settings["password"].Value;
                 isAutoLogin = cfa.AppSettings.Settings["autoLogin"].Value == "Y";

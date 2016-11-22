@@ -7,12 +7,13 @@
         xmlns:local="clr-namespace:Drcom_Dialer.View"
         mc:Ignorable="d"
                                    
-        Title="Title" Height="330" Width="300" ResizeMode="CanMinimize"
+        Title="广工Dr.com"
+        Height="330" Width="300" ResizeMode="CanMinimize"
         Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" StateChanged="MetroWindow_StateChanged" >
 
     <Window.Resources>
         <ResourceDictionary>
-            <Image x:Key="setting" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
+            <Image x:Key="SettingImage" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -22,10 +23,10 @@
             <Button Click="Setting_Button_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
-                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource setting}"/>
-                        </Rectangle.OpacityMask>
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                               <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Fill" Visual="{StaticResource SettingImage}"/>
+                               </Rectangle.OpacityMask>
                     </Rectangle>
                 </StackPanel>
             </Button>
@@ -34,29 +35,63 @@
     </Controls:MetroWindow.RightWindowCommands>
 
     <Grid>
-        <StackPanel HorizontalAlignment="Left" Height="249" VerticalAlignment="Top" Width="272" Margin="10,10,0,0">
+        <StackPanel Margin="10,10,0,0" 
+                    Height="249" 
+                    Width="272"
+                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Left"  >
             <Image x:Name="image" Source="/Drcom-Dialer;component/Resource/banner.png"/>
-            <StackPanel Height="30" Orientation="Horizontal" Margin="10,15,10,5">
-                <Label x:Name="lbl_username" Content="账户:" VerticalAlignment="Center" Margin="10,0,10,0"/>
-                <TextBox x:Name="tb_username" Width="180px" VerticalAlignment="Center" Margin="0,1,0,0" BorderThickness="0,0,0,1" TextChanged="tb_username_TextChanged" Controls:TextBoxHelper.Watermark="311500XXXX" />
+            <StackPanel Margin="10,15,10,5" 
+                        Height="30" 
+                        Orientation="Horizontal" >
+                <Label x:Name="lbl_username" Margin="10,0,10,0"
+                       Content="账户:"
+                       VerticalAlignment="Center" />
+                <TextBox x:Name="tb_username" 
+                         Width="180px" Margin="0,1,0,0" BorderThickness="0,0,0,1"
+                         Controls:TextBoxHelper.Watermark="311500XXXX"
+                         VerticalAlignment="Center"  
+                         TextChanged="tb_username_TextChanged" />
             </StackPanel>
             <StackPanel Height="30" Orientation="Horizontal" Margin="10,0,10,5">
-                <Label x:Name="lbl_password" Content="密码:" VerticalAlignment="Center"  Margin="10,0,10,0"/>
-                <PasswordBox x:Name="pb_password" Width="180px" VerticalAlignment="Center" Margin="0,1,0,0" BorderThickness="0,0,0,1" PasswordChanged="pb_password_PasswordChanged" Controls:TextBoxHelper.Watermark="123456" />
+                <TextBlock x:Name="lbl_password" Margin="10,0,10,0"
+                       Text="密码:" 
+                       VerticalAlignment="Center"  />
+                <!--不需要用Password-->
+                <PasswordBox x:Name="pb_password" Margin="0,1,0,0" Width="180px" 
+                             Controls:TextBoxHelper.Watermark="123456"
+                             BorderThickness="0,0,0,1"
+                             VerticalAlignment="Center"   
+                             PasswordChanged="pb_password_PasswordChanged" />
             </StackPanel>
-            <StackPanel Height="25" Orientation="Horizontal" Margin="10,0,10,5" HorizontalAlignment="Center">
-                <CheckBox x:Name="cb_remember" Content="记住密码" VerticalAlignment="Center" Margin="30,0,30,0" Click="cb_remember_Click"/>
-                <CheckBox x:Name="cb_autoLogin" Content="自动登录" VerticalAlignment="Center" Margin="30,0,30,0" Click="cb_autoLogin_Click"/>
+            <StackPanel Height="25" Margin="10,0,10,5" 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <CheckBox x:Name="cb_remember" Margin="30,0,30,0"
+                          Content="记住密码" 
+                          VerticalAlignment="Center"  
+                          Click="cb_remember_Click"/>
+                <CheckBox x:Name="cb_autoLogin" 
+                          Margin="30,0,30,0"
+                          Content="自动登录" 
+                          VerticalAlignment="Center"  
+                          Click="cb_autoLogin_Click"/>
             </StackPanel>
-            <StackPanel Height="25" Orientation="Horizontal" Margin="10,0,10,5" HorizontalAlignment="Center" Visibility="Hidden">
+            <StackPanel Margin="10,0,10,5" Height="25" Orientation="Horizontal"  
+                        Visibility="Hidden"
+                        HorizontalAlignment="Center" >
 
             </StackPanel>
-            <StackPanel Height="36" Orientation="Horizontal" Margin="10,0,10,5" HorizontalAlignment="Center">
-                <Button x:Name="btn_dial" Content="拨号" Width="150" Click="btn_dial_Click" Style="{StaticResource AccentedSquareButtonStyle}"/>
+            <StackPanel Margin="10,0,10,5" Height="36" Orientation="Horizontal"  
+                        HorizontalAlignment="Center">
+                <Button x:Name="btn_dial" Style="{StaticResource AccentedSquareButtonStyle}" Width="150"
+                        Content="拨号"  
+                        Click="btn_dial_Click" />
             </StackPanel>
         </StackPanel>
         <StatusBar Height="30" VerticalAlignment="Bottom" Margin="0">
-            <Label x:Name="lbl_status" Content="这是状态栏" Foreground="White" />
+            <TextBlock x:Name="lbl_status" Foreground="White" 
+                       Text="本软件仅作内部学习交流，请在下载后24小时内删除"  />
         </StatusBar>
 
     </Grid>
