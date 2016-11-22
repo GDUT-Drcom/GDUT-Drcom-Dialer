@@ -110,6 +110,7 @@
     <Compile Include="Model\Utils\Ping.cs" />
     <Compile Include="Model\Utils\RunOnStartup.cs" />
     <Compile Include="Model\Utils\Version.cs" />
+    <Compile Include="Model\Utils\VPNFixer.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
     <Compile Include="View\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>

@@ -58,6 +58,29 @@ namespace Drcom_Dialer.Model
         public static Campus zone;
 
         /// <summary>
+        /// 认证地址
+        /// </summary>
+        public static string AuthIP
+        {
+            get
+            {
+                switch (zone)
+                {
+                    case Campus.HEMC:
+                        return "10.0.3.2";
+                    case Campus.LongDong:
+                        return "10.0.3.6";
+                    case Campus.DongfengRd:
+                        return "0.0.0.0";
+                    case Campus.Panyu:
+                        return "0.0.0.0";
+                    default:
+                        return "0.0.0.0";
+                }
+            }
+        }
+
+        /// <summary>
         /// 配置类引用
         /// </summary>
         private static Configuration cfa;
