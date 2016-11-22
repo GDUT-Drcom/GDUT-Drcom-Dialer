@@ -94,6 +94,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Dial.cs" />
     <Compile Include="Model\DialerConfig.cs" />
     <Compile Include="Model\HeartBeatProxy.cs" />
     <Compile Include="Model\PPPoE.cs" />
