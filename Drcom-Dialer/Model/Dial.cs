@@ -10,7 +10,7 @@ namespace Drcom_Dialer.Model
     {
         public static void Auth()
         {
-            string username = "/r/n" + DialerConfig.username;
+            string username = "\r\n" + DialerConfig.username;
             string password = DialerConfig.password;
 
             bool status = PPPoE.Dial(username, password);

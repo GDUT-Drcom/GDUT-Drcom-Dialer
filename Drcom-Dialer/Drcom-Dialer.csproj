@@ -107,6 +107,7 @@
     <Compile Include="Model\HeartBeatProxy.cs" />
     <Compile Include="Model\PPPoE.cs" />
     <Compile Include="Model\Utils\Log4Net.cs" />
+    <Compile Include="Model\Utils\Ping.cs" />
     <Compile Include="Model\Utils\Version.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
     <Compile Include="View\AboutWindow.xaml.cs">

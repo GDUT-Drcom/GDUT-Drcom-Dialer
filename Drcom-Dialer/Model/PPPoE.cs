@@ -10,18 +10,18 @@ namespace Drcom_Dialer.Model
     /// <summary>
     /// PPPoE拨号器
     /// </summary>
-    internal class PPPoE
+    internal static class PPPoE
     {
-        public PPPoE()
+        public static void Init()
         {
-            init(Properties.Resources.RasConnectionName);
+            Init(Properties.Resources.RasConnectionName);
         }
 
         /// <summary>
         /// 初始化PPPoE拨号器
         /// </summary>
         /// <param name="connectName">连接名称</param>
-        private void init(string connectName )
+        public static void Init(string connectName)
         {
             try
             {
@@ -57,9 +57,9 @@ namespace Drcom_Dialer.Model
         /// </summary>
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
-        public void Dial(string username, string password)
+        public static bool Dial(string username, string password)
         {
-            Dial(username, password, Properties.Resources.RasConnectionName);
+            return Dial(username, password, Properties.Resources.RasConnectionName);
         }
         /// <summary>
         /// 拨号
@@ -67,7 +67,7 @@ namespace Drcom_Dialer.Model
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <param name="connectName">连接名</param>
-        public void Dial(string username, string password, string connectName)
+        public static bool Dial(string username, string password, string connectName)
         {
             try
             {
@@ -100,19 +100,23 @@ namespace Drcom_Dialer.Model
                             //ipAddr.IPAddress.ToString();
                             //其实就需要一个
                             //建议：使用EventHandle
+                            //先直接返回吧（
+                            return true;
                         }
                     }
                 }
+                return false;
             }
             catch (Exception e)
             {
                 Utils.Log4Net.WriteLog(e.Message, e);
+                return false;
             }
         }
         /// <summary>
         /// 断开所有连接
         /// </summary>
-        public void Hangup()
+        public static void Hangup()
         {
             try
             {

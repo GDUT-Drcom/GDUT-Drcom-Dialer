@@ -44,8 +44,8 @@
             <StackPanel Margin="10,15,10,5" 
                         Height="30" 
                         Orientation="Horizontal" >
-                <Label x:Name="lbl_username" Margin="10,0,10,0"
-                       Content="账户:"
+                <TextBlock x:Name="lbl_username" Margin="15,0,15,0"
+                       Text="账户:"
                        VerticalAlignment="Center" />
                 <TextBox x:Name="tb_username" 
                          Width="180px" Margin="0,1,0,0" BorderThickness="0,0,0,1"
@@ -54,7 +54,7 @@
                          TextChanged="tb_username_TextChanged" />
             </StackPanel>
             <StackPanel Height="30" Orientation="Horizontal" Margin="10,0,10,5">
-                <TextBlock x:Name="lbl_password" Margin="10,0,10,0"
+                <TextBlock x:Name="lbl_password" Margin="15,0,15,0"
                        Text="密码:" 
                        VerticalAlignment="Center"  />
                 <!--不需要用Password-->
