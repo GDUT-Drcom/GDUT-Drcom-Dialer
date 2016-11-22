@@ -22,10 +22,10 @@
             <Button Click="Setting_Button_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
-                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource setting}"/>
-                        </Rectangle.OpacityMask>
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                               <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Fill" Visual="{StaticResource setting}"/>
+                               </Rectangle.OpacityMask>
                     </Rectangle>
                 </StackPanel>
             </Button>
@@ -34,9 +34,13 @@
     </Controls:MetroWindow.RightWindowCommands>
 
     <Grid>
-        <StackPanel HorizontalAlignment="Left" Height="249" VerticalAlignment="Top" Width="272" Margin="10,10,0,0">
+        <StackPanel Margin="10,10,0,0" 
+                    Height="249" 
+                    Width="272"
+                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Left"  >
             <Image x:Name="image" Source="/Drcom-Dialer;component/Resource/banner.png"/>
-            <StackPanel Height="30" Orientation="Horizontal" Margin="10,15,10,5">
+            <StackPanel Margin="10,15,10,5" Height="30" Orientation="Horizontal" >
                 <Label x:Name="lbl_username" Content="账户:" VerticalAlignment="Center" Margin="10,0,10,0"/>
                 <TextBox x:Name="tb_username" Width="180px" VerticalAlignment="Center" Margin="0,1,0,0" BorderThickness="0,0,0,1" TextChanged="tb_username_TextChanged" Controls:TextBoxHelper.Watermark="311500XXXX" />
             </StackPanel>

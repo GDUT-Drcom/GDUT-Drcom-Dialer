@@ -23,13 +23,13 @@ namespace Drcom_Dialer.View
     public partial class MainWindow : MetroWindow
     {
 
-        private NotifyIcon trayIcon;
+        private NotifyIcon _trayIcon;
 
         public MainWindow()
         {
             InitializeComponent();
             Model.Utils.Log4Net.SetConfig();
-            initTrayIcon();
+            InitTrayIcon();
             
             Model.DialerConfig.Init();
         }
@@ -51,13 +51,17 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void cb_autoLogin_Click(object sender, RoutedEventArgs e)
         {
-            if (!(bool)cb_remember.IsChecked && (bool)cb_autoLogin.IsChecked)
+            if (cb_autoLogin.IsChecked != null && (cb_remember.IsChecked != null 
+                && (!(bool)cb_remember.IsChecked && (bool)cb_autoLogin.IsChecked)))
             {
                 cb_remember.IsChecked = true;
                 cb_remember_Click(null, null);
             }
 
-            Model.DialerConfig.isAutoLogin = (bool)cb_autoLogin.IsChecked;
+            if (cb_autoLogin.IsChecked != null)
+            {
+                Model.DialerConfig.isAutoLogin = (bool)cb_autoLogin.IsChecked;
+            }
         }
         /// <summary>
         /// 记住密码点击事件
@@ -66,12 +70,19 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void cb_remember_Click(object sender, RoutedEventArgs e)
         {
-            if (!(bool)cb_remember.IsChecked && (bool)cb_autoLogin.IsChecked)
+            //todo：cb_remember.IsChecked 是bool?
+
+            if (cb_autoLogin.IsChecked != null && (cb_remember.IsChecked != null 
+                && (!(bool)cb_remember.IsChecked && (bool)cb_autoLogin.IsChecked)))
             {
                 cb_autoLogin.IsChecked = false;
                 cb_autoLogin_Click(null, null);
             }
-            Model.DialerConfig.isRememberPassword = (bool)cb_remember.IsChecked;
+
+            if (cb_remember.IsChecked != null)
+            {
+                Model.DialerConfig.isRememberPassword = (bool)cb_remember.IsChecked;
+            }
         }
 
         /// <summary>
@@ -104,6 +115,7 @@ namespace Drcom_Dialer.View
             AboutWindow about = new AboutWindow();
             about.ShowDialog();
         }
+
         /// <summary>
         /// 将要关闭的事件
         /// 处理关闭前的工作
@@ -113,7 +125,11 @@ namespace Drcom_Dialer.View
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //TODO:add code here
+
+            //hangup
+
         }
+
         /// <summary>
         /// 关闭事件
         /// 处理最后一步的工作
@@ -122,7 +138,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void MetroWindow_Closed(object sender, EventArgs e)
         {
-            trayIcon.Visible = false;
+            _trayIcon.Visible = false;
         }
         /// <summary>
         /// 窗口位置改变事件
@@ -132,6 +148,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void MetroWindow_StateChanged(object sender, EventArgs e)
         {
+            //最小化到托盘
             if (this.WindowState == WindowState.Minimized)
             {
                 this.Hide();
@@ -141,25 +158,28 @@ namespace Drcom_Dialer.View
         /// <summary>
         /// 初始化托盘图标
         /// </summary>
-        private void initTrayIcon()
+        private void InitTrayIcon()
         {
-            trayIcon = new NotifyIcon();
-            trayIcon.Text = Properties.Resources.ProgramTitle;
-
-            trayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
-            trayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler((obj, e) =>
+            _trayIcon = new NotifyIcon
             {
+                Text = Properties.Resources.ProgramTitle,
+                Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath)
+            };
 
-                if (e.Button == MouseButtons.Left && this.WindowState == WindowState.Minimized)
+            _trayIcon.MouseClick += (obj, e) =>
+            {
+                if (e.Button == MouseButtons.Left && WindowState == WindowState.Minimized)
                 {
-                    this.Show();
-                    this.Activate();
-                    this.WindowState = WindowState.Normal;
+                    Show();
+                    Activate();
+                    WindowState = WindowState.Normal;
                 }
-
-            });
-            trayIcon.Visible = true;
+                //todo:关闭显示
+                // trayIcon.Visible = false;
+            };
+            _trayIcon.Visible = true;
         }
+
         /// <summary>
         /// 设置按钮
         /// </summary>
@@ -167,6 +187,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void Setting_Button_Click(object sender, RoutedEventArgs e)
         {
+            //todo:建议为窗体级
             SettingWindow setting = new SettingWindow();
             setting.ShowDialog();
         }
