@@ -54,6 +54,9 @@
   <PropertyGroup>
     <ApplicationIcon>DogCom_64.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Drcom_Dialer.View.ProgramInit</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotRas, Version=1.3.5166.33435, Culture=neutral, PublicKeyToken=b378f04384b7892a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotRas.for.Win8.1.3.0\lib\net40\DotRas.dll</HintPath>

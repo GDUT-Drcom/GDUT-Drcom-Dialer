@@ -12,7 +12,7 @@ namespace Drcom_Dialer.Model.Utils
 {
     /// <summary>
     /// VPN 修复
-    /// (未经测试)
+    /// (测试可添加路由表)
     /// </summary>
     class VPNFixer
     {
@@ -47,6 +47,7 @@ namespace Drcom_Dialer.Model.Utils
             psi.WorkingDirectory = Environment.CurrentDirectory;
             psi.FileName = Application.ExecutablePath;
             psi.Verb = "runas";
+            psi.Arguments = StartupArgs;
             try
             {
                 Process.Start(psi);
@@ -57,7 +58,8 @@ namespace Drcom_Dialer.Model.Utils
                 // TODO : 提醒用户需要允许UAC
                 return;
             }
-            Application.Exit();
+            //还是不要退出比较好
+            //Application.Exit();
         }
 
         /// <summary>
@@ -98,5 +100,7 @@ namespace Drcom_Dialer.Model.Utils
             var mc = reg.Matches(rout);
             return mc[0].Groups[2].Value;
         }
+
+        public const string StartupArgs = "fixvpn";
     }
 }

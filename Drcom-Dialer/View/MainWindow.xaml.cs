@@ -28,10 +28,8 @@ namespace Drcom_Dialer.View
         public MainWindow()
         {
             InitializeComponent();
-            Model.Utils.Log4Net.SetConfig();
             InitTrayIcon();
             
-            Model.DialerConfig.Init();
         }
 
         /// <summary>
@@ -190,6 +188,38 @@ namespace Drcom_Dialer.View
             //todo:建议为窗体级
             SettingWindow setting = new SettingWindow();
             setting.ShowDialog();
+        }
+    }
+    class ProgramInit
+    {
+        [STAThread]
+        static void Main(string[] args)
+        {
+            //进行必要的初始化工作
+            Model.Utils.Log4Net.SetConfig();
+            Model.DialerConfig.Init();
+            if (args.Length > 0)
+            {
+                switch (args[0])
+                {
+                    case Model.Utils.VPNFixer.StartupArgs:
+                        Model.Utils.VPNFixer.AddRouteRule();
+                        return;
+                        break;
+                    default:
+                        Model.Utils.Log4Net.WriteLog("未知的启动参数: " + args);
+                        break;
+                }
+            }
+
+            if (Model.DialerConfig.isFixVPN)
+            {
+                Model.Utils.VPNFixer.Elevate();
+            }
+
+            Drcom_Dialer.App app = new App();
+            app.InitializeComponent();
+            app.Run();
         }
     }
 }
