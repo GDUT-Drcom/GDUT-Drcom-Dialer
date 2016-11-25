@@ -11,36 +11,36 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 用户名
         /// </summary>
-        public static string username;
+        public static string username = "";
         /// <summary>
         /// 密码
         /// </summary>
-        public static string password;
+        public static string password = "";
 
         /// <summary>
         /// 是否记住密码
         /// </summary>
-        public static bool isRememberPassword;
+        public static bool isRememberPassword = false;
 
         /// <summary>
         /// 是否自动登录
         /// </summary>
-        public static bool isAutoLogin;
+        public static bool isAutoLogin = false;
 
         /// <summary>
         /// 是否开机启动
         /// </summary>
-        public static bool isRunOnStartup;
+        public static bool isRunOnStartup = false;
 
         /// <summary>
         /// 是否断线重连
         /// </summary>
-        public static bool isReDialOnFail;
+        public static bool isReDialOnFail = false;
 
         /// <summary>
         /// VPN修复
         /// </summary>
-        public static bool isFixVPN;
+        public static bool isFixVPN = false ;
 
         /// <summary>
         /// 校区枚举项
@@ -55,7 +55,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 校区选择
         /// </summary>
-        public static Campus zone;
+        public static Campus zone = 0;
 
         /// <summary>
         /// 认证地址
@@ -137,7 +137,7 @@ namespace Drcom_Dialer.Model
             try
             {
                 cfa.AppSettings.Settings.Add(nameof(username), username);
-                cfa.AppSettings.Settings.Add(nameof(isRememberPassword), isRememberPassword ? password : "");
+                cfa.AppSettings.Settings.Add(nameof(password), isRememberPassword ? password : "");
                 cfa.AppSettings.Settings.Add(nameof(isAutoLogin), isAutoLogin ? "Y" : "N");
                 cfa.AppSettings.Settings.Add(nameof(isRememberPassword), isRememberPassword ? "Y" : "N");
                 cfa.AppSettings.Settings.Add(nameof(isRunOnStartup), isRunOnStartup ? "Y" : "N");

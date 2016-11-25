@@ -218,6 +218,7 @@ namespace Drcom_Dialer.View
             }
 
             Model.PPPoE.Init();
+            Model.Dial.Init();
 
             Drcom_Dialer.App app = new App();
             app.InitializeComponent();

@@ -8,13 +8,15 @@ namespace Drcom_Dialer.Model
 {
     static class Dial
     {
-        public static void Auth()
+        public static void Init()
         {
-
             PPPoE.PPPoEDialSuccessEvent += new EventHandler<Msg>(PPPoESuccessEventHandler);
             PPPoE.PPPoEDialFailEvent += new EventHandler<Msg>(PPPoEFailEventHandler);
             PPPoE.PPPoEHangupSuccessEvent += new EventHandler(PPPoEHangupEventHandler);
+        }
 
+        public static void Auth()
+        {
             string username = "\r\n" + DialerConfig.username;
             string password = DialerConfig.password;
             PPPoE.Dial(username, password);
@@ -40,7 +42,7 @@ namespace Drcom_Dialer.Model
 
         private static void PPPoEFailEventHandler(object obj,Msg e)
         {
-            PPPoESuccessEventHandler(obj, e);
+            //PPPoESuccessEventHandler(obj, e);
         }
 
         private static void PPPoEHangupEventHandler(object obj,EventArgs e)
