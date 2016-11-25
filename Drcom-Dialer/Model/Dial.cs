@@ -10,36 +10,42 @@ namespace Drcom_Dialer.Model
     {
         public static void Auth()
         {
+
+            PPPoE.PPPoEDialSuccessEvent += new EventHandler<Msg>(PPPoESuccessEventHandler);
+            PPPoE.PPPoEDialFailEvent += new EventHandler<Msg>(PPPoEFailEventHandler);
+            PPPoE.PPPoEHangupSuccessEvent += new EventHandler(PPPoEHangupEventHandler);
+
             string username = "\r\n" + DialerConfig.username;
             string password = DialerConfig.password;
+            PPPoE.Dial(username, password);
+  
+        }
 
-            bool status = PPPoE.Dial(username, password);
-            
-            if (status)
+        private static void PPPoESuccessEventHandler(object obj,Msg e)
+        {
+            //TODO:IP地址的显示
+            if (HeartBeatProxy.init() != HeartBeatProxy.status.Success)
+                Utils.Log4Net.WriteLog("初始化心跳失败");
+            HeartBeatProxy.status stat = HeartBeatProxy.heartbeat();
+
+            switch (stat)
             {
-                //通常来说，他会卡在这
-                //如果他返回了什么，那么一定是拨号失败了
-                HeartBeatProxy.status hbStatus = HeartBeatProxy.heartbeat();
-                switch (hbStatus)
-                {
-                    case HeartBeatProxy.status.BindPortFail:
-                        Utils.Log4Net.WriteLog("绑定端口失败");
-                        break;
-                    case HeartBeatProxy.status.RecvTimedOut:
-                        //心跳超时又有几种可能
-                        //1.Heartbeat格式/校验出现的错误
-                        //2.Keepalive2格式/校验出现的错误
-                        //3.单纯的网络超时问题
-                        //
-                        //有的超时意味着PPPoE已经断开，有的却不是，这需要区分然后处理。
-
-                        Utils.Log4Net.WriteLog("心跳超时");
-                        break;
-                    default:
-                        break;
-                }
+                case HeartBeatProxy.status.BindPortFail:
+                    Utils.Log4Net.WriteLog("绑定端口失败");
+                    break;
+                default:
+                    break;
             }
-                
+        }
+
+        private static void PPPoEFailEventHandler(object obj,Msg e)
+        {
+            PPPoESuccessEventHandler(obj, e);
+        }
+
+        private static void PPPoEHangupEventHandler(object obj,EventArgs e)
+        {
+
         }
     }
 }

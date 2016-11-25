@@ -59,6 +59,7 @@ namespace Drcom_Dialer.Model.Utils
                 try
                 {
                     LogError.Error(info, se);
+                    Console.WriteLine(info);
                 }
                 catch
                 {

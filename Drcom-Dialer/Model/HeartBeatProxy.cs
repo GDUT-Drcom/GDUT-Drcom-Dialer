@@ -16,14 +16,38 @@ namespace Drcom_Dialer.Model
         /// </summary>
         public static status init()
         {
-            return status.Success;
+            try
+            {
+                byte[] ipaddr = System.Text.Encoding.Default.GetBytes(DialerConfig.AuthIP);
+                byte flag = 0x6a;
+                Utils.GDUT_Drcom.set_enable_crypt(1);
+                Utils.GDUT_Drcom.set_remote_ip(ref ipaddr, ipaddr.Length);
+                Utils.GDUT_Drcom.set_keep_alive1_flag(ref flag, 1);
+                return status.Success;
+            }
+            catch(Exception e)
+            {
+                Utils.Log4Net.WriteLog(e.Message, e);
+                return status.Unknown;
+            }
+            
         }
         /// <summary>
         /// 进行心跳操作
         /// </summary>
         public static status heartbeat()
         {
-            return status.Success;
+            try
+            {
+                if (Utils.GDUT_Drcom.auth() == -1)
+                    return status.BindPortFail;
+                return status.Success;
+            }
+            catch
+            {
+                return status.Unknown;
+            }
+            
         }
         /// <summary>
         /// 反初始化

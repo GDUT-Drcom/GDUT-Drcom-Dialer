@@ -41,6 +41,7 @@ namespace Drcom_Dialer.View
         {
             //TODO:add code here
             Model.DialerConfig.SaveConfig();
+            Model.Dial.Auth();
         }
         /// <summary>
         /// 自动登录点击事件
@@ -205,7 +206,6 @@ namespace Drcom_Dialer.View
                     case Model.Utils.VPNFixer.StartupArgs:
                         Model.Utils.VPNFixer.AddRouteRule();
                         return;
-                        break;
                     default:
                         Model.Utils.Log4Net.WriteLog("未知的启动参数: " + args);
                         break;
@@ -216,6 +216,8 @@ namespace Drcom_Dialer.View
             {
                 Model.Utils.VPNFixer.Elevate();
             }
+
+            Model.PPPoE.Init();
 
             Drcom_Dialer.App app = new App();
             app.InitializeComponent();

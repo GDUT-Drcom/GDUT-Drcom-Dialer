@@ -57,9 +57,9 @@ namespace Drcom_Dialer.Model
         /// </summary>
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
-        public static bool Dial(string username, string password)
+        public static void Dial(string username, string password)
         {
-            return Dial(username, password, Properties.Resources.RasConnectionName);
+            Dial(username, password, Properties.Resources.RasConnectionName);
         }
         /// <summary>
         /// 拨号
@@ -67,7 +67,7 @@ namespace Drcom_Dialer.Model
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <param name="connectName">连接名</param>
-        public static bool Dial(string username, string password, string connectName)
+        public static void Dial(string username, string password, string connectName)
         {
             try
             {
@@ -97,20 +97,19 @@ namespace Drcom_Dialer.Model
                         if (temp.Handle == hRas)
                         {
                             RasIPInfo ipAddr = (RasIPInfo)temp.GetProjectionInfo(RasProjectionType.IP);
-                            //ipAddr.IPAddress.ToString();
-                            //其实就需要一个
-                            //建议：使用EventHandle
-                            //先直接返回吧（
-                            return true;
+                            //
+                            if (PPPoEDialSuccessEvent != null)
+                                PPPoEDialSuccessEvent(null, new Msg(ipAddr.IPAddress.ToString()));
                         }
                     }
                 }
-                return false;
+                
             }
             catch (Exception e)
             {
                 Utils.Log4Net.WriteLog(e.Message, e);
-                return false;
+                if (PPPoEDialFailEvent != null)
+                    PPPoEDialFailEvent(null, new Msg(e.Message));
             }
         }
         /// <summary>
@@ -123,13 +122,39 @@ namespace Drcom_Dialer.Model
                 foreach (RasConnection conn in RasConnection.GetActiveConnections())
                 {
                     conn.HangUp();
-                    //建议：EventHandle 断开成功
+                    if(PPPoEHangupSuccessEvent != null)
+                        PPPoEHangupSuccessEvent(null, null);
                 }
             }
             catch (Exception e)
             {
                 Utils.Log4Net.WriteLog(e.Message, e);
             }
+        }
+        /// <summary>
+        /// PPPoE拨号成功事件
+        /// </summary>
+        public static EventHandler<Msg> PPPoEDialSuccessEvent;
+        /// <summary>
+        /// PPPoE拨号失败事件
+        /// </summary>
+        public static EventHandler<Msg> PPPoEDialFailEvent;
+        /// <summary>
+        /// PPPoE挂断成功事件
+        /// </summary>
+        public static EventHandler PPPoEHangupSuccessEvent;
+
+    }
+
+    /// <summary>
+    /// 简单的消息传输器
+    /// </summary>
+    public class Msg: EventArgs
+    {
+        public string Message;
+        public Msg(string _msg)
+        {
+            Message = _msg;
         }
     }
 }
