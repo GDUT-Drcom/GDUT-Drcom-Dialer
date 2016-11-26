@@ -21,7 +21,7 @@ namespace Drcom_Dialer.Model.Utils
         public static extern void set_remote_ip(ref byte[] ip, int len);
 
         [DllImport("gdut-drcom.dll")]
-        public static extern void set_keep_alive1_flag(ref byte flag, int len);
+        public static extern void set_keep_alive1_flag(ref byte[] flag, int len);
 
         [DllImport("gdut-drcom.dll")]
         public static extern void set_enable_crypt(int enable);
