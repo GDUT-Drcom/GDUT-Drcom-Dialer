@@ -191,38 +191,4 @@ namespace Drcom_Dialer.View
             setting.ShowDialog();
         }
     }
-    class ProgramInit
-    {
-        [STAThread]
-        static void Main(string[] args)
-        {
-            //进行必要的初始化工作
-            Model.Utils.Log4Net.SetConfig();
-            Model.DialerConfig.Init();
-            if (args.Length > 0)
-            {
-                switch (args[0])
-                {
-                    case Model.Utils.VPNFixer.StartupArgs:
-                        Model.Utils.VPNFixer.AddRouteRule();
-                        return;
-                    default:
-                        Model.Utils.Log4Net.WriteLog("未知的启动参数: " + args);
-                        break;
-                }
-            }
-
-            if (Model.DialerConfig.isFixVPN)
-            {
-                Model.Utils.VPNFixer.Elevate();
-            }
-
-            Model.PPPoE.Init();
-            Model.Dial.Init();
-
-            Drcom_Dialer.App app = new App();
-            app.InitializeComponent();
-            app.Run();
-        }
-    }
 }

@@ -55,7 +55,7 @@
     <ApplicationIcon>DogCom_64.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Drcom_Dialer.View.ProgramInit</StartupObject>
+    <StartupObject>Drcom_Dialer.ProgramInit</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotRas, Version=1.3.5166.33435, Culture=neutral, PublicKeyToken=b378f04384b7892a, processorArchitecture=MSIL">
@@ -115,6 +115,7 @@
     <Compile Include="Model\Utils\RunOnStartup.cs" />
     <Compile Include="Model\Utils\Version.cs" />
     <Compile Include="Model\Utils\VPNFixer.cs" />
+    <Compile Include="ProgramInit.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
     <Compile Include="View\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
@@ -125,16 +126,8 @@
     <Compile Include="View\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\AboutWindow.xaml">

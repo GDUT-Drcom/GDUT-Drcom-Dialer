@@ -29,7 +29,7 @@ namespace Drcom_Dialer.Model.Utils
                     WindowsPrincipal principal = new WindowsPrincipal(user);
                     return principal.IsInRole(WindowsBuiltInRole.Administrator);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return false;
                 }
