@@ -25,5 +25,29 @@ namespace Drcom_Dialer.Model.Utils
 
         [DllImport("gdut-drcom.dll")]
         public static extern void set_enable_crypt(int enable);
+
+        [DllImport("gdut-drcom.dll")]
+        private static extern void get_version(ref byte[] version);
+
+        /// <summary>
+        /// DLL的版本
+        /// </summary>
+        public static string Version
+        {
+            get
+            {
+                byte[] ver = new Byte[128];
+                try
+                {
+                    get_version(ref ver);
+                    return Encoding.Default.GetString(ver);
+                }
+                catch (Exception e)
+                {
+                    Log4Net.WriteLog(e.Message, e);
+                    return "";
+                }
+            }
+        }
     }
 }

@@ -43,6 +43,17 @@ namespace Drcom_Dialer.Model
         public static bool isFixVPN = false ;
 
         /// <summary>
+        /// 发送反馈
+        /// </summary>
+        public static bool isFeedback = true;
+
+        /// <summary>
+        /// GUID
+        /// 用于发送反馈
+        /// </summary>
+        public static string guid = "";
+
+        /// <summary>
         /// 校区枚举项
         /// </summary>
         public enum Campus
@@ -119,6 +130,8 @@ namespace Drcom_Dialer.Model
                 cfa.AppSettings.Settings[nameof(isRunOnStartup)].Value = isRunOnStartup ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(isReDialOnFail)].Value = isReDialOnFail ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(isFixVPN)].Value = isFixVPN ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(isFeedback)].Value = isFeedback ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(guid)].Value = guid;
                 cfa.AppSettings.Settings[nameof(zone)].Value = zone.ToString();
                 cfa.Save();
                 ConfigurationManager.RefreshSection("appSettings");
@@ -143,7 +156,9 @@ namespace Drcom_Dialer.Model
                 cfa.AppSettings.Settings.Add(nameof(isRunOnStartup), isRunOnStartup ? "Y" : "N");
                 cfa.AppSettings.Settings.Add(nameof(isReDialOnFail), isReDialOnFail ? "Y" : "N");
                 cfa.AppSettings.Settings.Add(nameof(isFixVPN), isFixVPN ? "Y" : "N");
+                cfa.AppSettings.Settings.Add(nameof(isFeedback), isFeedback ? "Y" : "N");
                 cfa.AppSettings.Settings.Add(nameof(zone), ((int)zone).ToString());
+                cfa.AppSettings.Settings.Add(nameof(guid), guid);
                 cfa.Save();
             }
             catch (Exception e)
@@ -166,6 +181,8 @@ namespace Drcom_Dialer.Model
                 isRunOnStartup = cfa.AppSettings.Settings[nameof(isRunOnStartup)].Value == "Y";
                 isReDialOnFail = cfa.AppSettings.Settings[nameof(isReDialOnFail)].Value == "Y";
                 isFixVPN = cfa.AppSettings.Settings[nameof(isFixVPN)].Value == "Y";
+                isFeedback = cfa.AppSettings.Settings[nameof(isFeedback)].Value == "Y";
+                guid = cfa.AppSettings.Settings[nameof(guid)].Value;
                 zone = (Campus)int.Parse(cfa.AppSettings.Settings[nameof(zone)].Value);
             }
             catch (Exception e)

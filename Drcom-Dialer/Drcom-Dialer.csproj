@@ -77,6 +77,10 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -109,7 +113,9 @@
     <Compile Include="Model\DialerConfig.cs" />
     <Compile Include="Model\HeartBeatProxy.cs" />
     <Compile Include="Model\PPPoE.cs" />
+    <Compile Include="Model\Utils\BmobAnalyze.cs" />
     <Compile Include="Model\Utils\gdut-drcom.cs" />
+    <Compile Include="Model\Utils\HeartBeatUpdate.cs" />
     <Compile Include="Model\Utils\Log4Net.cs" />
     <Compile Include="Model\Utils\Ping.cs" />
     <Compile Include="Model\Utils\RunOnStartup.cs" />

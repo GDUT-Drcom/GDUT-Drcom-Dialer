@@ -26,28 +26,40 @@ namespace Drcom_Dialer.Model
         private static void PPPoESuccessEventHandler(object obj,Msg e)
         {
             //TODO:IP地址的显示
-            if (HeartBeatProxy.init() != HeartBeatProxy.status.Success)
-                Utils.Log4Net.WriteLog("初始化心跳失败");
-            HeartBeatProxy.status stat = HeartBeatProxy.heartbeat();
-
-            switch (stat)
+            if (!Utils.HeartBeatUpdate.CheckDLL() || Utils.HeartBeatUpdate.CheckUpdate())
+                Utils.HeartBeatUpdate.Update();
+            if (Utils.HeartBeatUpdate.CheckDLL())
             {
-                case HeartBeatProxy.status.BindPortFail:
-                    Utils.Log4Net.WriteLog("绑定端口失败");
-                    break;
-                default:
-                    break;
+                Utils.BmobAnalyze.SendAnalyze();
+
+                if (HeartBeatProxy.init() != HeartBeatProxy.status.Success)
+                    Utils.Log4Net.WriteLog("初始化心跳失败");
+                HeartBeatProxy.status stat = HeartBeatProxy.heartbeat();
+
+                switch (stat)
+                {
+                    case HeartBeatProxy.status.BindPortFail:
+                        Utils.Log4Net.WriteLog("绑定端口失败");
+                        break;
+                    default:
+                        break;
+                }
             }
+            else
+            {
+                //在此报错！
+            }
+
         }
 
         private static void PPPoEFailEventHandler(object obj,Msg e)
         {
-            //PPPoESuccessEventHandler(obj, e);
+            PPPoESuccessEventHandler(obj, e);
         }
 
         private static void PPPoEHangupEventHandler(object obj,EventArgs e)
         {
-
+            HeartBeatProxy.kill();
         }
     }
 }
