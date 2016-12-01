@@ -123,6 +123,7 @@
     <Compile Include="Model\Utils\VPNFixer.cs" />
     <Compile Include="ProgramInit.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
+    <Compile Include="ViewModel\StatusPresenter.cs" />
     <Compile Include="View\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>

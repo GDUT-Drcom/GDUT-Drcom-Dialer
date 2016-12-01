@@ -17,6 +17,7 @@ using Drcom_Dialer.Model;
 // To access MetroWindow, add the following reference
 using MahApps.Metro.Controls;
 using Application = System.Windows.Forms.Application;
+using Drcom_Dialer.ViewModel;
 
 namespace Drcom_Dialer.View
 {
@@ -28,6 +29,16 @@ namespace Drcom_Dialer.View
         public MainWindow()
         {
             InitializeComponent();
+            // TODO
+            // 重构啊!MVVM啊!
+            // 重构啊!MVVM啊!
+            // 重构啊!MVVM啊!
+            StatusPresenter sp = new StatusPresenter();
+            PPPoE.PPPoEDialFailEvent += (s, e) => { sp.Status = "拨号失败"; };
+            PPPoE.PPPoEDialSuccessEvent += (s, e) => { sp.Status = "拨号成功"; };
+            PPPoE.PPPoEHangupSuccessEvent += (s, e) => { sp.Status = "拨号已断开"; };
+            HeartBeatProxy.HeartbeatExited += (code) => { sp.Status = $"心跳终止({code})"; };
+            DataContext = sp;
             InitTrayIcon();
         }
 
@@ -73,7 +84,9 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void cb_remember_Click(object sender, RoutedEventArgs e)
         {
-            if ((cb_autoLogin.IsChecked != null) && (cb_remember.IsChecked != null) && !(bool) cb_remember.IsChecked &&
+            if ((cb_autoLogin.IsChecked != null) &&
+                (cb_remember.IsChecked != null) &&
+                !(bool) cb_remember.IsChecked &&
                 (bool) cb_autoLogin.IsChecked)
             {
                 cb_autoLogin.IsChecked = false;

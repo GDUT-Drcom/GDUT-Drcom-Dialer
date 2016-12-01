@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
+        xmlns:ViewModels="clr-namespace:Drcom_Dialer.ViewModel"
         mc:Ignorable="d"
                                    
         Title="广工Dr.com"
@@ -92,7 +93,7 @@
         </StackPanel>
         <StatusBar Height="30" VerticalAlignment="Bottom" Margin="0">
             <TextBlock x:Name="lbl_status" Foreground="White" 
-                       Text="这句话太长神tm丑"  />
+                       Text="{Binding Status}"  />
         </StatusBar>
 
     </Grid>

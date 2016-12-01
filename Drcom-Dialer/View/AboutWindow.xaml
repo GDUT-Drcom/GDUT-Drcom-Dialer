@@ -13,11 +13,12 @@
             <TextBlock x:Name="Copyright" TextWrapping="Wrap" Margin="5,10,0,5">
                 作者（按字母顺序排序）:
                 <LineBreak/>
-                <LineBreak/>
             <Hyperlink NavigateUri="https://github.com/chenhaowen01" RequestNavigate="Hyperlink_RequestNavigate">chenhaowen</Hyperlink> DrCOM 心跳包维护者<LineBreak/>
             <Hyperlink NavigateUri="https://github.com/jiangming1399" RequestNavigate="Hyperlink_RequestNavigate">Jim Jiang</Hyperlink> 界面UI以及其他功能<LineBreak/>
             <Hyperlink NavigateUri="https://github.com/lindexi" RequestNavigate="Hyperlink_RequestNavigate">lindexi</Hyperlink> 核心功能<LineBreak/>
-            <LineBreak/>Github项目地址：<Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer" RequestNavigate="Hyperlink_RequestNavigate">Drcom-Dialer</Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/lyhyl" RequestNavigate="Hyperlink_RequestNavigate">lyhyl</Hyperlink> 龙洞维护者<LineBreak/>
+            <Hyperlink NavigateUri="https://github.com" RequestNavigate="Hyperlink_RequestNavigate">贪狼</Hyperlink> 东风路维护者<LineBreak/>
+            Github项目地址：<Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer" RequestNavigate="Hyperlink_RequestNavigate">Drcom-Dialer</Hyperlink>
             </TextBlock>
         </StackPanel>
 
