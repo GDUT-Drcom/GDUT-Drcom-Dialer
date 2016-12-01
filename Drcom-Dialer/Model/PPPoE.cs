@@ -67,7 +67,7 @@ namespace Drcom_Dialer.Model
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <param name="connectName">连接名</param>
-        public static void Dial(string username, string password, string connectName)
+        private static void Dial(string username, string password, string connectName)
         {
             try
             {
@@ -98,8 +98,7 @@ namespace Drcom_Dialer.Model
                         {
                             RasIPInfo ipAddr = (RasIPInfo)temp.GetProjectionInfo(RasProjectionType.IP);
                             //
-                            if (PPPoEDialSuccessEvent != null)
-                                PPPoEDialSuccessEvent(null, new Msg(ipAddr.IPAddress.ToString()));
+                            PPPoEDialSuccessEvent?.Invoke(null, new Msg(ipAddr.IPAddress.ToString()));
                         }
                     }
                 }
@@ -108,8 +107,7 @@ namespace Drcom_Dialer.Model
             catch (Exception e)
             {
                 Utils.Log4Net.WriteLog(e.Message, e);
-                if (PPPoEDialFailEvent != null)
-                    PPPoEDialFailEvent(null, new Msg(e.Message));
+                PPPoEDialFailEvent?.Invoke(null, new Msg(e.Message));
             }
         }
         /// <summary>
@@ -122,8 +120,7 @@ namespace Drcom_Dialer.Model
                 foreach (RasConnection conn in RasConnection.GetActiveConnections())
                 {
                     conn.HangUp();
-                    if(PPPoEHangupSuccessEvent != null)
-                        PPPoEHangupSuccessEvent(null, null);
+                    PPPoEHangupSuccessEvent?.Invoke(null, null);
                 }
             }
             catch (Exception e)

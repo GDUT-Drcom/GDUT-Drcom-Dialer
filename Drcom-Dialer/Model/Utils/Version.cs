@@ -7,12 +7,17 @@ using System.Deployment.Application;
 
 namespace Drcom_Dialer.Model.Utils
 {
-    class Version
+    internal static class Version
     {
-        public static string getVersion()
+        /// <summary>
+        /// 获取软件版本
+        /// </summary>
+        /// <returns></returns>
+        public static string GetVersion()
         {
             try
             {
+                //todo:不返回没用
                 ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
             }
             catch (Exception e)

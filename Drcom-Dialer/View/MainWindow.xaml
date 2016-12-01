@@ -9,7 +9,8 @@
                                    
         Title="广工Dr.com"
         Height="330" Width="300" ResizeMode="CanMinimize"
-        Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" StateChanged="MetroWindow_StateChanged" >
+        Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" 
+                      StateChanged="MetroWindow_StateChanged" >
 
     <Window.Resources>
         <ResourceDictionary>

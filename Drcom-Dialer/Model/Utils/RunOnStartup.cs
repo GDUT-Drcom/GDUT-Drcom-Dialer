@@ -11,7 +11,7 @@ namespace Drcom_Dialer.Model.Utils
     /// <summary>
     /// 自启动类
     /// </summary>
-    static class RunOnStartup
+    internal static class RunOnStartup
     {
         /// <summary>
         /// 设置自启动
@@ -36,17 +36,34 @@ namespace Drcom_Dialer.Model.Utils
         /// <returns></returns>
         public static bool SetStartup(bool setOrUnset)
         {
-            RegistryKey _regPath = Registry.CurrentUser;
+            RegistryKey regPath = Registry.CurrentUser;
             string path = Application.ExecutablePath;
-            RegistryKey _regKey = _regPath.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            RegistryKey regKey = regPath.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
             try
             {
+                //RegistryKey 为空
                 if (setOrUnset)
-                    _regKey.SetValue(Application.ProductName, path);
+                {
+                    regKey?.SetValue(Application.ProductName, path);
+                }
                 else
-                    _regKey.DeleteValue(Application.ProductName);
+                {
+                    regKey?.DeleteValue(Application.ProductName);
+                }
+                //if (setOrUnset)
+                //{
+                //    regKey.SetValue(Application.ProductName, path);
+                //}
+                //else
+                //{
+                //    regKey.DeleteValue(Application.ProductName);
+                //}
                 return true;
             }
+            //catch (NullReferenceException)
+            //{
+            //    //
+            //}
             catch (Exception e)
             {
                 Log4Net.WriteLog(e.Message, e);

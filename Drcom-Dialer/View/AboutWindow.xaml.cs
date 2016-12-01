@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 // To access MetroWindow, add the following reference
 using MahApps.Metro.Controls;
@@ -23,12 +25,12 @@ namespace Drcom_Dialer.View
         public AboutWindow()
         {
             InitializeComponent();
-            Version.Content = "Dr.COM三方客户端广工大专版 " + Model.Utils.Version.getVersion();
+            Version.Content = "Dr.COM三方客户端广工大专版 " + Model.Utils.Version.GetVersion();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri));
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
     }

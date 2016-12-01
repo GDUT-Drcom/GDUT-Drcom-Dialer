@@ -10,20 +10,25 @@ namespace Drcom_Dialer.Model
     {
         public static void Init()
         {
-            PPPoE.PPPoEDialSuccessEvent += new EventHandler<Msg>(PPPoESuccessEventHandler);
-            PPPoE.PPPoEDialFailEvent += new EventHandler<Msg>(PPPoEFailEventHandler);
-            PPPoE.PPPoEHangupSuccessEvent += new EventHandler(PPPoEHangupEventHandler);
+            PPPoE.PPPoEDialSuccessEvent += OnPppoESuccess;
+            PPPoE.PPPoEDialFailEvent += OnPPPoEFail;
+            PPPoE.PPPoEHangupSuccessEvent += OnPPPoEHangup;
         }
-
+        /// <summary>
+        /// 自动拨号
+        /// </summary>
         public static void Auth()
         {
             string username = "\r\n" + DialerConfig.username;
             string password = DialerConfig.password;
             PPPoE.Dial(username, password);
-  
         }
-
-        private static void PPPoESuccessEventHandler(object obj,Msg e)
+        /// <summary>
+        /// 拨号成功
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="e"></param>
+        private static void OnPppoESuccess(object obj,Msg e)
         {
             //TODO:IP地址的显示
             if (!Utils.HeartBeatUpdate.CheckDLL() || Utils.HeartBeatUpdate.CheckUpdate())
@@ -32,13 +37,13 @@ namespace Drcom_Dialer.Model
             {
                 Utils.BmobAnalyze.SendAnalyze();
 
-                if (HeartBeatProxy.init() != HeartBeatProxy.status.Success)
+                if (HeartBeatProxy.Init() != HeartBeatProxy.HeadBeatStatus.Success)
                     Utils.Log4Net.WriteLog("初始化心跳失败");
-                HeartBeatProxy.status stat = HeartBeatProxy.heartbeat();
+                HeartBeatProxy.HeadBeatStatus stat = HeartBeatProxy.Heartbeat();
 
                 switch (stat)
                 {
-                    case HeartBeatProxy.status.BindPortFail:
+                    case HeartBeatProxy.HeadBeatStatus.BindPortFail:
                         Utils.Log4Net.WriteLog("绑定端口失败");
                         break;
                     default:
@@ -48,18 +53,27 @@ namespace Drcom_Dialer.Model
             else
             {
                 //在此报错！
+
             }
 
         }
-
-        private static void PPPoEFailEventHandler(object obj,Msg e)
+        /// <summary>
+        /// 拨号错误
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="e"></param>
+        private static void OnPPPoEFail(object obj,Msg e)
         {
-            PPPoESuccessEventHandler(obj, e);
+            //PPPoESuccessEventHandler(obj, e);
         }
-
-        private static void PPPoEHangupEventHandler(object obj,EventArgs e)
+        /// <summary>
+        /// 注销
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="e"></param>
+        private static void OnPPPoEHangup(object obj,EventArgs e)
         {
-            HeartBeatProxy.kill();
+            HeartBeatProxy.Kill();
         }
     }
 }

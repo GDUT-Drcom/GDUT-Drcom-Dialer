@@ -8,6 +8,9 @@ namespace Drcom_Dialer.Model
     /// </summary>
     internal static class DialerConfig
     {
+        //todo:命名！！
+        //看到这个命名……
+
         /// <summary>
         /// 用户名
         /// </summary>
@@ -59,8 +62,11 @@ namespace Drcom_Dialer.Model
         public enum Campus
         {
             HEMC = 0,
+            //龙洞
             LongDong = 1,
+            //东风路
             DongfengRd = 2,
+            //番禺
             Panyu = 3
         }
         /// <summary>
@@ -111,9 +117,13 @@ namespace Drcom_Dialer.Model
         public static void SaveConfig()
         {
             if (cfa.AppSettings.Settings.Count > 0)
+            {
                 saveConfig();
+            }
             else
+            {
                 createConfig();
+            }
         }
 
         /// <summary>
@@ -141,22 +151,35 @@ namespace Drcom_Dialer.Model
                 Utils.Log4Net.WriteLog(e.Message, e);
             }
         }
+        /// <summary>
+        /// 我觉得做这个没用
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        private static string ConvertBoolYN(bool parameter)
+        {
+            const string True = "Y";
+            const string False = "N";
+
+            return parameter ? True : False;
+        }
 
         /// <summary>
         /// 创建配置文件
         /// </summary>
         private static void createConfig()
         {
+            //神，居然这样写
             try
             {
                 cfa.AppSettings.Settings.Add(nameof(username), username);
                 cfa.AppSettings.Settings.Add(nameof(password), isRememberPassword ? password : "");
-                cfa.AppSettings.Settings.Add(nameof(isAutoLogin), isAutoLogin ? "Y" : "N");
-                cfa.AppSettings.Settings.Add(nameof(isRememberPassword), isRememberPassword ? "Y" : "N");
-                cfa.AppSettings.Settings.Add(nameof(isRunOnStartup), isRunOnStartup ? "Y" : "N");
-                cfa.AppSettings.Settings.Add(nameof(isReDialOnFail), isReDialOnFail ? "Y" : "N");
-                cfa.AppSettings.Settings.Add(nameof(isFixVPN), isFixVPN ? "Y" : "N");
-                cfa.AppSettings.Settings.Add(nameof(isFeedback), isFeedback ? "Y" : "N");
+                cfa.AppSettings.Settings.Add(nameof(isAutoLogin), ConvertBoolYN(isAutoLogin));
+                cfa.AppSettings.Settings.Add(nameof(isRememberPassword), ConvertBoolYN(isRememberPassword));
+                cfa.AppSettings.Settings.Add(nameof(isRunOnStartup),  ConvertBoolYN(isRunOnStartup));
+                cfa.AppSettings.Settings.Add(nameof(isReDialOnFail), ConvertBoolYN(isReDialOnFail));
+                cfa.AppSettings.Settings.Add(nameof(isFixVPN),  ConvertBoolYN(isFixVPN));
+                cfa.AppSettings.Settings.Add(nameof(isFeedback),  ConvertBoolYN(isFeedback));
                 cfa.AppSettings.Settings.Add(nameof(zone), ((int)zone).ToString());
                 cfa.AppSettings.Settings.Add(nameof(guid), guid);
                 cfa.Save();

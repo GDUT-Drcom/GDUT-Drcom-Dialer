@@ -29,10 +29,8 @@ namespace Drcom_Dialer.Model.Utils
 
             if(response != null && response.Content !="" && response.ResponseStatus == ResponseStatus.Completed)
             {
-                if (response.Data.name != GDUT_Drcom.Version)
-                    return true;
-                else
-                    return false;
+                //简化代码
+                return response.Data.name != GDUT_Drcom.Version;
             }
             //另一个mirror
             client = new RestClient("https://api.github.com");
@@ -41,10 +39,8 @@ namespace Drcom_Dialer.Model.Utils
 
             if (response != null && response.Content != "" && response.ResponseStatus == ResponseStatus.Completed)
             {
-                if (response.Data.name != GDUT_Drcom.Version)
-                    return true;
-                else
-                    return false;
+                //简化
+                return response.Data.name != GDUT_Drcom.Version;
             }
             return false;
         }
@@ -58,17 +54,24 @@ namespace Drcom_Dialer.Model.Utils
             RestRequest request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
             IRestResponse<GithubReleaseResponse> response = client.Execute<GithubReleaseResponse>(request);
 
-            if (response != null && response.Content != "" && response.ResponseStatus == ResponseStatus.Completed)
+            //打个回车，太长了
+            if (response != null && response.Content != "" 
+                && response.ResponseStatus == ResponseStatus.Completed)
             {
                 if(response.Data.assets != null)
+                {
+                    //还是加括号
                     foreach(GithubReleaseAssetItem fileName in response.Data.assets)
                     {
                         if(fileName.name == "gdut-drcom.dll")
                         {
                             if (downloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
+                            {
                                 return true;
+                            }
                         }
                     }
+                }
             }
 
             //mirror
@@ -84,13 +87,14 @@ namespace Drcom_Dialer.Model.Utils
                         if (fileName.name == "gdut-drcom.dll")
                         {
                             if (downloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
+                            {
                                 return true;
+                            }
                         }
                     }
             }
 
             return false;
-
         }
         /// <summary>
         /// 下载文件
@@ -107,12 +111,16 @@ namespace Drcom_Dialer.Model.Utils
 
             byte[] result = client.DownloadData(request);
             if (result.Length < 1024)
+            {
                 return false;
+            }
             try
             {
-                FileStream fs = new FileStream(path, FileMode.Create);
-                fs.Write(result, 0, result.Length);
-                fs.Close();
+                //换用using
+                using (FileStream stream=new FileStream(path,FileMode.Create))
+                {
+                    stream.Write(result, 0, result.Length);
+                }
             }
             catch(Exception e)
             {
@@ -128,6 +136,7 @@ namespace Drcom_Dialer.Model.Utils
 
     public class GithubReleaseResponse
     {
+        //todo: 有点想改命名
         public string tag_name;
         public string name;
         public GithubReleaseAssetItem[] assets;

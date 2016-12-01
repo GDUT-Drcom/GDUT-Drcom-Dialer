@@ -14,9 +14,11 @@ namespace Drcom_Dialer.Model.Utils
         {
             //log4net.Config.XmlConfigurator.Configure();
             log4net.Appender.FileAppender fAppender = new log4net.Appender.FileAppender();
-            log4net.Layout.PatternLayout layout = new log4net.Layout.PatternLayout();
+            log4net.Layout.PatternLayout layout = new log4net.Layout.PatternLayout
+            {
+                ConversionPattern = "[%date] %thread -- %-5level -- %logger [%M] -- %message%newline"
+            };
 
-            layout.ConversionPattern = "[%date] %thread -- %-5level -- %logger [%M] -- %message%newline";
             layout.ActivateOptions();
 
             fAppender.File = "DogCom.log";
@@ -24,7 +26,6 @@ namespace Drcom_Dialer.Model.Utils
             fAppender.AppendToFile = true;
             fAppender.ActivateOptions();
             log4net.Config.BasicConfigurator.Configure(fAppender);
-            
         }
 
         /// <summary>
@@ -72,6 +73,5 @@ namespace Drcom_Dialer.Model.Utils
         //log4net日志专用
         private static readonly log4net.ILog LogInfo = log4net.LogManager.GetLogger("loginfo");
         private static readonly log4net.ILog LogError = log4net.LogManager.GetLogger("logerror");
-
     }
 }

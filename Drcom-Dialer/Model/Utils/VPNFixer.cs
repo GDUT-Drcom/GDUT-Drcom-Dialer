@@ -14,7 +14,7 @@ namespace Drcom_Dialer.Model.Utils
     /// VPN 修复
     /// (测试可添加路由表)
     /// </summary>
-    class VPNFixer
+    internal static class VPNFixer
     {
         /// <summary>
         /// 是否有管理员权限
@@ -42,12 +42,14 @@ namespace Drcom_Dialer.Model.Utils
         /// </summary>
         public static void Elevate()
         {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.UseShellExecute = true;
-            psi.WorkingDirectory = Environment.CurrentDirectory;
-            psi.FileName = Application.ExecutablePath;
-            psi.Verb = "runas";
-            psi.Arguments = StartupArgs;
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                UseShellExecute = true,
+                WorkingDirectory = Environment.CurrentDirectory,
+                FileName = Application.ExecutablePath,
+                Verb = "runas",
+                Arguments = StartupArgs
+            };
             try
             {
                 Process.Start(psi);
@@ -56,6 +58,7 @@ namespace Drcom_Dialer.Model.Utils
             {
                 Log4Net.WriteLog("用户拒绝提升权限");
                 // TODO : 提醒用户需要允许UAC
+                //MessageBox.Show("需要UAC");
                 return;
             }
             //还是不要退出比较好
@@ -69,16 +72,20 @@ namespace Drcom_Dialer.Model.Utils
         public static void AddRouteRule()
         {
             if (!IsElevated)
+            {
                 throw new InvalidOperationException("没有足够权限");
+            }
             string gateway = FindGateway();
 
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = "route";
-            // TODO 认证地址需要获取
-            psi.Arguments = $"add {DialerConfig.AuthIP} mask 255.255.255.255 {gateway} metric 5";
-            psi.CreateNoWindow = true;
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "route",
+                // TODO 认证地址需要获取
+                Arguments = $"add {DialerConfig.AuthIP} mask 255.255.255.255 {gateway} metric 5",
+                CreateNoWindow = true
+            };
             Process proc = Process.Start(psi);
-            proc.WaitForExit();
+            proc?.WaitForExit();
         }
 
         /// <summary>
@@ -87,14 +94,16 @@ namespace Drcom_Dialer.Model.Utils
         /// <returns>Gateway</returns>
         private static string FindGateway()
         {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = "route";
-            psi.Arguments = "print";
-            psi.CreateNoWindow = true;
-            psi.UseShellExecute = false;
-            psi.RedirectStandardOutput = true;
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "route",
+                Arguments = "print",
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
             Process proc = Process.Start(psi);
-            proc.WaitForExit();
+            proc?.WaitForExit();
             string rout = proc.StandardOutput.ReadToEnd();
             Regex reg = new Regex(@"(0\.0\.0\.0\s+){2}(\d+\.\d+\.\d+\.\d)+");
             var mc = reg.Matches(rout);
