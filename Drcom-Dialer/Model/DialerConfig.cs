@@ -88,7 +88,7 @@ namespace Drcom_Dialer.Model
                     case Campus.LongDong:
                         return "10.0.3.6";
                     case Campus.DongfengRd:
-                        return "0.0.0.0";
+                        return "10.0.3.6";
                     case Campus.Panyu:
                         return "0.0.0.0";
                     default:

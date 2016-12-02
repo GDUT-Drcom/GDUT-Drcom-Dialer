@@ -14,7 +14,7 @@
                       SelectedIndex="0">
                 <ListBoxItem Content="大学城校区"/>
                 <ListBoxItem Content="龙洞校区"/>
-                <ListBoxItem Content="东风路校区" IsEnabled="False"/>
+                <ListBoxItem Content="东风路校区"/>
                 <ListBoxItem Content="番禺校区" IsEnabled="False"/>
             </ComboBox>
             <TextBlock x:Name="FeatureTextBlock" Text="功能项:"  Margin="5,5,5,5"/>
