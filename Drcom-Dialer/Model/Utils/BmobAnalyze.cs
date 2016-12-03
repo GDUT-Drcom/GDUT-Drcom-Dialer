@@ -63,7 +63,7 @@ namespace Drcom_Dialer.Model.Utils
         /// <param name="bytes"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        private static string ToHexString(byte[] bytes, int count)
+        public static string ToHexString(byte[] bytes, int count)
         {
             string byteStr = string.Empty;
             int i = 0;
@@ -72,7 +72,7 @@ namespace Drcom_Dialer.Model.Utils
                 foreach (var item in bytes)
                 {
                     i++;
-                    byteStr += string.Format("{0:X2}", item);
+                    byteStr += string.Format("{0:x2}", item);
                     if (i >= count)
                         break;
                 }

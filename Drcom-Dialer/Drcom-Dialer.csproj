@@ -113,6 +113,7 @@
     <Compile Include="Model\DialerConfig.cs" />
     <Compile Include="Model\HeartBeatProxy.cs" />
     <Compile Include="Model\PPPoE.cs" />
+    <Compile Include="Model\Utils\AccountStatus.cs" />
     <Compile Include="Model\Utils\BmobAnalyze.cs" />
     <Compile Include="Model\Utils\gdut-drcom.cs" />
     <Compile Include="Model\Utils\HeartBeatUpdate.cs" />
