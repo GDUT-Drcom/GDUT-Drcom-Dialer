@@ -65,7 +65,7 @@ namespace Drcom_Dialer.Model
         private static void OnPPPoEFail(object obj,Msg e)
         {
             //PPPoESuccessEventHandler(obj, e);
-            Utils.AccountStatus.GetAccountInfomation();
+            Utils.AccountStatus.AccountInfo();
         }
         /// <summary>
         /// 注销

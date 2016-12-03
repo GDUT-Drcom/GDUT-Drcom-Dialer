@@ -24,7 +24,7 @@ namespace Drcom_Dialer.Model.Utils
             IRestResponse indexResponse = client.Execute(indexRequest);
 
             Match match = Regex.Match(indexResponse.Content, @"var checkcode=""([0-9]*)""");
-            
+
             string code = match.Groups[1].Value;
 
             RestRequest authRequest = new RestRequest("/Self/LoginAction.action", Method.POST);
@@ -32,16 +32,11 @@ namespace Drcom_Dialer.Model.Utils
             MD5 md5 = new MD5CryptoServiceProvider();
             byte[] mdResult = md5.ComputeHash(Encoding.Default.GetBytes(DialerConfig.password));
             authRequest.AddParameter("password", BmobAnalyze.ToHexString(mdResult, mdResult.Length));
-            //authRequest.AddParameter("code", "");
+            authRequest.AddParameter("code", "");
             authRequest.AddParameter("checkcode", code);
-            //authRequest.AddParameter("Submit", "登录");
+            authRequest.AddParameter("Submit", "登录");
 
-            authRequest.AddHeader("Accept-Language", @"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
-            //authRequest.AddHeader("Connection", "keep-alive");
-            authRequest.AddHeader("Pragma", "no-cache");
-            authRequest.AddHeader("Cache-Control", "no-cache");
-
-            authRequest.AddHeader("Accept", @"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            client.Execute(new RestRequest("Self/RandomCodeAction.action"));
 
             IRestResponse authResponse = client.Execute(authRequest);
 
@@ -51,6 +46,12 @@ namespace Drcom_Dialer.Model.Utils
             return infoResponse.Data;
         }
 
+
+        public static void AccountInfo()
+        {
+            AccountInfomation accInfo = GetAccountInfomation();
+            Log4Net.WriteLog(accInfo.note.overdate);
+        }
 
         /// <summary>
         /// 账户信息
