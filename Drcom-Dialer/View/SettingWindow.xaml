@@ -6,7 +6,10 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
         mc:Ignorable="d" ResizeMode="NoResize"
-        Title="Setting" Height="300" Width="240">
+        BorderBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
+        WindowStartupLocation="CenterScreen"
+        Title="Setting" Height="320" Width="240">
     <Grid>
         <StackPanel Margin="10,10,10,10">
             <TextBlock Text="校区选择:" Margin="5,5,5,5"/>
@@ -30,6 +33,10 @@
                       Content="修复VPN" 
                       VerticalAlignment="Center" 
                       Click="cb_vpnFix_Checked" />
+            <CheckBox x:Name="ExpireNotifyCheckBox" Margin="30,5,30,5"
+                      Content="欠费前提醒" 
+                      VerticalAlignment="Center" 
+                      Click="ExpireNotifyCheckBox_Click" />
             <TextBlock x:Name="OtherTextBlock"
                       Text="其他:"  Margin="5,5,5,5"/>
             <CheckBox x:Name="ReportCheckBox" Margin="30,5,30,0"

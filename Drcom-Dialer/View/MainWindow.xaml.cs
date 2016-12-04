@@ -34,7 +34,7 @@ namespace Drcom_Dialer.View
             // 重构啊!MVVM啊!
             // 重构啊!MVVM啊!
             StatusPresenter sp = new StatusPresenter();
-            PPPoE.PPPoEDialFailEvent += (s, e) => { sp.Status = "拨号失败"; };
+            PPPoE.PPPoEDialFailEvent += (s, e) => { sp.Status = e.Message; };
             PPPoE.PPPoEDialSuccessEvent += (s, e) => { sp.Status = "拨号成功"; };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) => { sp.Status = "拨号已断开"; };
             HeartBeatProxy.HeartbeatExited += (code) => { sp.Status = $"心跳终止({code})"; };
@@ -42,7 +42,7 @@ namespace Drcom_Dialer.View
             InitTrayIcon();
         }
 
-        private NotifyIcon _trayIcon;
+        public static NotifyIcon _trayIcon;
 
         /// <summary>
         ///     拨号按钮点击事件
@@ -64,8 +64,8 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void cb_autoLogin_Click(object sender, RoutedEventArgs e)
         {
-            if ((cb_autoLogin.IsChecked != null) && (cb_remember.IsChecked != null) && !(bool) cb_remember.IsChecked &&
-                (bool) cb_autoLogin.IsChecked)
+            if ((cb_autoLogin.IsChecked != null) && (cb_remember.IsChecked != null) && !(bool)cb_remember.IsChecked &&
+                (bool)cb_autoLogin.IsChecked)
             {
                 cb_remember.IsChecked = true;
                 cb_remember_Click(null, null);
@@ -73,7 +73,7 @@ namespace Drcom_Dialer.View
 
             if (cb_autoLogin.IsChecked != null)
             {
-                DialerConfig.isAutoLogin = (bool) cb_autoLogin.IsChecked;
+                DialerConfig.isAutoLogin = (bool)cb_autoLogin.IsChecked;
             }
         }
 
@@ -86,8 +86,8 @@ namespace Drcom_Dialer.View
         {
             if ((cb_autoLogin.IsChecked != null) &&
                 (cb_remember.IsChecked != null) &&
-                !(bool) cb_remember.IsChecked &&
-                (bool) cb_autoLogin.IsChecked)
+                !(bool)cb_remember.IsChecked &&
+                (bool)cb_autoLogin.IsChecked)
             {
                 cb_autoLogin.IsChecked = false;
                 cb_autoLogin_Click(null, null);
@@ -95,7 +95,7 @@ namespace Drcom_Dialer.View
 
             if (cb_remember.IsChecked != null)
             {
-                DialerConfig.isRememberPassword = (bool) cb_remember.IsChecked;
+                DialerConfig.isRememberPassword = (bool)cb_remember.IsChecked;
             }
         }
 
@@ -204,6 +204,19 @@ namespace Drcom_Dialer.View
             //todo:建议为窗体级
             SettingWindow setting = new SettingWindow();
             setting.ShowDialog();
+        }
+
+        /// <summary>
+        ///     显示气泡
+        ///     需要弄成MVVM
+        /// </summary>
+        /// <param name="timeout">消失时间（毫秒）</param>
+        /// <param name="title">标题</param>
+        /// <param name="text">内容</param>
+        /// <param name="icon">图标</param>
+        public static void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon = ToolTipIcon.Info)
+        {
+            _trayIcon.ShowBalloonTip(timeout, title, text, icon);
         }
     }
 }

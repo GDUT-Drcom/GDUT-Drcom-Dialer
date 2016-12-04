@@ -137,14 +137,15 @@ namespace Drcom_Dialer.Model.Utils
     public class GithubReleaseResponse
     {
         //todo: 有点想改命名
-        public string tag_name;
-        public string name;
-        public GithubReleaseAssetItem[] assets;
+        //改完记得用DeserializeAs修正序列化问题
+        public string tag_name { get; set; }
+        public string name { get; set; }
+        public GithubReleaseAssetItem[] assets { get; set; }
     }
 
     public class GithubReleaseAssetItem
     {
-        public string name;
-        public string browser_download_url;
+        public string name { get; set; }
+        public string browser_download_url { get; set; }
     }
 }

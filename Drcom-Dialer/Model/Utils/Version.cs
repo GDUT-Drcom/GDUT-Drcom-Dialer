@@ -17,8 +17,7 @@ namespace Drcom_Dialer.Model.Utils
         {
             try
             {
-                //todo:不返回没用
-                ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+                return ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
             }
             catch (Exception e)
             {

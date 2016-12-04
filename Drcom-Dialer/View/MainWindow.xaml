@@ -11,7 +11,10 @@
         Title="广工Dr.com"
         Height="330" Width="300" ResizeMode="CanMinimize"
         Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" 
-                      StateChanged="MetroWindow_StateChanged" >
+        StateChanged="MetroWindow_StateChanged"
+        BorderBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>

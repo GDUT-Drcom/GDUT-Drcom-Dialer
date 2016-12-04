@@ -26,6 +26,7 @@ namespace Drcom_Dialer.View
             StartupCheckBox.IsChecked = Model.DialerConfig.isRunOnStartup;
             RedialCheckBox.IsChecked = Model.DialerConfig.isReDialOnFail;
             VpnFixCheckBox.IsChecked = Model.DialerConfig.isFixVPN;
+            ExpireNotifyCheckBox.IsChecked = Model.DialerConfig.isNotifyWhenExpire;
             CampusComboBox.SelectedIndex = (int)Model.DialerConfig.zone;
 
             CampusComboBox.SelectionChanged += CampusComboBox_SelectionChanged;
@@ -59,6 +60,14 @@ namespace Drcom_Dialer.View
         private void CampusComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Model.DialerConfig.zone = (Model.DialerConfig.Campus)CampusComboBox.SelectedIndex;
+        }
+
+        private void ExpireNotifyCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (ExpireNotifyCheckBox.IsChecked != null)
+            {
+                Model.DialerConfig.isNotifyWhenExpire = (bool)ExpireNotifyCheckBox.IsChecked;
+            }
         }
     }
 }

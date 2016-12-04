@@ -6,19 +6,18 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
         mc:Ignorable="d"
-        Title="About" Height="200" Width="300" ResizeMode="NoResize" >
+        Title="About" Height="200" Width="300" ResizeMode="NoResize"
+        BorderBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel HorizontalAlignment="Left" Margin="10,10,0,10" Width="274">
             <Label x:Name="Version" Content="Dr.COM三方客户端广工大专版1.0.3.284"/>
             <TextBlock x:Name="Copyright" TextWrapping="Wrap" Margin="5,10,0,5">
-                作者（按字母顺序排序）:
-                <LineBreak/>
-            <Hyperlink NavigateUri="https://github.com/chenhaowen01" RequestNavigate="Hyperlink_RequestNavigate">chenhaowen</Hyperlink> DrCOM 心跳包维护者<LineBreak/>
-            <Hyperlink NavigateUri="https://github.com/jiangming1399" RequestNavigate="Hyperlink_RequestNavigate">Jim Jiang</Hyperlink> 界面UI以及其他功能<LineBreak/>
-            <Hyperlink NavigateUri="https://github.com/lindexi" RequestNavigate="Hyperlink_RequestNavigate">lindexi</Hyperlink> 核心功能<LineBreak/>
-            <Hyperlink NavigateUri="https://github.com/lyhyl" RequestNavigate="Hyperlink_RequestNavigate">lyhyl</Hyperlink> 龙洞维护者<LineBreak/>
-            <Hyperlink NavigateUri="https://github.com" RequestNavigate="Hyperlink_RequestNavigate">贪狼</Hyperlink> 东风路维护者<LineBreak/>
-            Github项目地址：<Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer" RequestNavigate="Hyperlink_RequestNavigate">Drcom-Dialer</Hyperlink>
+                免责声明：<LineBreak/>
+                本软件仅供内部学习交流使用，请在 GPL-3.0 协议下授权使用。使用本软件造成的任何后果，包括但不限于经济损失、法律责任，均由使用者承担，作者不承担任何责任。
+                <LineBreak/><LineBreak/>
+            项目主页：<Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer" RequestNavigate="Hyperlink_RequestNavigate">Drcom-Dialer</Hyperlink> 问题反馈：<Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer/issues" RequestNavigate="Hyperlink_RequestNavigate">ISSUE</Hyperlink>
             </TextBlock>
         </StackPanel>
 

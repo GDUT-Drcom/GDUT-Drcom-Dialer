@@ -51,6 +51,11 @@ namespace Drcom_Dialer.Model
         public static bool isFeedback = true;
 
         /// <summary>
+        /// 到期前提醒
+        /// </summary>
+        public static bool isNotifyWhenExpire = true;
+
+        /// <summary>
         /// GUID
         /// 用于发送反馈
         /// </summary>
@@ -61,13 +66,26 @@ namespace Drcom_Dialer.Model
         /// </summary>
         public enum Campus
         {
+            /// <summary>
+            ///     大学城
+            /// </summary>
             HEMC = 0,
-            //龙洞
+            /// <summary>
+            ///     龙洞
+            /// </summary>
             LongDong = 1,
-            //东风路
+            /// <summary>
+            ///     东风路
+            /// </summary>
             DongfengRd = 2,
-            //番禺
-            Panyu = 3
+            /// <summary>
+            ///     番禺
+            /// </summary>
+            Panyu = 3,
+            /// <summary>
+            ///     未知
+            /// </summary>
+            Unknown = -1
         }
         /// <summary>
         /// 校区选择
@@ -92,7 +110,7 @@ namespace Drcom_Dialer.Model
                     case Campus.Panyu:
                         return "0.0.0.0";
                     default:
-                        return "0.0.0.0";
+                        return "10.0.3.2";
                 }
             }
         }
@@ -141,6 +159,7 @@ namespace Drcom_Dialer.Model
                 cfa.AppSettings.Settings[nameof(isReDialOnFail)].Value = isReDialOnFail ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(isFixVPN)].Value = isFixVPN ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(isFeedback)].Value = isFeedback ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(isNotifyWhenExpire)].Value = isNotifyWhenExpire ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(guid)].Value = guid;
                 cfa.AppSettings.Settings[nameof(zone)].Value = zone.ToString();
                 cfa.Save();
@@ -180,6 +199,7 @@ namespace Drcom_Dialer.Model
                 cfa.AppSettings.Settings.Add(nameof(isReDialOnFail), ConvertBoolYN(isReDialOnFail));
                 cfa.AppSettings.Settings.Add(nameof(isFixVPN),  ConvertBoolYN(isFixVPN));
                 cfa.AppSettings.Settings.Add(nameof(isFeedback),  ConvertBoolYN(isFeedback));
+                cfa.AppSettings.Settings.Add(nameof(isNotifyWhenExpire),  ConvertBoolYN(isNotifyWhenExpire));
                 cfa.AppSettings.Settings.Add(nameof(zone), ((int)zone).ToString());
                 cfa.AppSettings.Settings.Add(nameof(guid), guid);
                 cfa.Save();
@@ -205,6 +225,7 @@ namespace Drcom_Dialer.Model
                 isReDialOnFail = cfa.AppSettings.Settings[nameof(isReDialOnFail)].Value == "Y";
                 isFixVPN = cfa.AppSettings.Settings[nameof(isFixVPN)].Value == "Y";
                 isFeedback = cfa.AppSettings.Settings[nameof(isFeedback)].Value == "Y";
+                isNotifyWhenExpire = cfa.AppSettings.Settings[nameof(isNotifyWhenExpire)].Value == "Y";
                 guid = cfa.AppSettings.Settings[nameof(guid)].Value;
                 zone = (Campus)int.Parse(cfa.AppSettings.Settings[nameof(zone)].Value);
             }
