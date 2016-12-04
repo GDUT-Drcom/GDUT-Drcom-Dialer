@@ -1,0 +1,5 @@
+language: csharp
+solution: Drcom-Dialer.sln
+install:
+  - sudo apt-get install -y gtk-sharp2
+  - nuget restore Drcom-Dialer.sln
