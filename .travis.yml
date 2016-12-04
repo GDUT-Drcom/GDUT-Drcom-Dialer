@@ -1,7 +1,5 @@
-language: c
-
-install: 
-  - sudo apt-get install mono-devel mono-gmcs
-  
-script:
-  - xbuild CI.proj
+language: csharp
+solution: Drcom-Dialer.sln
+install:
+  - sudo apt-get install -y gtk-sharp2
+  - nuget restore Drcom-Dialer.sln
