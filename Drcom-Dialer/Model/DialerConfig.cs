@@ -90,7 +90,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 校区选择
         /// </summary>
-        public static Campus zone = 0;
+        public static Campus zone = Campus.Unknown;
 
         /// <summary>
         /// 认证地址

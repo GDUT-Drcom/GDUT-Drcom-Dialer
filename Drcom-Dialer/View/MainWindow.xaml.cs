@@ -139,7 +139,7 @@ namespace Drcom_Dialer.View
         private void MetroWindow_Closing(object sender, CancelEventArgs e)
         {
             //TODO:add code here 注销
-
+            PPPoE.Hangup();
             //hangup
         }
 

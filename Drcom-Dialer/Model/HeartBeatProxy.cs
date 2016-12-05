@@ -36,11 +36,12 @@ namespace Drcom_Dialer.Model
         {
             try
             {
-                byte[] ipaddr = Encoding.Default.GetBytes(DialerConfig.AuthIP);
-                byte[] flag = Encoding.Default.GetBytes("6a");
+                string keep_alive1_flag = "6a\0";
+                string log = ".\\gdut-drcom.log\0";
                 GDUT_Drcom.set_enable_crypt(1);
-                GDUT_Drcom.set_remote_ip(ref ipaddr, ipaddr.Length);
-                GDUT_Drcom.set_keep_alive1_flag(ref flag, flag.Length);
+                GDUT_Drcom.set_remote_ip(DialerConfig.AuthIP, DialerConfig.AuthIP.Length);
+                GDUT_Drcom.set_keep_alive1_flag(keep_alive1_flag, keep_alive1_flag.Length);
+                GDUT_Drcom.set_log_file(log, log.Length);
                 return HeadBeatStatus.Success;
             }
             catch (Exception e)

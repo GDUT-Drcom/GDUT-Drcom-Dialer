@@ -10,7 +10,7 @@ namespace Drcom_Dialer.Model
     {
         public static void Init()
         {
-            PPPoE.PPPoEDialSuccessEvent += OnPppoESuccess;
+            PPPoE.PPPoEDialSuccessEvent += OnPPPoESuccess;
             PPPoE.PPPoEDialFailEvent += OnPPPoEFail;
             PPPoE.PPPoEHangupSuccessEvent += OnPPPoEHangup;
         }
@@ -28,7 +28,7 @@ namespace Drcom_Dialer.Model
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="e"></param>
-        private static void OnPppoESuccess(object obj,Msg e)
+        private static void OnPPPoESuccess(object obj,Msg e)
         {
             //TODO:IP地址的显示
             if (!Utils.HeartBeatUpdate.CheckDLL() || Utils.HeartBeatUpdate.CheckUpdate())
@@ -45,6 +45,9 @@ namespace Drcom_Dialer.Model
                 {
                     case HeartBeatProxy.HeadBeatStatus.BindPortFail:
                         Utils.Log4Net.WriteLog("绑定端口失败");
+                        break;
+                    case HeartBeatProxy.HeadBeatStatus.Unknown:
+                        Utils.Log4Net.WriteLog("未知错误");
                         break;
                     default:
                         break;
