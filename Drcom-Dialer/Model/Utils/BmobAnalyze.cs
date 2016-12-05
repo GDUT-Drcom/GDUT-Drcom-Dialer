@@ -11,7 +11,7 @@ namespace Drcom_Dialer.Model.Utils
     /// <summary>
     /// 运行统计类
     /// </summary>
-    static class BmobAnalyze
+    internal static class BmobAnalyze
     {
         /// <summary>
         /// 发送运行统计
@@ -66,15 +66,18 @@ namespace Drcom_Dialer.Model.Utils
         public static string ToHexString(byte[] bytes, int count)
         {
             string byteStr = string.Empty;
-            int i = 0;
-            if (bytes != null || bytes.Length > 0)
+            if (bytes != null )
             {
-                foreach (var item in bytes)
+                //int i = 0;
+                for (int i = 0; i < bytes.Length; i++)
                 {
-                    i++;
-                    byteStr += string.Format("{0:x2}", item);
+                    var item = bytes[i];
+                    //i++;
+                    byteStr += $"{item:x2}";
                     if (i >= count)
+                    {
                         break;
+                    }
                 }
             }
             return byteStr;
@@ -82,13 +85,12 @@ namespace Drcom_Dialer.Model.Utils
     }
 
 
-
-    class AnalyzeData
+    internal class AnalyzeData
     {
         public string Username;
     }
 
-    class ObjId
+    internal class ObjId
     {
         public string objectId;
     }

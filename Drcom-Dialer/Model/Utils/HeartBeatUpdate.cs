@@ -27,17 +27,20 @@ namespace Drcom_Dialer.Model.Utils
             RestRequest request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
             IRestResponse<GithubReleaseResponse> response = client.Execute<GithubReleaseResponse>(request);
 
-            if(response != null && response.Content !="" && response.ResponseStatus == ResponseStatus.Completed)
+            if(response != null && response.Content !="" 
+                && response.ResponseStatus == ResponseStatus.Completed)
             {
                 //简化代码
                 return response.Data.name != GDUT_Drcom.Version;
             }
+
             //另一个mirror
             client = new RestClient("https://api.github.com");
             request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
             response = client.Execute<GithubReleaseResponse>(request);
 
-            if (response != null && response.Content != "" && response.ResponseStatus == ResponseStatus.Completed)
+            if (response != null && response.Content != "" 
+                && response.ResponseStatus == ResponseStatus.Completed)
             {
                 //简化
                 return response.Data.name != GDUT_Drcom.Version;
@@ -65,7 +68,7 @@ namespace Drcom_Dialer.Model.Utils
                     {
                         if(fileName.name == "gdut-drcom.dll")
                         {
-                            if (downloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
+                            if (DownloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
                             {
                                 return true;
                             }
@@ -86,7 +89,7 @@ namespace Drcom_Dialer.Model.Utils
                     {
                         if (fileName.name == "gdut-drcom.dll")
                         {
-                            if (downloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
+                            if (DownloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
                             {
                                 return true;
                             }
@@ -102,7 +105,7 @@ namespace Drcom_Dialer.Model.Utils
         /// <param name="url">链接</param>
         /// <param name="path">本地文件</param>
         /// <returns></returns>
-        private static bool downloadFile(string url,string path)
+        private static bool DownloadFile(string url,string path)
         {
             int index = url.IndexOf("/", 10); //懒的用其他的了，这是第三个/的出现的位置
 
