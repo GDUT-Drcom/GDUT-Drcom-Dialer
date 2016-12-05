@@ -30,33 +30,25 @@ namespace Drcom_Dialer.Model
         /// <param name="e"></param>
         private static void OnPPPoESuccess(object obj,Msg e)
         {
-            //TODO:IP地址的显示
+            //检测DLL更新
             if (!Utils.HeartBeatUpdate.CheckDLL() || Utils.HeartBeatUpdate.CheckUpdate())
                 Utils.HeartBeatUpdate.Update();
+
             if (Utils.HeartBeatUpdate.CheckDLL())
             {
-                Utils.BmobAnalyze.SendAnalyze();
+                //获取账户信息
+                Utils.AccountStatus.AccountInfo();
 
                 if (HeartBeatProxy.Init() != HeartBeatProxy.HeadBeatStatus.Success)
                     Utils.Log4Net.WriteLog("初始化心跳失败");
                 HeartBeatProxy.HeadBeatStatus stat = HeartBeatProxy.Heartbeat();
 
-                switch (stat)
-                {
-                    case HeartBeatProxy.HeadBeatStatus.BindPortFail:
-                        Utils.Log4Net.WriteLog("绑定端口失败");
-                        break;
-                    case HeartBeatProxy.HeadBeatStatus.Unknown:
-                        Utils.Log4Net.WriteLog("未知错误");
-                        break;
-                    default:
-                        break;
-                }
+                //发送反馈
+                Utils.BmobAnalyze.SendAnalyze();
             }
             else
             {
                 //在此报错！
-
             }
 
         }
@@ -68,7 +60,6 @@ namespace Drcom_Dialer.Model
         private static void OnPPPoEFail(object obj,Msg e)
         {
             //PPPoESuccessEventHandler(obj, e);
-            Utils.AccountStatus.AccountInfo();
         }
         /// <summary>
         /// 注销

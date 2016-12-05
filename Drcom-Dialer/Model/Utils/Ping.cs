@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Net.NetworkInformation;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Drcom_Dialer.Model.Utils
 {
@@ -95,10 +91,8 @@ namespace Drcom_Dialer.Model.Utils
             {
                 case SimplePing.Status.Success:
                     if(outerRetry > MaxRetry)
-                        //同志们我又连上了
-                        //下面这句话是占位符
                     {
-                        outerRetry = 0;//差点就打错了
+                        //todo: 通知外部连上了
                     }
                     outerRetry = 0;
                     break;

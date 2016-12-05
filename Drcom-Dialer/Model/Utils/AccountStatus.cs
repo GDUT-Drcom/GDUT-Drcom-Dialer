@@ -80,7 +80,8 @@ namespace Drcom_Dialer.Model.Utils
                     }
                 }
 
-
+                //这个功能本来是用于自动设置校区的
+                //然而辣鸡广工的套餐名称三校区相同
                 if(DialerConfig.zone == DialerConfig.Campus.Unknown)
                 {
                     if (accInfo.note.service.Contains("大学城"))

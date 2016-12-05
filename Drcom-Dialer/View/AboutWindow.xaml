@@ -6,18 +6,54 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
         mc:Ignorable="d"
-        Title="About" Height="200" Width="300" ResizeMode="NoResize"
+        Title="About" Height="420" Width="300" ResizeMode="NoResize"
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <StackPanel HorizontalAlignment="Left" Margin="10,10,0,10" Width="274">
+        <StackPanel Margin="10,10,10,10">
             <Label x:Name="Version" Content="Dr.COM三方客户端广工大专版1.0.3.284"/>
             <TextBlock x:Name="Copyright" TextWrapping="Wrap" Margin="5,10,0,5">
                 免责声明：<LineBreak/>
-                本软件仅供内部学习交流使用，请在 GPL-3.0 协议下授权使用。使用本软件造成的任何后果，包括但不限于经济损失、法律责任，均由使用者承担，作者不承担任何责任。
+                本软件以 GPL-3.0 协议授权，并仅供内部学习交流使用。
+                本软件仅以“原样”提供，使用本软件造成的任何后果，
+                包括但不限于经济损失、法律责任，均由使用者承担，
+                作者不承担任何责任。<LineBreak/><LineBreak/>
+                <Run FontSize="9"> THE SOFTWARE IS PROVIDED 
+                    "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+                    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+                    TO THE WARRANTIES OF MERCHANTABILITY, FITNESS 
+                    FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+                    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+                    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES 
+                    OR OTHER LIABILITY, WHETHER IN AN ACTION 
+                    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR 
+                    THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+                </Run><LineBreak/><LineBreak/>
+                开源组件：<LineBreak/>
+                <Hyperlink NavigateUri="https://github.com/Fody/Costura/" 
+                           RequestNavigate="Hyperlink_RequestNavigate">Costura</Hyperlink> | 
+                <Hyperlink NavigateUri="http://dotras.codeplex.com/" 
+                           RequestNavigate="Hyperlink_RequestNavigate">DotRas</Hyperlink> | 
+                <Hyperlink NavigateUri="https://github.com/chenhaowen01/gdut-drcom" 
+                           RequestNavigate="Hyperlink_RequestNavigate">Gdut-Drcom</Hyperlink> | 
+                <Hyperlink NavigateUri="http://logging.apache.org/log4net/" 
+                           RequestNavigate="Hyperlink_RequestNavigate">Log4Net</Hyperlink> | 
+                <Hyperlink NavigateUri="https://github.com/MahApps/MahApps.Metro" 
+                           RequestNavigate="Hyperlink_RequestNavigate">MahApps.Metro</Hyperlink> | 
+                <Hyperlink NavigateUri="https://github.com/restsharp/RestSharp" 
+                           RequestNavigate="Hyperlink_RequestNavigate">RestSharp</Hyperlink>
                 <LineBreak/><LineBreak/>
-            项目主页：<Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer" RequestNavigate="Hyperlink_RequestNavigate">Drcom-Dialer</Hyperlink> 问题反馈：<Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer/issues" RequestNavigate="Hyperlink_RequestNavigate">ISSUE</Hyperlink>
+                相关链接：<LineBreak/>
+                <Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer" 
+                           RequestNavigate="Hyperlink_RequestNavigate">项目主页</Hyperlink> | 
+                <Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer/issues" 
+                           RequestNavigate="Hyperlink_RequestNavigate">问题反馈</Hyperlink> | 
+                <Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer/wiki" 
+                           RequestNavigate="Hyperlink_RequestNavigate">使用帮助</Hyperlink> |
+                <Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer/releases"
+                           RequestNavigate="Hyperlink_RequestNavigate">检测更新</Hyperlink>
             </TextBlock>
         </StackPanel>
 

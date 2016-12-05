@@ -31,6 +31,7 @@ namespace Drcom_Dialer.Model.Utils
                 byte[] mdResult = md5.ComputeHash(Encoding.Default.GetBytes(DialerConfig.username));
                 data.Username = ToHexString(mdResult, mdResult.Length);
             }
+            data.CampusZone = (int)DialerConfig.zone;
             
             if (DialerConfig.guid == "")
             {
@@ -88,6 +89,7 @@ namespace Drcom_Dialer.Model.Utils
     internal class AnalyzeData
     {
         public string Username;
+        public int CampusZone;
     }
 
     internal class ObjId

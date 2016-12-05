@@ -160,7 +160,7 @@ namespace Drcom_Dialer.ViewModel
             };
             PPPoE.PPPoEDialSuccessEvent += (s, e) =>
             {
-                StatusPresenterModel.Status = "拨号成功";
+                StatusPresenterModel.Status = "拨号成功，IP: " + e.Message;
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {
