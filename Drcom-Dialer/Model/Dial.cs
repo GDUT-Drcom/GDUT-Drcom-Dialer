@@ -14,6 +14,7 @@ namespace Drcom_Dialer.Model
             PPPoE.PPPoEDialFailEvent += OnPPPoEFail;
             PPPoE.PPPoEHangupSuccessEvent += OnPPPoEHangup;
         }
+
         /// <summary>
         /// 自动拨号
         /// </summary>
@@ -23,16 +24,19 @@ namespace Drcom_Dialer.Model
             string password = DialerConfig.password;
             PPPoE.Dial(username, password);
         }
+
         /// <summary>
         /// 拨号成功
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="e"></param>
-        private static void OnPPPoESuccess(object obj,Msg e)
+        private static void OnPPPoESuccess(object obj, Msg e)
         {
             //检测DLL更新
             if (!Utils.HeartBeatUpdate.CheckDLL() || Utils.HeartBeatUpdate.CheckUpdate())
+            {
                 Utils.HeartBeatUpdate.Update();
+            }
 
             if (Utils.HeartBeatUpdate.CheckDLL())
             {
@@ -40,33 +44,40 @@ namespace Drcom_Dialer.Model
                 Utils.AccountStatus.AccountInfo();
 
                 if (HeartBeatProxy.Init() != HeartBeatProxy.HeadBeatStatus.Success)
+                {
                     Utils.Log4Net.WriteLog("初始化心跳失败");
-                HeartBeatProxy.HeadBeatStatus stat = HeartBeatProxy.Heartbeat();
+                }
+                else
+                {
+                    HeartBeatProxy.HeadBeatStatus stat = HeartBeatProxy.Heartbeat();
+                }
 
                 //发送反馈
                 Utils.BmobAnalyze.SendAnalyze();
             }
             else
             {
-                //在此报错！
+                Utils.Log4Net.WriteLog("心跳DLL缺失/更新失败");
+                //ViewModel.ViewModel.View.StatusPresenterModel.Status = "心跳DLL缺失/更新失败";
             }
-
         }
+
         /// <summary>
         /// 拨号错误
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="e"></param>
-        private static void OnPPPoEFail(object obj,Msg e)
+        private static void OnPPPoEFail(object obj, Msg e)
         {
             //PPPoESuccessEventHandler(obj, e);
         }
+
         /// <summary>
         /// 注销
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="e"></param>
-        private static void OnPPPoEHangup(object obj,EventArgs e)
+        private static void OnPPPoEHangup(object obj, EventArgs e)
         {
             HeartBeatProxy.Kill();
         }

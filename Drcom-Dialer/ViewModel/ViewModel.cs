@@ -26,6 +26,10 @@ namespace Drcom_Dialer.ViewModel
             {
                 UserName = DialerConfig.username;
             }
+
+            IsRememberPassword = DialerConfig.isRememberPassword;
+
+            IsAutoLogin = DialerConfig.isAutoLogin;
         }
 
         public string Password
@@ -51,6 +55,32 @@ namespace Drcom_Dialer.ViewModel
             get
             {
                 return _userName;
+            }
+        }
+
+        public bool IsRememberPassword
+        {
+            set
+            {
+                _isRememberPassword = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _isRememberPassword;
+            }
+        }
+
+        public bool IsAutoLogin
+        {
+            set
+            {
+                _isAutoLogin = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _isAutoLogin;
             }
         }
 
@@ -124,23 +154,26 @@ namespace Drcom_Dialer.ViewModel
                     DialerConfig.SaveConfig();
                     Model.Dial.Auth();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Notify(e.Message);
+                    Model.Utils.Log4Net.WriteLog(e.Message, e);
                 }
                 Enable = true;
             }).Start();
         }
-
-
+        
         private bool _enable;
+
+        private string _userName;
 
         private string _password;
 
+        private bool _isRememberPassword;
 
+        private bool _isAutoLogin;
+        
         private StatusPresenterModel _statusPresenterModel;
-
-
-        private string _userName;
 
         /// <summary>
         ///     通知
@@ -166,7 +199,7 @@ namespace Drcom_Dialer.ViewModel
             {
                 StatusPresenterModel.Status = "拨号已断开";
             };
-            HeartBeatProxy.HeartbeatExited += (code) =>
+            HeartBeatProxy.HeartbeatExited += (s, code) =>
             {
                 StatusPresenterModel.Status = $"心跳终止({code})";
             };
