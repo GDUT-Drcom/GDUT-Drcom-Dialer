@@ -1,8 +1,12 @@
 ﻿// lindexi
 // 15:58
 
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Forms.VisualStyles;
+using System.Windows.Threading;
 
 namespace Drcom_Dialer.ViewModel
 {
@@ -29,7 +33,6 @@ namespace Drcom_Dialer.ViewModel
         public void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-           
             handler?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 

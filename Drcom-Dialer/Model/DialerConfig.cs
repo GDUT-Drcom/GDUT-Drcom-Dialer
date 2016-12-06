@@ -90,7 +90,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 校区选择
         /// </summary>
-        public static Campus zone = 0;
+        public static Campus zone = Campus.Unknown;
 
         /// <summary>
         /// 认证地址
@@ -126,7 +126,7 @@ namespace Drcom_Dialer.Model
         public static void Init()
         {
             cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            readConfig();
+            ReadConfig();
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Drcom_Dialer.Model
             }
             else
             {
-                createConfig();
+                CreateConfig();
             }
         }
 
@@ -186,7 +186,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 创建配置文件
         /// </summary>
-        private static void createConfig()
+        private static void CreateConfig()
         {
             //神，居然这样写
             try
@@ -213,7 +213,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 读配置文件
         /// </summary>
-        private static void readConfig()
+        private static void ReadConfig()
         {
             try
             {

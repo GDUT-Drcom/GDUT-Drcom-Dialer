@@ -17,17 +17,20 @@ namespace Drcom_Dialer.Model.Utils
         [DllImport("gdut-drcom.dll")]
         public static extern int auth();
 
-        [DllImport("gdut-drcom.dll")]
-        public static extern void set_remote_ip(ref byte[] ip, int len);
+        [DllImport("gdut-drcom.dll", CharSet = CharSet.Ansi)]
+        public static extern void set_remote_ip(string ip, int len);
 
-        [DllImport("gdut-drcom.dll")]
-        public static extern void set_keep_alive1_flag(ref byte[] flag, int len);
+        [DllImport("gdut-drcom.dll", CharSet = CharSet.Ansi)]
+        public static extern void set_keep_alive1_flag(string flag, int len);
 
         [DllImport("gdut-drcom.dll")]
         public static extern void set_enable_crypt(int enable);
 
         [DllImport("gdut-drcom.dll")]
-        private static extern void get_version(ref byte[] version);
+        private static extern void get_version(IntPtr version);
+
+        [DllImport("gdut-drcom.dll", CharSet = CharSet.Ansi)]
+        public static extern void set_log_file(string log_file, int len);
 
         /// <summary>
         /// DLL的版本
@@ -36,11 +39,13 @@ namespace Drcom_Dialer.Model.Utils
         {
             get
             {
-                byte[] ver = new Byte[128];
                 try
                 {
-                    get_version(ref ver);
-                    return Encoding.Default.GetString(ver);
+                    var ver = Marshal.AllocHGlobal(Marshal.SizeOf<byte>() * 128);
+                    get_version(ver);
+                    string sver = Marshal.PtrToStringAnsi(ver);
+                    Marshal.FreeHGlobal(ver);
+                    return sver;
                 }
                 catch (Exception e)
                 {

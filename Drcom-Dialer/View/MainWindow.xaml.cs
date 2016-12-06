@@ -29,20 +29,28 @@ namespace Drcom_Dialer.View
         public MainWindow()
         {
             InitializeComponent();
-            // TODO
-            // 重构啊!MVVM啊!
-            // 重构啊!MVVM啊!
-            // 重构啊!MVVM啊!
-            StatusPresenter sp = new StatusPresenter();
-            PPPoE.PPPoEDialFailEvent += (s, e) => { sp.Status = e.Message; };
-            PPPoE.PPPoEDialSuccessEvent += (s, e) => { sp.Status = "拨号成功"; };
-            PPPoE.PPPoEHangupSuccessEvent += (s, e) => { sp.Status = "拨号已断开"; };
-            HeartBeatProxy.HeartbeatExited += (code) => { sp.Status = $"心跳终止({code})"; };
-            DataContext = sp;
+            View = (ViewModel.ViewModel) DataContext;
             InitTrayIcon();
         }
 
-        public static NotifyIcon _trayIcon;
+        /// <summary>
+        ///     显示气泡
+        ///     需要弄成MVVM
+        /// </summary>
+        /// <param name="timeout">消失时间（毫秒）</param>
+        /// <param name="title">标题</param>
+        /// <param name="text">内容</param>
+        /// <param name="icon">图标</param>
+        public static void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon = ToolTipIcon.Info)
+        {
+            _trayIcon.ShowBalloonTip(timeout, title, text, icon);
+        }
+
+        private ViewModel.ViewModel View
+        {
+            set;
+            get;
+        }
 
         /// <summary>
         ///     拨号按钮点击事件
@@ -53,8 +61,8 @@ namespace Drcom_Dialer.View
         {
             //TODO:add code here
             //保存，判断和上次有没修改
-            DialerConfig.SaveConfig();
-            Dial.Auth();
+
+            View.Dial();
         }
 
         /// <summary>
@@ -64,8 +72,8 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void cb_autoLogin_Click(object sender, RoutedEventArgs e)
         {
-            if ((cb_autoLogin.IsChecked != null) && (cb_remember.IsChecked != null) && !(bool)cb_remember.IsChecked &&
-                (bool)cb_autoLogin.IsChecked)
+            if ((cb_autoLogin.IsChecked != null) && (cb_remember.IsChecked != null) && !(bool) cb_remember.IsChecked &&
+                (bool) cb_autoLogin.IsChecked)
             {
                 cb_remember.IsChecked = true;
                 cb_remember_Click(null, null);
@@ -73,7 +81,7 @@ namespace Drcom_Dialer.View
 
             if (cb_autoLogin.IsChecked != null)
             {
-                DialerConfig.isAutoLogin = (bool)cb_autoLogin.IsChecked;
+                DialerConfig.isAutoLogin = (bool) cb_autoLogin.IsChecked;
             }
         }
 
@@ -86,8 +94,8 @@ namespace Drcom_Dialer.View
         {
             if ((cb_autoLogin.IsChecked != null) &&
                 (cb_remember.IsChecked != null) &&
-                !(bool)cb_remember.IsChecked &&
-                (bool)cb_autoLogin.IsChecked)
+                !(bool) cb_remember.IsChecked &&
+                (bool) cb_autoLogin.IsChecked)
             {
                 cb_autoLogin.IsChecked = false;
                 cb_autoLogin_Click(null, null);
@@ -95,29 +103,29 @@ namespace Drcom_Dialer.View
 
             if (cb_remember.IsChecked != null)
             {
-                DialerConfig.isRememberPassword = (bool)cb_remember.IsChecked;
+                DialerConfig.isRememberPassword = (bool) cb_remember.IsChecked;
             }
         }
 
-        /// <summary>
-        ///     密码输入处理
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void pb_password_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            DialerConfig.password = pb_password.Password;
-        }
+        ///// <summary>
+        /////     密码输入处理 
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void pb_password_PasswordChanged(object sender, RoutedEventArgs e)
+        //{
+        //    DialerConfig.password = pb_password.Password;
+        //}
 
-        /// <summary>
-        ///     账号输入处理
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tb_username_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            DialerConfig.username = tb_username.Text;
-        }
+        ///// <summary>
+        /////     账号输入处理
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void tb_username_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    DialerConfig.username = tb_username.Text;
+        //}
 
         /// <summary>
         ///     关于按钮
@@ -139,7 +147,7 @@ namespace Drcom_Dialer.View
         private void MetroWindow_Closing(object sender, CancelEventArgs e)
         {
             //TODO:add code here 注销
-
+            PPPoE.Hangup();
             //hangup
         }
 
@@ -206,17 +214,6 @@ namespace Drcom_Dialer.View
             setting.ShowDialog();
         }
 
-        /// <summary>
-        ///     显示气泡
-        ///     需要弄成MVVM
-        /// </summary>
-        /// <param name="timeout">消失时间（毫秒）</param>
-        /// <param name="title">标题</param>
-        /// <param name="text">内容</param>
-        /// <param name="icon">图标</param>
-        public static void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon = ToolTipIcon.Info)
-        {
-            _trayIcon.ShowBalloonTip(timeout, title, text, icon);
-        }
+        private static NotifyIcon _trayIcon;
     }
 }

@@ -80,17 +80,26 @@ namespace Drcom_Dialer.Model.Utils
                     }
                 }
 
-
+                //这个功能本来是用于自动设置校区的
+                //然而辣鸡广工的套餐名称三校区相同
                 if(DialerConfig.zone == DialerConfig.Campus.Unknown)
                 {
                     if (accInfo.note.service.Contains("大学城"))
+                    {
                         DialerConfig.zone = DialerConfig.Campus.HEMC;
+                    }
                     else if (accInfo.note.service.Contains("东风路"))
+                    {
                         DialerConfig.zone = DialerConfig.Campus.DongfengRd;
+                    }
                     else if (accInfo.note.service.Contains("龙洞"))
+                    {
                         DialerConfig.zone = DialerConfig.Campus.LongDong;
+                    }
                     else if (accInfo.note.service.Contains("番禺"))
+                    {
                         DialerConfig.zone = DialerConfig.Campus.Panyu;
+                    }
                     else
                     {
                         Log4Net.WriteLog("无法匹配的校区字符串：" + accInfo.note.service);

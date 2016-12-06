@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 namespace Drcom_Dialer.ViewModel
 {
-    public class StatusPresenter : NotifyProperty
+    public class StatusPresenterModel : NotifyProperty
     {
-        private string status = "点击关于可查看免责声明";
         public string Status
         {
-            get { return status; }
             set
             {
-                UpdateProper(ref status, value, nameof(Status));
+                UpdateProper(ref _status, value);
+            }
+            get
+            {
+                return _status;
             }
         }
+
+        private string _status = "点击关于可查看免责声明";
     }
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Drcom_Dialer
 {
-    class ProgramInit
+    internal static class ProgramInit
     {
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //进行必要的初始化工作
             Model.Utils.Log4Net.SetConfig();
@@ -19,8 +19,8 @@ namespace Drcom_Dialer
                 switch (args[0])
                 {
                     case Model.Utils.VPNFixer.StartupArgs:
-                        Model.Utils.VPNFixer.AddRouteRule();
-                        return;
+                         Model.Utils.VPNFixer.AddRouteRule();
+                         return;
                     default:
                         Model.Utils.Log4Net.WriteLog("未知的启动参数: " + args);
                         break;

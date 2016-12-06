@@ -125,6 +125,7 @@
     <Compile Include="ProgramInit.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
     <Compile Include="ViewModel\StatusPresenter.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="View\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -169,7 +170,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Fakes Include="Fakes\DotRas.fakes" />
+    <Fakes Include="Fakes\DotRas.fakes">
+      <SubType>Designer</SubType>
+    </Fakes>
     <None Include="Model\README.md" />
     <None Include="Model\Utils\README.md" />
     <None Include="packages.config" />

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
-        xmlns:ViewModels="clr-namespace:Drcom_Dialer.ViewModel"
+        xmlns:viewModels="clr-namespace:Drcom_Dialer.ViewModel"
         mc:Ignorable="d"
                                    
         Title="广工Dr.com"
@@ -13,13 +13,12 @@
         Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" 
         StateChanged="MetroWindow_StateChanged"
         BorderBrush="{DynamicResource AccentColorBrush}"
+        DataContext="{Binding Source={StaticResource ViewModel},Path=View}"
         BorderThickness="1"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <ResourceDictionary>
-            <Image x:Key="SettingImage" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
-        </ResourceDictionary>
+        <Image x:Key="SettingImage" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
     </Window.Resources>
 
     <Controls:MetroWindow.RightWindowCommands>
@@ -55,19 +54,23 @@
                 <TextBox x:Name="tb_username" 
                          Width="180px" Margin="0,1,0,0" BorderThickness="0,0,0,1"
                          Controls:TextBoxHelper.Watermark="311500XXXX"
+                         Text="{Binding Path=UserName,Mode=TwoWay}"
                          VerticalAlignment="Center"  
-                         TextChanged="tb_username_TextChanged" />
+                          />
+                <!--TextChanged="tb_username_TextChanged"-->
             </StackPanel>
             <StackPanel Height="30" Orientation="Horizontal" Margin="10,0,10,5">
                 <TextBlock x:Name="lbl_password" Margin="15,0,15,0"
                        Text="密码:" 
                        VerticalAlignment="Center"  />
                 <!--不需要用Password-->
-                <PasswordBox x:Name="pb_password" Margin="0,1,0,0" Width="180px" 
+                <TextBox x:Name="pb_password" Margin="0,1,0,0" Width="180px" 
                              Controls:TextBoxHelper.Watermark="123456"
+                         Text="{Binding Path=Password,Mode=TwoWay}"
                              BorderThickness="0,0,0,1"
                              VerticalAlignment="Center"   
-                             PasswordChanged="pb_password_PasswordChanged" />
+                             />
+                <!--PasswordChanged="pb_password_PasswordChanged"-->
             </StackPanel>
             <StackPanel Height="25" Margin="10,0,10,5" 
                         Orientation="Horizontal"
@@ -94,9 +97,11 @@
                         Click="btn_dial_Click" />
             </StackPanel>
         </StackPanel>
-        <StatusBar Height="30" VerticalAlignment="Bottom" Margin="0">
+        <StatusBar Margin="0" Height="30" 
+                   VerticalAlignment="Bottom" 
+                   DataContext="{Binding Source={StaticResource ViewModel},Path=StatusPresenterModel}">
             <TextBlock x:Name="lbl_status" Foreground="White" 
-                       Text="{Binding Status}"  />
+                       Text="{Binding Status,Mode=TwoWay}"  />
         </StatusBar>
 
     </Grid>
