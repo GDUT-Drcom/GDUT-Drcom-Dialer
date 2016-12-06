@@ -12,6 +12,7 @@ namespace Drcom_Dialer
         private static void Main(string[] args)
         {
             //进行必要的初始化工作
+            Model.Utils.GDUT_Drcom.Load();
             Model.Utils.Log4Net.SetConfig();
             Model.DialerConfig.Init();
             if (args.Length > 0)

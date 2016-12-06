@@ -33,6 +33,7 @@ namespace Drcom_Dialer.Model
         private static void OnPPPoESuccess(object obj, Msg e)
         {
             //检测DLL更新
+            Utils.Log4Net.WriteLog($"当前心跳包版本({Utils.GDUT_Drcom.Version})");
             if (!Utils.HeartBeatUpdate.CheckDLL() || Utils.HeartBeatUpdate.CheckUpdate())
             {
                 Utils.HeartBeatUpdate.Update();

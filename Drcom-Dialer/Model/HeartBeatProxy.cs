@@ -83,9 +83,8 @@ namespace Drcom_Dialer.Model
             }
             if (HeartBeatThread.IsAlive)
             {
-                // todo:
-                // 线程还是没有干掉啊
-                //HeadBeatThread.Abort();
+                int res = GDUT_Drcom.exit_auth?.Invoke() ?? -123;
+                HeartbeatExited?.Invoke(null, res);
             }
             HeartBeatThread = null;
         }

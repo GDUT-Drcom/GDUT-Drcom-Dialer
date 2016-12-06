@@ -161,7 +161,7 @@ namespace Drcom_Dialer.Model
                 cfa.AppSettings.Settings[nameof(isFeedback)].Value = isFeedback ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(isNotifyWhenExpire)].Value = isNotifyWhenExpire ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(guid)].Value = guid;
-                cfa.AppSettings.Settings[nameof(zone)].Value = zone.ToString();
+                cfa.AppSettings.Settings[nameof(zone)].Value = ((int)zone).ToString();
                 cfa.Save();
                 ConfigurationManager.RefreshSection("appSettings");
             }

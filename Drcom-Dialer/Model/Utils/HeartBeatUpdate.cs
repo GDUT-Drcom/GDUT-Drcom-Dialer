@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using RestSharp;
+using System.Net;
 
 namespace Drcom_Dialer.Model.Utils
 {
@@ -23,27 +24,35 @@ namespace Drcom_Dialer.Model.Utils
         /// <returns></returns>
         public static bool CheckUpdate()
         {
-            RestClient client = new RestClient("https://api.github.com");
-            RestRequest request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
-            IRestResponse<GithubReleaseResponse> response = client.Execute<GithubReleaseResponse>(request);
+            RestClient client;
+            RestRequest request;
+            IRestResponse<GithubReleaseResponse> response;
 
-            if (response != null &&
-                response.Content != "" &&
-                response.ResponseStatus == ResponseStatus.Completed)
-            {
-                return response.Data.name != GDUT_Drcom.Version;
-            }
-
-            //另一个mirror
             client = new RestClient("https://api.github.com");
+            client.Timeout = 2000;
             request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
             response = client.Execute<GithubReleaseResponse>(request);
 
             if (response != null &&
                 response.Content != "" &&
-                response.ResponseStatus == ResponseStatus.Completed)
+                response.StatusCode == HttpStatusCode.OK)
             {
-                return response.Data.name != GDUT_Drcom.Version;
+                JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
+                return json["tag_name"] as string != GDUT_Drcom.Version;
+            }
+
+            //另一个mirror
+            client = new RestClient("https://api.github.com");
+            client.Timeout = 2000;
+            request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
+            response = client.Execute<GithubReleaseResponse>(request);
+
+            if (response != null &&
+                response.Content != "" &&
+                response.StatusCode == HttpStatusCode.OK)
+            {
+                JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
+                return json["tag_name"] as string != GDUT_Drcom.Version;
             }
 
             return false;
@@ -57,25 +66,27 @@ namespace Drcom_Dialer.Model.Utils
         {
             Log4Net.WriteLog("开始更新gdut-drcom.dll");
 
-            RestClient client = new RestClient("https://api.github.com");
-            client.Timeout = 2000;
-            RestRequest request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
-            IRestResponse<GithubReleaseResponse> response = client.Execute<GithubReleaseResponse>(request);
-            
+            RestClient client;
+            RestRequest request;
+            IRestResponse<GithubReleaseResponse> response;
+
+            client = new RestClient("https://api.github.com");
+            request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
+            response = client.Execute<GithubReleaseResponse>(request);
+
             if (response != null &&
                 response.Content != "" &&
-                response.ResponseStatus == ResponseStatus.Completed)
+                response.StatusCode == HttpStatusCode.OK)
             {
-                if (response.Data.assets != null)
+                JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
+                JsonArray assets = json["assets"] as JsonArray;
+                foreach (JsonObject asset in assets)
                 {
-                    foreach (GithubReleaseAssetItem fileName in response.Data.assets)
+                    if (asset["name"] as string == "gdut-drcom.dll")
                     {
-                        if (fileName.name == "gdut-drcom.dll")
+                        if (DownloadFile(asset["browser_download_url"] as string, "gdut-drcom.dll"))
                         {
-                            if (DownloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                 }
@@ -131,11 +142,13 @@ namespace Drcom_Dialer.Model.Utils
             }
             try
             {
-                //换用using
+                GDUT_Drcom.Unload();
                 using (FileStream stream = new FileStream(path, FileMode.Create))
                 {
                     stream.Write(result, 0, result.Length);
                 }
+                GDUT_Drcom.Load();
+                Log4Net.WriteLog($"心跳更新成功({GDUT_Drcom.Version})");
             }
             catch (Exception e)
             {
@@ -151,6 +164,7 @@ namespace Drcom_Dialer.Model.Utils
 
     public class GithubReleaseResponse
     {
+        public GithubReleaseResponse() { }
         //todo: 有点想改命名
         //改完记得用DeserializeAs修正序列化问题
         public string tag_name { get; set; }
@@ -160,6 +174,7 @@ namespace Drcom_Dialer.Model.Utils
 
     public class GithubReleaseAssetItem
     {
+        public GithubReleaseAssetItem() { }
         public string name { get; set; }
         public string browser_download_url { get; set; }
     }
