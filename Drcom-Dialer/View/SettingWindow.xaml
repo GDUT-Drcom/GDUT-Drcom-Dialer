@@ -9,7 +9,7 @@
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         WindowStartupLocation="CenterScreen"
-        Title="Setting" Height="320" Width="240">
+        Title="Setting" Height="320" Width="240" Icon="/Drcom-Dialer;component/Resource/Settings.ico">
     <Grid>
         <StackPanel Margin="10,10,10,10">
             <TextBlock Text="校区选择:" Margin="5,5,5,5"/>

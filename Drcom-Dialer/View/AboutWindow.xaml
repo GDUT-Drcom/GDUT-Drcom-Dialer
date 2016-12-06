@@ -9,7 +9,7 @@
         Title="About" Height="420" Width="300" ResizeMode="NoResize"
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico">
     <Grid>
         <StackPanel Margin="10,10,10,10">
             <Label x:Name="Version" Content="Dr.COM三方客户端广工大专版1.0.3.284"/>

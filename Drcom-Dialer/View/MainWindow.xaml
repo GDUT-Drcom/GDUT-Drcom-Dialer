@@ -15,7 +15,7 @@
         BorderBrush="{DynamicResource AccentColorBrush}"
         DataContext="{Binding Source={StaticResource ViewModel},Path=View}"
         BorderThickness="1"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico">
 
     <Window.Resources>
         <Image x:Key="SettingImage" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
@@ -78,11 +78,13 @@
                 <CheckBox x:Name="cb_remember" Margin="30,0,30,0"
                           Content="记住密码" 
                           VerticalAlignment="Center"  
+                          IsChecked="{Binding Path=IsRememberPassword,Mode=TwoWay}"
                           Click="cb_remember_Click"/>
                 <CheckBox x:Name="cb_autoLogin" 
                           Margin="30,0,30,0"
                           Content="自动登录" 
                           VerticalAlignment="Center"  
+                          IsChecked="{Binding Path=IsAutoLogin,Mode=TwoWay}"
                           Click="cb_autoLogin_Click"/>
             </StackPanel>
             <StackPanel Margin="10,0,10,5" Height="25" Orientation="Horizontal"  
