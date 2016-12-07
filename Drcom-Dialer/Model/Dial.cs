@@ -32,8 +32,10 @@ namespace Drcom_Dialer.Model
         /// <param name="e"></param>
         private static void OnPPPoESuccess(object obj, Msg e)
         {
+            
+            if(Utils.HeartBeatUpdate.CheckDLL())
+                Utils.Log4Net.WriteLog($"当前心跳包版本({Utils.GDUT_Drcom.Version})");
             //检测DLL更新
-            Utils.Log4Net.WriteLog($"当前心跳包版本({Utils.GDUT_Drcom.Version})");
             if (!Utils.HeartBeatUpdate.CheckDLL() || Utils.HeartBeatUpdate.CheckUpdate())
             {
                 Utils.HeartBeatUpdate.Update();
@@ -58,7 +60,7 @@ namespace Drcom_Dialer.Model
             }
             else
             {
-                Utils.Log4Net.WriteLog("心跳DLL缺失/更新失败");
+                Utils.Log4Net.WriteLog("心跳DLL缺失且更新失败");
                 //ViewModel.ViewModel.View.StatusPresenterModel.Status = "心跳DLL缺失/更新失败";
             }
         }

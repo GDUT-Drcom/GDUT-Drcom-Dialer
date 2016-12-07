@@ -28,6 +28,8 @@ namespace Drcom_Dialer.Model.Utils
             RestRequest request;
             IRestResponse<GithubReleaseResponse> response;
 
+            Log4Net.WriteLog("正在从Github源检测DLL更新");
+
             client = new RestClient("https://api.github.com");
             client.Timeout = 2000;
             request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
@@ -38,13 +40,21 @@ namespace Drcom_Dialer.Model.Utils
                 response.StatusCode == HttpStatusCode.OK)
             {
                 JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
+                Log4Net.WriteLog($"远端版本:{json["tag_name"] as string}");
                 return json["tag_name"] as string != GDUT_Drcom.Version;
+            }
+            else
+            {
+                Log4Net.WriteLog("Github源获取失败");
             }
 
             //另一个mirror
             client = new RestClient("https://api.github.com");
             client.Timeout = 2000;
             request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
+
+            Log4Net.WriteLog("正在从Mirror源检测DLL更新");
+
             response = client.Execute<GithubReleaseResponse>(request);
 
             if (response != null &&
@@ -52,9 +62,13 @@ namespace Drcom_Dialer.Model.Utils
                 response.StatusCode == HttpStatusCode.OK)
             {
                 JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
+                Log4Net.WriteLog($"远端版本:{json["tag_name"] as string}");
                 return json["tag_name"] as string != GDUT_Drcom.Version;
             }
-
+            else
+            {
+                Log4Net.WriteLog("Mirror源获取失败");
+            }
             return false;
         }
 
