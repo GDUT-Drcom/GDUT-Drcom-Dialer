@@ -27,7 +27,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         ///     心跳线程退出事件
         /// </summary>
-        public static event Action<int> HeartbeatExited;
+        public static event EventHandler<int> HeartbeatExited;
 
         /// <summary>
         ///     初始化心跳包
@@ -58,12 +58,12 @@ namespace Drcom_Dialer.Model
         {
             try
             {
-                HeadBeatThread = new Thread(() =>
+                HeartBeatThread = new Thread(() =>
                 {
                     int res = GDUT_Drcom.auth();
-                    HeartbeatExited?.Invoke(res);
+                    HeartbeatExited?.Invoke(null, res);
                 });
-                HeadBeatThread.Start();
+                HeartBeatThread.Start();
                 return HeadBeatStatus.Success;
             }
             catch
@@ -77,15 +77,16 @@ namespace Drcom_Dialer.Model
         /// </summary>
         public static void Kill()
         {
-            if (HeadBeatThread == null)
+            if (HeartBeatThread == null)
             {
                 return;
             }
-            if (HeadBeatThread.IsAlive)
+            if (HeartBeatThread.IsAlive)
             {
-                HeadBeatThread.Abort();
+                int res = GDUT_Drcom.exit_auth?.Invoke() ?? -123;
+                HeartbeatExited?.Invoke(null, res);
             }
-            HeadBeatThread = null;
+            HeartBeatThread = null;
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         ///     心跳线程
         /// </summary>
-        private static Thread HeadBeatThread
+        private static Thread HeartBeatThread
         {
             set;
             get;

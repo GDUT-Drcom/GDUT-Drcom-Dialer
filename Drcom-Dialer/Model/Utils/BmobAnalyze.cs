@@ -20,6 +20,7 @@ namespace Drcom_Dialer.Model.Utils
         {
             RestClient client = new RestClient("https://api.bmob.cn");
 
+            //填充用户信息
             AnalyzeData data = new AnalyzeData();
             if (!DialerConfig.isFeedback)
             {
@@ -33,6 +34,7 @@ namespace Drcom_Dialer.Model.Utils
             }
             data.CampusZone = (int)DialerConfig.zone;
             
+            //发送/更新用户信息
             if (DialerConfig.guid == "")
             {
                 RestRequest request = new RestRequest("/1/classes/analyze",Method.POST); //post

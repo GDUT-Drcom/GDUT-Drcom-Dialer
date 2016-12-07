@@ -1,154 +1,128 @@
 ﻿using System;
 using System.IO;
 using RestSharp;
+using System.Net;
 
 namespace Drcom_Dialer.Model.Utils
 {
     /// <summary>
     /// 心跳包升级类
     /// </summary>
-    static class HeartBeatUpdate
+    internal static class HeartBeatUpdate
     {
+        private const string DllName = "gdut-drcom.dll";
+
         /// <summary>
         /// 检测DLL是否存在
         /// </summary>
         /// <returns></returns>
         public static bool CheckDLL()
         {
-            return File.Exists("gdut-drcom.dll");
+            return File.Exists(DllName);
         }
+        
+        public enum UpdateState { UpToDate, Updated, Failed }
         /// <summary>
         /// 检测更新
         /// </summary>
         /// <returns></returns>
-        public static bool CheckUpdate()
+        public static UpdateState TryUpdate()
         {
-            RestClient client = new RestClient("https://api.github.com");
-            RestRequest request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
-            IRestResponse<GithubReleaseResponse> response = client.Execute<GithubReleaseResponse>(request);
+            string localVersion = GDUT_Drcom.Version;
+            Log4Net.WriteLog($"开始更新{DllName},当前心跳包版本({localVersion})");
+            UpdateState result;
 
-            if(response != null && response.Content !="" 
-                && response.ResponseStatus == ResponseStatus.Completed)
-            {
-                //简化代码
-                return response.Data.name != GDUT_Drcom.Version;
-            }
+            result = TryUpdate("https://api.github.com", "/repos/chenhaowen01/gdut-drcom/releases/latest", "Github");
 
-            //另一个mirror
-            client = new RestClient("https://api.github.com");
-            request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
-            response = client.Execute<GithubReleaseResponse>(request);
+            if (result != UpdateState.Failed)
+                return result;
 
-            if (response != null && response.Content != "" 
-                && response.ResponseStatus == ResponseStatus.Completed)
-            {
-                //简化
-                return response.Data.name != GDUT_Drcom.Version;
-            }
-            return false;
+            //Mirror
+            //result = TryUpdate("https://api.github.com", "/repos/chenhaowen01/gdut-drcom/releases/latest", "Github");
+            return result;
+
         }
         /// <summary>
-        /// 升级DLL
+        /// 使用指定的Mirror检测更新
         /// </summary>
+        /// <param name="MirrorHost">Mirror主机</param>
+        /// <param name="MirrorUrl">RestfulAPI的URL</param>
+        /// <param name="MirrorName">Mirror名称</param>
         /// <returns></returns>
-        public static bool Update()
+        public static UpdateState TryUpdate(string MirrorHost, string MirrorUrl, string MirrorName)
         {
-            RestClient client = new RestClient("https://api.github.com");
-            RestRequest request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
-            IRestResponse<GithubReleaseResponse> response = client.Execute<GithubReleaseResponse>(request);
+            RestClient client;
+            RestRequest request;
+            IRestResponse response;
 
-            //打个回车，太长了
-            if (response != null && response.Content != "" 
-                && response.ResponseStatus == ResponseStatus.Completed)
+            client = new RestClient(MirrorHost);
+            request = new RestRequest(MirrorUrl);
+            response = client.Execute(request);
+
+
+            Log4Net.WriteLog($"正在从{MirrorName}检测DLL更新");
+            if (response != null &&
+                response.Content != "" &&
+                response.StatusCode == HttpStatusCode.OK)
             {
-                if(response.Data.assets != null)
-                {
-                    //还是加括号
-                    foreach(GithubReleaseAssetItem fileName in response.Data.assets)
-                    {
-                        if(fileName.name == "gdut-drcom.dll")
-                        {
-                            if (DownloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
+                JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
+                string remoteVersion = json["tag_name"] as string;
+                Log4Net.WriteLog($"远端版本:{remoteVersion}");
+
+                // 无需更新
+                if (remoteVersion == GDUT_Drcom.Version)
+                    return UpdateState.UpToDate;
+
+                // 需要更新
+                foreach (JsonObject asset in json["assets"] as JsonArray)
+                    if (asset["name"] as string == DllName)
+                        if (DownloadFile(asset["browser_download_url"] as string, DllName))
+                            return UpdateState.Updated;
             }
-
-            //mirror
-            client = new RestClient("https://api.github.com");
-            request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
-            response = client.Execute<GithubReleaseResponse>(request);
-
-            if (response != null && response.Content != "" && response.ResponseStatus == ResponseStatus.Completed)
+            else
             {
-                if (response.Data.assets != null)
-                    foreach (GithubReleaseAssetItem fileName in response.Data.assets)
-                    {
-                        if (fileName.name == "gdut-drcom.dll")
-                        {
-                            if (DownloadFile(fileName.browser_download_url, "gdut-drcom.dll"))
-                            {
-                                return true;
-                            }
-                        }
-                    }
+                Log4Net.WriteLog($"{MirrorName}源获取失败");
             }
-
-            return false;
+            return UpdateState.Failed;
         }
+
+
         /// <summary>
         /// 下载文件
         /// </summary>
         /// <param name="url">链接</param>
         /// <param name="path">本地文件</param>
         /// <returns></returns>
-        private static bool DownloadFile(string url,string path)
+        private static bool DownloadFile(string url, string path)
         {
             int index = url.IndexOf("/", 10); //懒的用其他的了，这是第三个/的出现的位置
 
-            RestClient client = new RestClient(url.Substring(0,index));
-            RestRequest request = new RestRequest(url.Substring(index,url.Length - index));
+            RestClient client = new RestClient(url.Substring(0, index));
+            RestRequest request = new RestRequest(url.Substring(index, url.Length - index));
 
             byte[] result = client.DownloadData(request);
             if (result.Length < 1024)
             {
+                Log4Net.WriteLog($"下载心跳包失败: 太少数据({result.Length}b)");
                 return false;
             }
             try
             {
-                //换用using
-                using (FileStream stream=new FileStream(path,FileMode.Create))
+                GDUT_Drcom.Unload();
+                using (FileStream stream = new FileStream(path, FileMode.Create))
                 {
                     stream.Write(result, 0, result.Length);
                 }
+                GDUT_Drcom.Load();
+                Log4Net.WriteLog($"心跳更新成功({GDUT_Drcom.Version})");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Log4Net.WriteLog(e.Message, e);
+                Log4Net.WriteLog("下载心跳包失败: " + e.Message, e);
                 return false;
             }
 
             return true;
         }
-
-
-    }
-
-    public class GithubReleaseResponse
-    {
-        //todo: 有点想改命名
-        //改完记得用DeserializeAs修正序列化问题
-        public string tag_name { get; set; }
-        public string name { get; set; }
-        public GithubReleaseAssetItem[] assets { get; set; }
-    }
-
-    public class GithubReleaseAssetItem
-    {
-        public string name { get; set; }
-        public string browser_download_url { get; set; }
     }
 }

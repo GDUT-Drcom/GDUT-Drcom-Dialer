@@ -59,9 +59,6 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void btn_dial_Click(object sender, RoutedEventArgs e)
         {
-            //TODO:add code here
-            //保存，判断和上次有没修改
-
             View.Dial();
         }
 
