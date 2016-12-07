@@ -67,6 +67,13 @@ namespace Drcom_Dialer.Model.Utils
             {
                 FreeLibrary(Handle);
                 Handle = IntPtr.Zero;
+                get_version = null;
+                auth = null;
+                exit_auth = null;
+                set_enable_crypt = null;
+                set_remote_ip = null;
+                set_keep_alive1_flag = null;
+                set_log_file = null;
             }
         }
 
@@ -77,6 +84,8 @@ namespace Drcom_Dialer.Model.Utils
         {
             get
             {
+                if (get_version == null)
+                    return "0.0.0";
                 try
                 {
                     var ver = Marshal.AllocHGlobal(Marshal.SizeOf<byte>() * 128);

@@ -236,7 +236,8 @@ namespace Drcom_Dialer.Model
             {
                 if (cfa.AppSettings.Settings.Count > 0)
                 {
-                    CreateConfig(int.Parse(cfa.AppSettings.Settings[nameof(username)].Value));
+                    // ??? int 放不下学号 ???
+                    //CreateConfig(int.Parse(cfa.AppSettings.Settings[nameof(username)].Value));
 
                     username = cfa.AppSettings.Settings[nameof(username)].Value;
                     password = cfa.AppSettings.Settings[nameof(password)].Value;
@@ -249,6 +250,10 @@ namespace Drcom_Dialer.Model
                     isNotifyWhenExpire = cfa.AppSettings.Settings[nameof(isNotifyWhenExpire)].Value == "Y";
                     guid = cfa.AppSettings.Settings[nameof(guid)].Value;
                     zone = (Campus)int.Parse(cfa.AppSettings.Settings[nameof(zone)].Value);
+                }
+                else
+                {
+                    CreateConfig(0);
                 }
             }
             catch (Exception e)

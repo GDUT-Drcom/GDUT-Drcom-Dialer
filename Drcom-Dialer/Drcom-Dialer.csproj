@@ -73,7 +73,7 @@
     <ManifestCertificateThumbprint>5C802CD307325C26FD1D38243806FF503B470903</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Resource\app.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Drcom-Dialer.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -197,6 +197,7 @@
     <Fakes Include="Fakes\DotRas.fakes">
       <SubType>Designer</SubType>
     </Fakes>
+    <None Include="Drcom-Dialer.pfx" />
     <None Include="Model\README.md" />
     <None Include="Model\Utils\README.md" />
     <None Include="packages.config">

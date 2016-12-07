@@ -32,13 +32,14 @@ namespace Drcom_Dialer.Model
         /// <param name="e"></param>
         private static void OnPPPoESuccess(object obj, Msg e)
         {
-            
-            if(Utils.HeartBeatUpdate.CheckDLL())
-                Utils.Log4Net.WriteLog($"当前心跳包版本({Utils.GDUT_Drcom.Version})");
-            //检测DLL更新
-            if (!Utils.HeartBeatUpdate.CheckDLL() || Utils.HeartBeatUpdate.CheckUpdate())
+            switch (Utils.HeartBeatUpdate.TryUpdate())
             {
-                Utils.HeartBeatUpdate.Update();
+                case Utils.HeartBeatUpdate.UpdateState.Failed:
+                    Utils.Log4Net.WriteLog("更新失败");
+                    break;
+                default:
+                    Utils.Log4Net.WriteLog("更新成功");
+                    break;
             }
 
             if (Utils.HeartBeatUpdate.CheckDLL())
