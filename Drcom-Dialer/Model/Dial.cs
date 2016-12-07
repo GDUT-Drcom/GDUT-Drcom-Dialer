@@ -73,7 +73,7 @@ namespace Drcom_Dialer.Model
         /// <param name="e"></param>
         private static void OnPPPoEFail(object obj, Msg e)
         {
-            //PPPoESuccessEventHandler(obj, e);
+            //OnPPPoESuccess(obj, e);
         }
 
         /// <summary>

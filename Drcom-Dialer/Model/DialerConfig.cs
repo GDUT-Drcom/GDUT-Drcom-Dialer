@@ -236,8 +236,8 @@ namespace Drcom_Dialer.Model
             {
                 if (cfa.AppSettings.Settings.Count > 0)
                 {
-                    // ??? int 放不下学号 ???
-                    //CreateConfig(int.Parse(cfa.AppSettings.Settings[nameof(username)].Value));
+                    //升级配置文件
+                    CreateConfig(int.Parse(cfa.AppSettings.Settings[nameof(configVer)].Value));
 
                     username = cfa.AppSettings.Settings[nameof(username)].Value;
                     password = cfa.AppSettings.Settings[nameof(password)].Value;
@@ -253,6 +253,7 @@ namespace Drcom_Dialer.Model
                 }
                 else
                 {
+                    //创建一个配置文件
                     CreateConfig(0);
                 }
             }

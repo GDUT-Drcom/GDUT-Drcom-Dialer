@@ -30,16 +30,37 @@ namespace Drcom_Dialer.Model.Utils
         {
             string localVersion = GDUT_Drcom.Version;
             Log4Net.WriteLog($"开始更新{DllName},当前心跳包版本({localVersion})");
+            UpdateState result;
 
+            result = TryUpdate("https://api.github.com", "/repos/chenhaowen01/gdut-drcom/releases/latest", "Github");
+
+            if (result != UpdateState.Failed)
+                return result;
+
+            //Mirror
+            //result = TryUpdate("https://api.github.com", "/repos/chenhaowen01/gdut-drcom/releases/latest", "Github");
+            return result;
+
+        }
+        /// <summary>
+        /// 使用指定的Mirror检测更新
+        /// </summary>
+        /// <param name="MirrorHost">Mirror主机</param>
+        /// <param name="MirrorUrl">RestfulAPI的URL</param>
+        /// <param name="MirrorName">Mirror名称</param>
+        /// <returns></returns>
+        public static UpdateState TryUpdate(string MirrorHost, string MirrorUrl, string MirrorName)
+        {
             RestClient client;
             RestRequest request;
             IRestResponse response;
 
-            client = new RestClient("https://api.github.com");
-            request = new RestRequest("/repos/chenhaowen01/gdut-drcom/releases/latest");
+            client = new RestClient(MirrorHost);
+            request = new RestRequest(MirrorUrl);
             response = client.Execute(request);
 
-            Log4Net.WriteLog("正在从Github源检测DLL更新");
+
+            Log4Net.WriteLog($"正在从{MirrorName}检测DLL更新");
             if (response != null &&
                 response.Content != "" &&
                 response.StatusCode == HttpStatusCode.OK)
@@ -60,13 +81,11 @@ namespace Drcom_Dialer.Model.Utils
             }
             else
             {
-                Log4Net.WriteLog("Github源获取失败");
+                Log4Net.WriteLog($"{MirrorName}源获取失败");
             }
-
-            //mirror
-
             return UpdateState.Failed;
         }
+
 
         /// <summary>
         /// 下载文件
