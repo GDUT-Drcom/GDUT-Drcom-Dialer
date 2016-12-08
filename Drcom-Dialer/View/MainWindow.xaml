@@ -15,15 +15,26 @@
         BorderBrush="{DynamicResource AccentColorBrush}"
         DataContext="{Binding Source={StaticResource ViewModel},Path=View}"
         BorderThickness="1"
-        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico">
+        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico" ShowIconOnTitleBar="False" TitleCharacterCasing="Normal">
 
     <Window.Resources>
         <Image x:Key="SettingImage" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
+        <Image x:Key="AccountInfoImage" Source="/Drcom-Dialer;component/Resource/AccountInfo.ico" />
     </Window.Resources>
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button Content="关于" Click="About_Button_Click"/>
+            <Button Click="AccountInfo_Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource AccountInfoImage}"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+            </Button>
             <Button Click="Setting_Button_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"

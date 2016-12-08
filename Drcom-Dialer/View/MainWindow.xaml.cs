@@ -211,6 +211,12 @@ namespace Drcom_Dialer.View
             setting.ShowDialog();
         }
 
+        private void AccountInfo_Button_Click(object sender, RoutedEventArgs e)
+        {
+            AccountInfoWindow accountInfo = new AccountInfoWindow();
+            accountInfo.ShowDialog();
+        }
+
         private static NotifyIcon _trayIcon;
     }
 }
