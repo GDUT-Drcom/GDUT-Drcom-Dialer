@@ -59,7 +59,10 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void btn_dial_Click(object sender, RoutedEventArgs e)
         {
-            View.Dial();
+            if (View.DialOrHangup)
+                View.Dial();
+            else
+                View.Hangup();
         }
 
         /// <summary>

@@ -87,7 +87,7 @@
                        VerticalAlignment="Center"  />
                 <!--不需要用Password-->
                 <TextBox x:Name="pb_password" Margin="0,1,0,0" Width="180px" 
-                             Controls:TextBoxHelper.Watermark="123456"
+                             Controls:TextBoxHelper.Watermark="***"
                          Text="{Binding Path=Password,Mode=TwoWay}"
                              BorderThickness="0,0,0,1"
                              VerticalAlignment="Center"   
@@ -117,8 +117,8 @@
             <StackPanel Margin="10,0,10,5" Height="36" Orientation="Horizontal"  
                         HorizontalAlignment="Center">
                 <Button x:Name="btn_dial" Style="{StaticResource AccentedSquareButtonStyle}" Width="150"
-                        Content="拨号"  
-                        Click="btn_dial_Click" />
+                        Content="{Binding Path=DialBtnContent}"  
+                        Click="btn_dial_Click" IsEnabled="{Binding Path=DialBtnEnable}" />
             </StackPanel>
         </StackPanel>
         <StatusBar Margin="0" Height="30" 

@@ -102,7 +102,7 @@ namespace Drcom_Dialer.Model
                         }
                     }
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -126,6 +126,7 @@ namespace Drcom_Dialer.Model
             catch (Exception e)
             {
                 Utils.Log4Net.WriteLog(e.Message, e);
+                PPPoEHangupFailEvent?.Invoke(null, new Msg(e.Message));
             }
         }
         /// <summary>
@@ -140,13 +141,18 @@ namespace Drcom_Dialer.Model
         /// PPPoE挂断成功事件
         /// </summary>
         public static EventHandler PPPoEHangupSuccessEvent;
+        /// <summary>
+        /// PPPoE挂断失败事件
+        /// </summary>
+        public static EventHandler<Msg> PPPoEHangupFailEvent;
+
 
     }
 
     /// <summary>
     /// 简单的消息传输器
     /// </summary>
-    public class Msg: EventArgs
+    public class Msg : EventArgs
     {
         public string Message;
         public Msg(string _msg)

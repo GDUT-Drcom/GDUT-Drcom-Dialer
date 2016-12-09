@@ -119,6 +119,45 @@ namespace Drcom_Dialer.ViewModel
             }
         }
 
+        public bool DialBtnEnable
+        {
+            set
+            {
+                _dialBtnEnable = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _dialBtnEnable;
+            }
+
+        }
+
+        public string DialBtnContent
+        {
+            get
+            {
+                if (_dialOrHangup)
+                    return "拨号";
+                else
+                    return "断开";
+
+            }
+        }
+
+        public bool DialOrHangup
+        {
+            set
+            {
+                _dialOrHangup = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _dialOrHangup;
+            }
+        }
+
         /// <summary>
         ///     拨号
         /// </summary>
@@ -152,6 +191,7 @@ namespace Drcom_Dialer.ViewModel
                 {
                     //后台保存
                     DialerConfig.SaveConfig();
+                    DialBtnEnable = false;
                     Model.Dial.Auth();
                 }
                 catch (Exception e)
@@ -162,7 +202,23 @@ namespace Drcom_Dialer.ViewModel
                 Enable = true;
             }).Start();
         }
-        
+
+        public void Hangup()
+        {
+            new Task(() =>
+            {
+                try
+                {
+                    DialBtnEnable = false;
+                    Model.PPPoE.Hangup();
+                }
+                catch (Exception e)
+                {
+                    Model.Utils.Log4Net.WriteLog(e.Message, e);
+                }
+            });
+        }
+
         private bool _enable;
 
         private string _userName;
@@ -172,7 +228,11 @@ namespace Drcom_Dialer.ViewModel
         private bool _isRememberPassword;
 
         private bool _isAutoLogin;
-        
+
+        private bool _dialBtnEnable = true;
+
+        private bool _dialOrHangup = true;
+
         private StatusPresenterModel _statusPresenterModel;
 
         /// <summary>
@@ -190,14 +250,25 @@ namespace Drcom_Dialer.ViewModel
             PPPoE.PPPoEDialFailEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = e.Message;
+                DialBtnEnable = true;
             };
             PPPoE.PPPoEDialSuccessEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = "拨号成功，IP: " + e.Message;
+                DialBtnEnable = true;
+                DialOrHangup = false;
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = "拨号已断开";
+                DialBtnEnable = true;
+                DialOrHangup = true;
+            };
+            PPPoE.PPPoEHangupFailEvent += (s, e) =>
+            {
+                StatusPresenterModel.Status = e.Message;
+                DialBtnEnable = true;
+                DialOrHangup = true;
             };
             HeartBeatProxy.HeartbeatExited += (s, code) =>
             {
