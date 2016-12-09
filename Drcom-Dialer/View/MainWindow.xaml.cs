@@ -146,9 +146,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void MetroWindow_Closing(object sender, CancelEventArgs e)
         {
-            //TODO:add code here 注销
-            PPPoE.Hangup();
-            //hangup
+            View.Hangup();
         }
 
         /// <summary>
