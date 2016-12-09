@@ -61,6 +61,15 @@ namespace Drcom_Dialer
             app.Run();
         }
 
+        private static void WaitProcess(string name)
+        {
+            Process[] ps;
+            do
+            {
+                ps = Process.GetProcessesByName(name);
+            } while (ps.Length > 0);
+        }
+
         private static bool Update()
         {
             string name = AppDomain.CurrentDomain.FriendlyName;
@@ -72,13 +81,14 @@ namespace Drcom_Dialer
                 // Clean up
                 if (File.Exists(Model.Utils.Updater.OldName + ".exe"))
                 {
-                    MessageBox.Show("Delete " + Model.Utils.Updater.OldName + ".exe");
+                    //MessageBox.Show("Delete " + Model.Utils.Updater.OldName + ".exe");
+                    WaitProcess(Model.Utils.Updater.OldName);
                     File.Delete(Model.Utils.Updater.OldName + ".exe");
                 }
 
                 if (File.Exists(Model.Utils.Updater.NewName))
                 {
-                    MessageBox.Show("Rename .new to .new.exe");
+                    //MessageBox.Show("Rename .new to .new.exe");
                     File.Move(Model.Utils.Updater.NewName, Model.Utils.Updater.NewName + ".exe");
                     Process.Start(Model.Utils.Updater.NewName + ".exe");
                     return true;
@@ -93,7 +103,8 @@ namespace Drcom_Dialer
                 {
                     if (File.Exists(Model.Utils.Updater.NoExtName + ".exe"))
                     {
-                        MessageBox.Show("Rename .exe to .old.exe");
+                        //MessageBox.Show("Rename .exe to .old.exe");
+                        WaitProcess(Model.Utils.Updater.NoExtName);
                         File.Move(Model.Utils.Updater.NoExtName + ".exe", Model.Utils.Updater.OldName + ".exe");
                         Process.Start(Model.Utils.Updater.OldName + ".exe");
                         return true;
@@ -108,7 +119,8 @@ namespace Drcom_Dialer
                 {
                     if (File.Exists(Model.Utils.Updater.NewName + ".exe"))
                     {
-                        MessageBox.Show("Rename .new.exe to .exe");
+                        //MessageBox.Show("Rename .new.exe to .exe");
+                        WaitProcess(Model.Utils.Updater.NewName);
                         File.Move(Model.Utils.Updater.NewName + ".exe", Model.Utils.Updater.NoExtName + ".exe");
                         Process.Start(Model.Utils.Updater.NoExtName + ".exe");
                         return true;
