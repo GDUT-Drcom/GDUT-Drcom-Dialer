@@ -2,15 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Drcom_Dialer
 {
     internal static class ProgramInit
     {
+        private static Mutex singleInstanceWatcher;
+        private static bool createdNew;
+
         [STAThread]
         private static void Main(string[] args)
         {
+            string mutexName = Drcom_Dialer.Properties.Resources.ProgramTitle + "Mutex";
+            singleInstanceWatcher = new Mutex(false, mutexName, out createdNew);
+            if (!createdNew)
+            {
+                MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(-1);
+            }
+
             //进行必要的初始化工作
             Model.Utils.GDUT_Drcom.Load();
             Model.Utils.Log4Net.SetConfig();
