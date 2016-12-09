@@ -84,11 +84,11 @@ namespace Drcom_Dialer.Model
                 RasHandle hRas = dialer.Dial();
 
                 //连接失败
-                while (hRas.IsInvalid)
-                {
-                    //TODO: Add code here
-                    //继续连接
-                }
+                //while (hRas.IsInvalid)
+                //{
+                //    //TODO: Add code here
+                //    //继续连接
+                //}
 
                 if (!hRas.IsInvalid)
                 {
@@ -154,7 +154,11 @@ namespace Drcom_Dialer.Model
     /// </summary>
     public class Msg : EventArgs
     {
-        public string Message;
+        public string Message
+        {
+            set;
+            get;
+        }
         public Msg(string _msg)
         {
             Message = _msg;

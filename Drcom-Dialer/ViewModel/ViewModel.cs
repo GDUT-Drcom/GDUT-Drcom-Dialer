@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Drcom_Dialer.Model;
+using Drcom_Dialer.Model.Utils;
+using Drcom_Dialer.Properties;
 
 namespace Drcom_Dialer.ViewModel
 {
@@ -17,19 +21,12 @@ namespace Drcom_Dialer.ViewModel
 
             NewStatusPresenterModel();
 
-            if (!string.IsNullOrEmpty(DialerConfig.password))
-            {
-                Password = DialerConfig.password;
-            }
+            InitTrayIcon();
 
-            if (!string.IsNullOrEmpty(DialerConfig.username))
-            {
-                UserName = DialerConfig.username;
-            }
+            InitializeFieldFormDialerConfig();
 
-            IsRememberPassword = DialerConfig.isRememberPassword;
-
-            IsAutoLogin = DialerConfig.isAutoLogin;
+            //DialOrHangup = true;
+            DialStatus = DialHangupStatus.Disconnect;
         }
 
         public string Password
@@ -106,19 +103,24 @@ namespace Drcom_Dialer.ViewModel
             get;
         }
 
-        public bool Enable
-        {
-            set
-            {
-                _enable = value;
-                OnPropertyChanged();
-            }
-            get
-            {
-                return _enable;
-            }
-        }
+        //public bool Enable
+        //{
+        //    set
+        //    {
+        //        _enable = value;
+        //        OnPropertyChanged();
+        //    }
+        //    get
+        //    {
+        //        return _enable;
+        //    }
+        //}
 
+        /// <summary>
+        /// 按钮是否可以按下
+        /// true 可以按下
+        /// false 不可以按下
+        /// </summary>
         public bool DialBtnEnable
         {
             set
@@ -130,38 +132,93 @@ namespace Drcom_Dialer.ViewModel
             {
                 return _dialBtnEnable;
             }
-
         }
 
-        public string DialBtnContent
-        {
-            get
-            {
-                if (_dialOrHangup)
-                    return "拨号";
-                else
-                    return "断开";
+        /// <summary>
+        /// 按钮内容
+        /// </summary>
+        public string DialBtnContent => _dialOrHangup ? "拨号" : "断开";
 
+        ///// <summary>
+        ///// false 拨号
+        ///// true 断开 
+        ///// 为true 就可拨号
+        ///// </summary>
+        //public bool DialOrHangup
+        //{
+        //    set
+        //    {
+        //        _dialOrHangup = value;
+        //        OnPropertyChanged(nameof(DialBtnContent));
+        //        OnPropertyChanged();
+        //    }
+        //    get
+        //    {
+        //        return _dialOrHangup;
+        //    }
+        //}
+
+        public void DialOrHangup()
+        {
+            if (DialStatus == DialHangupStatus.Disconnect)
+            {
+                Dial();
+            }
+            else if (DialStatus == DialHangupStatus.Connect)
+            {
+                Hangup();
             }
         }
 
-        public bool DialOrHangup
+        private DialHangupStatus DialStatus
         {
             set
             {
-                _dialOrHangup = value;
+                _dialStatus = value;
+                OnPropertyChanged(nameof(DialBtnContent));
                 OnPropertyChanged();
             }
             get
             {
-                return _dialOrHangup;
+                return _dialStatus;
             }
+        }
+
+
+
+        private DialHangupStatus _dialStatus;
+
+        private enum DialHangupStatus
+        {
+            //断开
+            Disconnect,
+            //连接
+            Connect
+        }
+
+        public NotifyIcon TrayIcon
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
+        ///     显示气泡
+        /// </summary>
+        /// <param name="timeout">消失时间（毫秒）</param>
+        /// <param name="title">标题</param>
+        /// <param name="text">内容</param>
+        /// <param name="icon">图标</param>
+        public void ShowBalloonTip(int timeout, string title,
+            string text, ToolTipIcon icon = ToolTipIcon.Info)
+        {
+            TrayIcon.ShowBalloonTip(timeout, title, text, icon);
         }
 
         /// <summary>
         ///     拨号
         /// </summary>
-        public void Dial()
+        private void Dial()
         {
             // 不想写Command
 
@@ -183,7 +240,8 @@ namespace Drcom_Dialer.ViewModel
             //开始拨号
             Notify("开始拨号");
 
-            Enable = false;
+            //Enable = false;
+            DialBtnEnable = false; //拿出，不应该在Task 
 
             new Task(() =>
             {
@@ -191,15 +249,14 @@ namespace Drcom_Dialer.ViewModel
                 {
                     //后台保存
                     DialerConfig.SaveConfig();
-                    DialBtnEnable = false;
                     Model.Dial.Auth();
                 }
                 catch (Exception e)
                 {
                     Notify(e.Message);
-                    Model.Utils.Log4Net.WriteLog(e.Message, e);
+                    Log4Net.WriteLog(e.Message, e);
                 }
-                Enable = true;
+                //Enable = true;
             }).Start();
         }
 
@@ -208,30 +265,65 @@ namespace Drcom_Dialer.ViewModel
             try
             {
                 DialBtnEnable = false;
-                Model.Utils.NetworkCheck.StopCheck();
-                Model.PPPoE.Hangup();
+                NetworkCheck.StopCheck();
+                PPPoE.Hangup();
+                //DialStatus=DialHangupStatus.Disconnect;
             }
             catch (Exception e)
             {
-                Model.Utils.Log4Net.WriteLog(e.Message, e);
+                Log4Net.WriteLog(e.Message, e);
             }
         }
-
-        private bool _enable;
-
-        private string _userName;
-
-        private string _password;
-
-        private bool _isRememberPassword;
-
-        private bool _isAutoLogin;
 
         private bool _dialBtnEnable = true;
 
         private bool _dialOrHangup = true;
 
+        //private bool _enable;
+
+        private bool _isAutoLogin;
+
+        private bool _isRememberPassword;
+
+        private string _password;
+
         private StatusPresenterModel _statusPresenterModel;
+
+        private string _userName;
+
+        /// <summary>
+        ///     从配置获字段
+        /// </summary>
+        private void InitializeFieldFormDialerConfig()
+        {
+            if (!string.IsNullOrEmpty(DialerConfig.password))
+            {
+                Password = DialerConfig.password;
+            }
+
+            if (!string.IsNullOrEmpty(DialerConfig.username))
+            {
+                UserName = DialerConfig.username;
+            }
+
+            IsRememberPassword = DialerConfig.isRememberPassword;
+
+            IsAutoLogin = DialerConfig.isAutoLogin;
+        }
+
+
+        /// <summary>
+        ///     初始化托盘图标
+        /// </summary>
+        private void InitTrayIcon()
+        {
+            TrayIcon = new NotifyIcon
+            {
+                Text = Resources.ProgramTitle,
+                Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
+                Visible = true
+            };
+        }
 
         /// <summary>
         ///     通知
@@ -240,6 +332,18 @@ namespace Drcom_Dialer.ViewModel
         private void Notify(string str)
         {
             StatusPresenterModel.Status = str;
+        }
+
+        /// <summary>
+        /// 重新Dial
+        /// </summary>
+        private void Redial()
+        {
+            if (DialStatus == DialHangupStatus.Connect)
+            {
+                Hangup();
+                Dial();
+            }
         }
 
         private void NewStatusPresenterModel()
@@ -253,38 +357,44 @@ namespace Drcom_Dialer.ViewModel
             PPPoE.PPPoEDialSuccessEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = "拨号成功，IP: " + e.Message;
+
                 DialBtnEnable = true;
-                DialOrHangup = false;
+                //DialOrHangup = false;
+                DialStatus = DialHangupStatus.Connect;
 
                 if (DialerConfig.isReDialOnFail)
-                    Model.Utils.NetworkCheck.LoopCheck();
+                {
+                    NetworkCheck.LoopCheck();
+                }
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = "拨号已断开";
                 DialBtnEnable = true;
-                DialOrHangup = true;
+                //DialOrHangup = true;
+                DialStatus = DialHangupStatus.Disconnect;
             };
             PPPoE.PPPoEHangupFailEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = e.Message;
                 DialBtnEnable = true;
-                DialOrHangup = true;
+                //DialOrHangup = true;
+                DialStatus = DialHangupStatus.Disconnect;
             };
             HeartBeatProxy.HeartbeatExited += (s, code) =>
             {
                 StatusPresenterModel.Status = $"心跳终止({code})";
             };
-            Model.Utils.NetworkCheck.InnerNetworkCheckFailed += (s, e) =>
+            NetworkCheck.InnerNetworkCheckFailed += (s, e) =>
             {
-                Hangup();
-                Dial();
+                Redial();
             };
-            Model.Utils.NetworkCheck.OuterNetworkCheckFailed += (s, e) =>
+            NetworkCheck.OuterNetworkCheckFailed += (s, e) =>
             {
                 StatusPresenterModel.Status = "似乎无法连接到外网";
+                Redial();
             };
-            Model.Utils.NetworkCheck.OuterNetworkCheckSuccessed += (s, e) =>
+            NetworkCheck.OuterNetworkCheckSuccessed += (s, e) =>
             {
                 StatusPresenterModel.Status = "拨号成功";
             };

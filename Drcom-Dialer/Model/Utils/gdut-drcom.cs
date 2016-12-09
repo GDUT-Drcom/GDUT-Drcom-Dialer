@@ -85,7 +85,9 @@ namespace Drcom_Dialer.Model.Utils
             get
             {
                 if (get_version == null)
+                {
                     return "0.0.0";
+                }
                 try
                 {
                     var ver = Marshal.AllocHGlobal(Marshal.SizeOf<byte>() * 128);

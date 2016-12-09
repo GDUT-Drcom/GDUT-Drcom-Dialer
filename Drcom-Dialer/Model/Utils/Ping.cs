@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
 namespace Drcom_Dialer.Model.Utils
 {
@@ -50,7 +51,6 @@ namespace Drcom_Dialer.Model.Utils
                 Log4Net.WriteLog(e.Message, e);
                 return Status.Expection;
             }
-
         }
     }
 
@@ -76,9 +76,13 @@ namespace Drcom_Dialer.Model.Utils
         /// </summary>
         public static EventHandler OuterNetworkCheckSuccessed;
 
-        private static Thread pingThread;
+        private static Task pingThread
+        {
+            set;
+            get;
+        }
 
-        private static bool exit = false;
+        private static bool _exit = false;
 
         /// <summary>
         /// 检测
@@ -86,11 +90,11 @@ namespace Drcom_Dialer.Model.Utils
         /// </summary>
         /// <param name="InnerIPAddr">内网IP</param>
         /// <param name="OuterIPAddr">外网IP</param>
-        public static void Check(string InnerIPAddr = "10.0.3.2", string OuterIPAddr = "119.29.29.29")
+        private static void Check(string InnerIPAddr = "10.0.3.2", string OuterIPAddr = "119.29.29.29")
         {
             int innerRetry = 0, outerRetry = 0;
-            exit = false;
-            while (!exit)
+            _exit = false;
+            while (!_exit)
             {
                 switch (SimplePing.Ping(InnerIPAddr))
                 {
@@ -144,17 +148,22 @@ namespace Drcom_Dialer.Model.Utils
         {
             try
             {
-                pingThread = new Thread(() =>
+                if (pingThread != null)
                 {
-                    Check(DialerConfig.AuthIP);
-                });
-                pingThread.Start();
+                    _exit = true;
+                    pingThread.Dispose();
+                }
             }
             catch(Exception e)
             {
                 Log4Net.WriteLog(e.Message, e);
             }
-
+          
+            pingThread = new Task(() =>
+            {
+                Check(DialerConfig.AuthIP);
+            });
+            pingThread.Start();
         }
 
         /// <summary>
@@ -163,14 +172,12 @@ namespace Drcom_Dialer.Model.Utils
         public static void StopCheck()
         {
             if (pingThread == null)
-                return;
-
-            if (pingThread.IsAlive)
             {
-                exit = true;
+                return;
             }
-            pingThread = null;
-        }
 
+            _exit = true;
+            pingThread.Dispose();
+        }
     }
 }
