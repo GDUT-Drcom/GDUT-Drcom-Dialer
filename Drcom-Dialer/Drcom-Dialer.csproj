@@ -147,6 +147,7 @@
     <Compile Include="Model\Utils\Version.cs" />
     <Compile Include="Model\Utils\VPNFixer.cs" />
     <Compile Include="ProgramInit.cs" />
+    <Compile Include="ViewModel\AccountInfoModel.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
     <Compile Include="ViewModel\StatusPresenter.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />

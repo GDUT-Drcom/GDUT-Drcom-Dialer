@@ -14,15 +14,15 @@
         <StackPanel HorizontalAlignment="Left" Height="87" Margin="10,10,0,0" VerticalAlignment="Top" Width="272">
             <StackPanel Height="30" Orientation="Horizontal">
                 <Label x:Name="lbl_user_" Content="用户" Width="80"/>
-                <Label x:Name="lbl_user" Content="user"/>
+                <Label x:Name="lbl_user" Content="{Binding Path=Username}"/>
             </StackPanel>
             <StackPanel Height="30" Orientation="Horizontal">
                 <Label x:Name="lbl_leftmoeny_" Content="余额" Width="80"/>
-                <Label x:Name="lbl_leftmoeny" Content="leftmoeny"/>
+                <Label x:Name="lbl_leftmoeny" Content="{Binding Path=Money}"/>
             </StackPanel>
             <StackPanel Height="30" Orientation="Horizontal">
                 <Label x:Name="lbl_overdate_" Content="到期日期" Width="80"/>
-                <Label x:Name="lbl_overdate" Content="overdate"/>
+                <Label x:Name="lbl_overdate" Content="{Binding Path=Overdata,Mode=OneWay}"/>
             </StackPanel>
         </StackPanel>
 
