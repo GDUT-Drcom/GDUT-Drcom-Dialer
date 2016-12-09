@@ -205,18 +205,16 @@ namespace Drcom_Dialer.ViewModel
 
         public void Hangup()
         {
-            new Task(() =>
+            try
             {
-                try
-                {
-                    DialBtnEnable = false;
-                    Model.PPPoE.Hangup();
-                }
-                catch (Exception e)
-                {
-                    Model.Utils.Log4Net.WriteLog(e.Message, e);
-                }
-            });
+                DialBtnEnable = false;
+                Model.Utils.NetworkCheck.StopCheck();
+                Model.PPPoE.Hangup();
+            }
+            catch (Exception e)
+            {
+                Model.Utils.Log4Net.WriteLog(e.Message, e);
+            }
         }
 
         private bool _enable;
@@ -257,6 +255,9 @@ namespace Drcom_Dialer.ViewModel
                 StatusPresenterModel.Status = "拨号成功，IP: " + e.Message;
                 DialBtnEnable = true;
                 DialOrHangup = false;
+
+                if (DialerConfig.isReDialOnFail)
+                    Model.Utils.NetworkCheck.LoopCheck();
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {
@@ -273,6 +274,19 @@ namespace Drcom_Dialer.ViewModel
             HeartBeatProxy.HeartbeatExited += (s, code) =>
             {
                 StatusPresenterModel.Status = $"心跳终止({code})";
+            };
+            Model.Utils.NetworkCheck.InnerNetworkCheckFailed += (s, e) =>
+            {
+                Hangup();
+                Dial();
+            };
+            Model.Utils.NetworkCheck.OuterNetworkCheckFailed += (s, e) =>
+            {
+                StatusPresenterModel.Status = "似乎无法连接到外网";
+            };
+            Model.Utils.NetworkCheck.OuterNetworkCheckSuccessed += (s, e) =>
+            {
+                StatusPresenterModel.Status = "拨号成功";
             };
         }
     }
