@@ -18,9 +18,12 @@ namespace Drcom_Dialer
         [STAThread]
         private static void Main(string[] args)
         {
-            Update();
+            //更新
+            if (Update())
+                return;
 
-            string mutexName = Drcom_Dialer.Properties.Resources.ProgramTitle + "Mutex";
+            //防止多启
+            string mutexName = Properties.Resources.ProgramTitle + "Mutex";
             singleInstanceWatcher = new Mutex(false, mutexName, out createdNew);
             if (!createdNew)
             {
@@ -58,41 +61,69 @@ namespace Drcom_Dialer
             app.Run();
         }
 
-        private static void Update()
+        private static bool Update()
         {
-            //如果看不懂，请看
-            //![](http://7xqpl8.com1.z0.glb.clouddn.com/246a4e2c-cc8f-497d-860a-7e7287ae38cf2016129221850.jpg)
-            //……除了我，好像大家都知
-
-            //如果程序名结束是 Dr.update
-            if (AppDomain.CurrentDomain.FriendlyName.EndsWith(Model.Utils.Updater.UpdateSuffix))
+            string name = AppDomain.CurrentDomain.FriendlyName;
+            if (name.EndsWith(".exe"))
+                name = name.Substring(0, name.Length - 4);
+            int idx = name.LastIndexOf('.');
+            if (idx == -1) // .exe
             {
-                string tar = Model.Utils.Updater.ExeName;
-                tar = tar.Substring(0, tar.Length - 4);
-                Process[] ps;
-                do
+                // Clean up
+                if (File.Exists(Model.Utils.Updater.OldName + ".exe"))
                 {
-                    ps = Process.GetProcessesByName(tar);
-                } while (ps.Length > 0);
+                    MessageBox.Show("Delete " + Model.Utils.Updater.OldName + ".exe");
+                    File.Delete(Model.Utils.Updater.OldName + ".exe");
+                }
 
-                //删除之前的Dr.exe
-                File.Delete(Model.Utils.Updater.ExeName);
-                //复制本程序到Dr.exe
-                File.Copy(Model.Utils.Updater.UpdateName, Model.Utils.Updater.ExeName);
-                Process proc = new Process()
+                if (File.Exists(Model.Utils.Updater.NewName))
                 {
-                    StartInfo = new ProcessStartInfo()
-                    {
-                        FileName = Model.Utils.Updater.ExeName
-                    }
-                };
-                proc.Start();
-                return;
+                    MessageBox.Show("Rename .new to .new.exe");
+                    File.Move(Model.Utils.Updater.NewName, Model.Utils.Updater.NewName + ".exe");
+                    Process.Start(Model.Utils.Updater.NewName + ".exe");
+                    return true;
+                }
+                else
+                    return false; // 正常流程
             }
-
-            if (File.Exists(Model.Utils.Updater.UpdateName))
+            else
             {
-                File.Delete(Model.Utils.Updater.UpdateName);
+                string suff = name.Substring(idx);
+                if (suff == Model.Utils.Updater.NewSuffix) // .new.exe
+                {
+                    if (File.Exists(Model.Utils.Updater.NoExtName + ".exe"))
+                    {
+                        MessageBox.Show("Rename .exe to .old.exe");
+                        File.Move(Model.Utils.Updater.NoExtName + ".exe", Model.Utils.Updater.OldName + ".exe");
+                        Process.Start(Model.Utils.Updater.OldName + ".exe");
+                        return true;
+                    }
+                    else
+                    {
+                        // Exception
+                        return false;
+                    }
+                }
+                else if (suff == Model.Utils.Updater.OldSuffix) // .old.exe
+                {
+                    if (File.Exists(Model.Utils.Updater.NewName + ".exe"))
+                    {
+                        MessageBox.Show("Rename .new.exe to .exe");
+                        File.Move(Model.Utils.Updater.NewName + ".exe", Model.Utils.Updater.NoExtName + ".exe");
+                        Process.Start(Model.Utils.Updater.NoExtName + ".exe");
+                        return true;
+                    }
+                    else
+                    {
+                        // Exception
+                        return false;
+                    }
+                }
+                else
+                {
+                    // Exception
+                    return false;
+                }
             }
         }
     }

@@ -16,19 +16,18 @@ namespace Drcom_Dialer.Model.Utils
     /// </summary>
     internal static class Updater
     {
-        public static readonly string UpdateSuffix = ".update.exe";
-        public static readonly string ExeName;
-        public static readonly string UpdateName;
+        public static readonly string NoExtName;
+        public static readonly string NewSuffix = ".new";
+        public static readonly string OldSuffix = ".old";
+        public static string NewName => NoExtName + NewSuffix;
+        public static string OldName => NoExtName + OldSuffix;
 
         static Updater()
         {
-            ExeName = AppDomain.CurrentDomain.FriendlyName;
-            if (ExeName.Contains("."))
-            {
-                int idx = ExeName.IndexOf('.');
-                ExeName = ExeName.Substring(0, idx) + ".exe";
-            }
-            UpdateName = ExeName.Substring(0, ExeName.Length - 4) + UpdateSuffix;
+            NoExtName = AppDomain.CurrentDomain.FriendlyName;
+            int idx = NoExtName.IndexOf('.');
+            if (idx != -1)
+                NoExtName = NoExtName.Substring(0, idx);
         }
 
         public static void TryUpdate()
@@ -56,8 +55,8 @@ namespace Drcom_Dialer.Model.Utils
 
                 // 需要更新
                 foreach (JsonObject asset in json["assets"] as JsonArray)
-                    if (asset["name"] as string == ExeName)
-                        if (DownloadFile(asset["browser_download_url"] as string, UpdateName))
+                    if (asset["name"] as string == NoExtName)
+                        if (DownloadFile(asset["browser_download_url"] as string, NewName))
                             if (MessageBox.Show(
                                 "程序更新完成,是否立即重启?",
                                 "更新",
@@ -82,7 +81,7 @@ namespace Drcom_Dialer.Model.Utils
             {
                 StartInfo = new ProcessStartInfo()
                 {
-                    FileName = UpdateName
+                    FileName = NewName
                 }
             };
             proc.Start();
@@ -109,7 +108,7 @@ namespace Drcom_Dialer.Model.Utils
             byte[] result = client.DownloadData(request);
             if (result.Length < 1024)
             {
-                Log4Net.WriteLog($"下载心跳包失败: 太少数据({result.Length}b)");
+                Log4Net.WriteLog($"下载失败: 太少数据({result.Length}b)");
                 return false;
             }
             try
@@ -120,11 +119,11 @@ namespace Drcom_Dialer.Model.Utils
                     stream.Write(result, 0, result.Length);
                 }
                 GDUT_Drcom.Load();
-                Log4Net.WriteLog($"心跳更新成功({GDUT_Drcom.Version})");
+                Log4Net.WriteLog($"更新成功({GDUT_Drcom.Version})");
             }
             catch (Exception e)
             {
-                Log4Net.WriteLog("下载心跳包失败: " + e.Message, e);
+                Log4Net.WriteLog("下载失败: " + e.Message, e);
                 return false;
             }
 
