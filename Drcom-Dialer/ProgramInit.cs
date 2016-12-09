@@ -60,6 +60,11 @@ namespace Drcom_Dialer
 
         private static void Update()
         {
+            //如果看不懂，请看
+            //![](http://7xqpl8.com1.z0.glb.clouddn.com/246a4e2c-cc8f-497d-860a-7e7287ae38cf2016129221850.jpg)
+            //……除了我，好像大家都知
+
+            //如果程序名结束是 Dr.update
             if (AppDomain.CurrentDomain.FriendlyName.EndsWith(Model.Utils.Updater.UpdateSuffix))
             {
                 string tar = Model.Utils.Updater.ExeName;
@@ -70,7 +75,9 @@ namespace Drcom_Dialer
                     ps = Process.GetProcessesByName(tar);
                 } while (ps.Length > 0);
 
+                //删除之前的Dr.exe
                 File.Delete(Model.Utils.Updater.ExeName);
+                //复制本程序到Dr.exe
                 File.Copy(Model.Utils.Updater.UpdateName, Model.Utils.Updater.ExeName);
                 Process proc = new Process()
                 {
@@ -84,7 +91,9 @@ namespace Drcom_Dialer
             }
 
             if (File.Exists(Model.Utils.Updater.UpdateName))
+            {
                 File.Delete(Model.Utils.Updater.UpdateName);
+            }
         }
     }
 }
