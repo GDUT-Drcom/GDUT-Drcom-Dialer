@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,6 +18,8 @@ namespace Drcom_Dialer
         [STAThread]
         private static void Main(string[] args)
         {
+            Update();
+
             string mutexName = Drcom_Dialer.Properties.Resources.ProgramTitle + "Mutex";
             singleInstanceWatcher = new Mutex(false, mutexName, out createdNew);
             if (!createdNew)
@@ -52,6 +56,35 @@ namespace Drcom_Dialer
             App app = new App();
             app.InitializeComponent();
             app.Run();
+        }
+
+        private static void Update()
+        {
+            if (AppDomain.CurrentDomain.FriendlyName.EndsWith(Model.Utils.Updater.UpdateSuffix))
+            {
+                string tar = Model.Utils.Updater.ExeName;
+                tar = tar.Substring(0, tar.Length - 4);
+                Process[] ps;
+                do
+                {
+                    ps = Process.GetProcessesByName(tar);
+                } while (ps.Length > 0);
+
+                File.Delete(Model.Utils.Updater.ExeName);
+                File.Copy(Model.Utils.Updater.UpdateName, Model.Utils.Updater.ExeName);
+                Process proc = new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        FileName = Model.Utils.Updater.ExeName
+                    }
+                };
+                proc.Start();
+                return;
+            }
+
+            if (File.Exists(Model.Utils.Updater.UpdateName))
+                File.Delete(Model.Utils.Updater.UpdateName);
         }
     }
 }

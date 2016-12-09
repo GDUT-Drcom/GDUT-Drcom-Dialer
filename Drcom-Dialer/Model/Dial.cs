@@ -54,6 +54,7 @@ namespace Drcom_Dialer.Model
                 else
                 {
                     HeartBeatProxy.HeadBeatStatus stat = HeartBeatProxy.Heartbeat();
+                    Utils.Updater.TryUpdate();
                 }
 
                 //发送反馈
