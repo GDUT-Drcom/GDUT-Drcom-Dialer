@@ -6,7 +6,7 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
         mc:Ignorable="d"
-        Title="账号信息" Height="138" Width="300" ResizeMode="NoResize"
+        Title="Account" Height="138" Width="300" ResizeMode="NoResize"
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico">

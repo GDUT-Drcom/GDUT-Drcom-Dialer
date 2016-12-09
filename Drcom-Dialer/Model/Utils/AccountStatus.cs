@@ -49,12 +49,19 @@ namespace Drcom_Dialer.Model.Utils
                 RestRequest infoRequest = new RestRequest("Self/refreshaccount");
                 IRestResponse<AccountInfomation> infoResponse = client.Execute<AccountInfomation>(infoRequest);
 
+                if (infoResponse.Data == null)
+                {
+                    infoResponse.Data = new AccountInfomation();
+                    infoResponse.Data.date = "fail";
+                }
                 return infoResponse.Data;
             }
             catch(Exception e)
             {
                 Log4Net.WriteLog(e.Message, e);
-                return null;
+                AccountInfomation acci = new AccountInfomation();
+                acci.date = "fail";
+                return acci;
             }
         }
 
@@ -64,7 +71,7 @@ namespace Drcom_Dialer.Model.Utils
         public static void AccountInfo()
         {
             AccountInfomation accInfo = GetAccountInfomation();
-            if(accInfo != null)
+            if(accInfo != null && accInfo.date == "success")
             {
                 if (DialerConfig.isNotifyWhenExpire)
                 {
@@ -80,8 +87,6 @@ namespace Drcom_Dialer.Model.Utils
                     }
                 }
 
-                //这个功能本来是用于自动设置校区的
-                //然而辣鸡广工的套餐名称三校区相同
                 if(DialerConfig.zone == DialerConfig.Campus.Unknown)
                 {
                     if (accInfo.note.service.Contains("大学城"))

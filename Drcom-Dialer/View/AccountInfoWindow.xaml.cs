@@ -31,10 +31,26 @@ namespace Drcom_Dialer.View
 
         private void ReadInfo()
         {
-            AccountInfomation info = GetAccountInfomation();
-            lbl_user.Content = info.note.welcome;
-            lbl_leftmoeny.Content = info.note.leftmoeny;
-            lbl_overdate.Content = info.note.overdate;
+            try
+            {
+                AccountInfomation info = GetAccountInfomation();
+                if(info.date == "success")
+                {
+                    lbl_user.Content = info.note.welcome;
+                    lbl_leftmoeny.Content = info.note.leftmoeny;
+                    lbl_overdate.Content = info.note.overdate;
+                }
+                else
+                {
+                    lbl_user.Content = "N/A";
+                    lbl_leftmoeny.Content = "N/A";
+                    lbl_overdate.Content = "N/A";
+                }
+            }
+            catch(Exception e)
+            {
+                Log4Net.WriteLog(e.Message, e);
+            }
         }
     }
 }

@@ -8,7 +8,7 @@
         xmlns:viewModels="clr-namespace:Drcom_Dialer.ViewModel"
         mc:Ignorable="d"
                                    
-        Title="广工Dr.com"
+        Title="广工Dr.COM"
         Height="330" Width="300" ResizeMode="CanMinimize"
         Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" 
         StateChanged="MetroWindow_StateChanged"
@@ -20,11 +20,22 @@
     <Window.Resources>
         <Image x:Key="SettingImage" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
         <Image x:Key="AccountInfoImage" Source="/Drcom-Dialer;component/Resource/AccountInfo.ico" />
+        <Image x:Key="AboutImage" Source="/Drcom-Dialer;component/Resource/About.ico" />
     </Window.Resources>
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="关于" Click="About_Button_Click"/>
+            <Button Click="About_Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource AboutImage}"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+
+            </Button>
             <Button Click="AccountInfo_Button_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
