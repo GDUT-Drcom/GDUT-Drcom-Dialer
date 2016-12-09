@@ -33,18 +33,19 @@ namespace Drcom_Dialer.View
             InitTrayIcon();
         }
 
-        /// <summary>
-        ///     显示气泡
-        ///     需要弄成MVVM
-        /// </summary>
-        /// <param name="timeout">消失时间（毫秒）</param>
-        /// <param name="title">标题</param>
-        /// <param name="text">内容</param>
-        /// <param name="icon">图标</param>
-        public static void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon = ToolTipIcon.Info)
-        {
-            _trayIcon.ShowBalloonTip(timeout, title, text, icon);
-        }
+        ///// <summary>
+        /////     显示气泡
+        /////     需要弄成MVVM
+        ///// </summary>
+        ///// <param name="timeout">消失时间（毫秒）</param>
+        ///// <param name="title">标题</param>
+        ///// <param name="text">内容</param>
+        ///// <param name="icon">图标</param>
+        //public static void ShowBalloonTip(int timeout, string title, 
+        //    string text, ToolTipIcon icon = ToolTipIcon.Info)
+        //{
+        //    _trayIcon.ShowBalloonTip(timeout, title, text, icon);
+        //}
 
         private ViewModel.ViewModel View
         {
@@ -59,10 +60,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void btn_dial_Click(object sender, RoutedEventArgs e)
         {
-            if (View.DialOrHangup)
-                View.Dial();
-            else
-                View.Hangup();
+            View.DialOrHangup();
         }
 
         /// <summary>
@@ -157,7 +155,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void MetroWindow_Closed(object sender, EventArgs e)
         {
-            _trayIcon.Visible = false;
+            View.TrayIcon.Visible = false;
         }
 
         /// <summary>
@@ -180,15 +178,16 @@ namespace Drcom_Dialer.View
         /// </summary>
         private void InitTrayIcon()
         {
-            _trayIcon = new NotifyIcon
-            {
-                Text = Properties.Resources.ProgramTitle,
-                Icon = System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath)
-            };
+            //_trayIcon = new NotifyIcon
+            //{
+            //    Text = Properties.Resources.ProgramTitle,
+            //    Icon = System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath)
+            //};
 
-            _trayIcon.MouseClick += (obj, e) =>
+            View.TrayIcon.MouseClick += (obj, e) =>
             {
-                if ((e.Button == MouseButtons.Left) && (WindowState == WindowState.Minimized))
+                if ((e.Button == MouseButtons.Left) && 
+                (WindowState == WindowState.Minimized))
                 {
                     Show();
                     Activate();
@@ -197,7 +196,7 @@ namespace Drcom_Dialer.View
                 //todo:关闭显示
                 // trayIcon.Visible = false;
             };
-            _trayIcon.Visible = true;
+            //_trayIcon.Visible = true;
         }
 
         /// <summary>
@@ -218,6 +217,6 @@ namespace Drcom_Dialer.View
             accountInfo.ShowDialog();
         }
 
-        private static NotifyIcon _trayIcon;
+        //private static NotifyIcon _trayIcon;
     }
 }

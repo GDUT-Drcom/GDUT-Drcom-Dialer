@@ -117,8 +117,8 @@
             <StackPanel Margin="10,0,10,5" Height="36" Orientation="Horizontal"  
                         HorizontalAlignment="Center">
                 <Button x:Name="btn_dial" Style="{StaticResource AccentedSquareButtonStyle}" Width="150"
-                        Content="{Binding Path=DialBtnContent}"  
-                        Click="btn_dial_Click" IsEnabled="{Binding Path=DialBtnEnable}" />
+                        Content="{Binding Path=DialBtnContent,Mode=OneWay}"  
+                        Click="btn_dial_Click" IsEnabled="{Binding Path=DialBtnEnable,Mode=TwoWay}" />
             </StackPanel>
         </StackPanel>
         <StatusBar Margin="0" Height="30" 

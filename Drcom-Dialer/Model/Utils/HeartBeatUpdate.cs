@@ -6,89 +6,107 @@ using System.Net;
 namespace Drcom_Dialer.Model.Utils
 {
     /// <summary>
-    /// 心跳包升级类
+    ///     心跳包升级类
     /// </summary>
     internal static class HeartBeatUpdate
     {
         private const string DllName = "gdut-drcom.dll";
 
+        public enum UpdateState
+        {
+            UpToDate,
+            Updated,
+            Failed
+        }
+
         /// <summary>
-        /// 检测DLL是否存在
+        ///     检测DLL是否存在
         /// </summary>
         /// <returns></returns>
         public static bool CheckDLL()
         {
             return File.Exists(DllName);
         }
-        
-        public enum UpdateState { UpToDate, Updated, Failed }
+
         /// <summary>
-        /// 检测更新
+        ///     检测更新
         /// </summary>
         /// <returns></returns>
         public static UpdateState TryUpdate()
         {
             string localVersion = GDUT_Drcom.Version;
             Log4Net.WriteLog($"开始更新{DllName},当前心跳包版本({localVersion})");
-            UpdateState result;
 
-            result = TryUpdate("https://api.github.com", "/repos/chenhaowen01/gdut-drcom/releases/latest", "Github");
+            var result = TryUpdate("https://api.github.com",
+                "/repos/chenhaowen01/gdut-drcom/releases/latest", "Github");
 
             if (result != UpdateState.Failed)
+            {
                 return result;
+            }
 
             //Mirror
             //result = TryUpdate("https://api.github.com", "/repos/chenhaowen01/gdut-drcom/releases/latest", "Github");
             return result;
-
         }
+
         /// <summary>
-        /// 使用指定的Mirror检测更新
+        ///     使用指定的Mirror检测更新
         /// </summary>
-        /// <param name="MirrorHost">Mirror主机</param>
-        /// <param name="MirrorUrl">RestfulAPI的URL</param>
-        /// <param name="MirrorName">Mirror名称</param>
+        /// <param name="mirrorHost">Mirror主机</param>
+        /// <param name="mirrorUrl">RestfulAPI的URL</param>
+        /// <param name="mirrorName">Mirror名称</param>
         /// <returns></returns>
-        public static UpdateState TryUpdate(string MirrorHost, string MirrorUrl, string MirrorName)
+        public static UpdateState TryUpdate(string mirrorHost, string mirrorUrl, string mirrorName)
         {
-            RestClient client;
-            RestRequest request;
-            IRestResponse response;
-
-            client = new RestClient(MirrorHost);
-            request = new RestRequest(MirrorUrl);
-            response = client.Execute(request);
+            var client = new RestClient(mirrorHost);
+            var request = new RestRequest(mirrorUrl);
+            var response = client.Execute(request);
 
 
-            Log4Net.WriteLog($"正在从{MirrorName}检测DLL更新");
-            if (response != null &&
-                response.Content != "" &&
-                response.StatusCode == HttpStatusCode.OK)
+            Log4Net.WriteLog($"正在从{mirrorName}检测DLL更新");
+            try
             {
-                JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
-                string remoteVersion = json["tag_name"] as string;
-                Log4Net.WriteLog($"远端DLL版本:{remoteVersion}");
+                if (!string.IsNullOrEmpty(response?.Content) &&
+                    (response.StatusCode == HttpStatusCode.OK))
+                {
+                    JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
+                    string remoteVersion = json["tag_name"] as string;
+                    Log4Net.WriteLog($"远端版本:{remoteVersion}");
 
-                // 无需更新
-                if (remoteVersion == GDUT_Drcom.Version)
-                    return UpdateState.UpToDate;
+                    // 无需更新
+                    if (remoteVersion == GDUT_Drcom.Version)
+                    {
+                        return UpdateState.UpToDate;
+                    }
 
-                // 需要更新
-                foreach (JsonObject asset in json["assets"] as JsonArray)
-                    if (asset["name"] as string == DllName)
-                        if (DownloadFile(asset["browser_download_url"] as string, DllName))
-                            return UpdateState.Updated;
+                    // 需要更新
+                    foreach (JsonObject asset in json["assets"] as JsonArray)
+                    {
+                        if (asset["name"] as string == DllName)
+                        {
+                            if (DownloadFile(asset["browser_download_url"] as string, DllName))
+                            {
+                                return UpdateState.Updated;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Log4Net.WriteLog($"{mirrorName}源获取失败");
+                }
             }
-            else
+            catch (Exception e)//更新网络数据不是想要的
             {
-                Log4Net.WriteLog($"{MirrorName}源获取失败");
+                Log4Net.WriteLog($"{mirrorName}源获取失败",e);
             }
             return UpdateState.Failed;
         }
 
 
         /// <summary>
-        /// 下载文件
+        ///     下载文件
         /// </summary>
         /// <param name="url">链接</param>
         /// <param name="path">本地文件</param>
