@@ -67,7 +67,7 @@ namespace Drcom_Dialer.Model.Utils
             {
                 JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
                 string remoteVersion = json["tag_name"] as string;
-                Log4Net.WriteLog($"远端版本:{remoteVersion}");
+                Log4Net.WriteLog($"远端DLL版本:{remoteVersion}");
 
                 // 无需更新
                 if (remoteVersion == GDUT_Drcom.Version)
