@@ -95,18 +95,18 @@ namespace Drcom_Dialer
             if (idx == -1) // .exe
             {
                 // Clean up
-                if (File.Exists(Model.Utils.Updater.OldName + ".exe"))
+                if (File.Exists(Model.Utils.DialerUpdater.OldName + ".exe"))
                 {
                     //MessageBox.Show("Delete " + Model.Utils.Updater.OldName + ".exe");
-                    WaitProcess(Model.Utils.Updater.OldName);
-                    File.Delete(Model.Utils.Updater.OldName + ".exe");
+                    WaitProcess(Model.Utils.DialerUpdater.OldName);
+                    File.Delete(Model.Utils.DialerUpdater.OldName + ".exe");
                 }
 
-                if (File.Exists(Model.Utils.Updater.NewName))
+                if (File.Exists(Model.Utils.DialerUpdater.NewName))
                 {
                     Model.Utils.Log4Net.WriteLog("重命名 .new 到 .new.exe");
-                    File.Move(Model.Utils.Updater.NewName, Model.Utils.Updater.NewName + ".exe");
-                    Process.Start(Model.Utils.Updater.NewName + ".exe"); //是否有可能导致一个没关一个又开了呢？
+                    File.Move(Model.Utils.DialerUpdater.NewName, Model.Utils.DialerUpdater.NewName + ".exe");
+                    Process.Start(Model.Utils.DialerUpdater.NewName + ".exe"); //是否有可能导致一个没关一个又开了呢？
                     return true;
                 }
                 else
@@ -117,39 +117,39 @@ namespace Drcom_Dialer
             else
             {
                 string suff = name.Substring(idx);
-                if (suff == Model.Utils.Updater.NewSuffix) // .new.exe
+                if (suff == Model.Utils.DialerUpdater.NewSuffix) // .new.exe
                 {
-                    if (File.Exists(Model.Utils.Updater.NoExtName + ".exe"))
+                    if (File.Exists(Model.Utils.DialerUpdater.NoExtName + ".exe"))
                     {
                         Model.Utils.Log4Net.WriteLog("重命名 .exe 到 .old.exe");
-                        WaitProcess(Model.Utils.Updater.NoExtName);
-                        File.Move(Model.Utils.Updater.NoExtName + ".exe", Model.Utils.Updater.OldName + ".exe");
-                        Process.Start(Model.Utils.Updater.OldName + ".exe");
+                        WaitProcess(Model.Utils.DialerUpdater.NoExtName);
+                        File.Move(Model.Utils.DialerUpdater.NoExtName + ".exe", Model.Utils.DialerUpdater.OldName + ".exe");
+                        Process.Start(Model.Utils.DialerUpdater.OldName + ".exe");
                         return true;
                     }
                     else
                     {
                         Model.Utils.Log4Net.WriteLog("未找到 .exe，尝试直接使用 .new.exe");
-                        File.Copy(Model.Utils.Updater.NewName + ".exe", Model.Utils.Updater.NoExtName + ".exe");
-                        Process.Start(Model.Utils.Updater.NoExtName + ".exe");
+                        File.Copy(Model.Utils.DialerUpdater.NewName + ".exe", Model.Utils.DialerUpdater.NoExtName + ".exe");
+                        Process.Start(Model.Utils.DialerUpdater.NoExtName + ".exe");
                         return true;
                     }
                 }
-                else if (suff == Model.Utils.Updater.OldSuffix) // .old.exe
+                else if (suff == Model.Utils.DialerUpdater.OldSuffix) // .old.exe
                 {
-                    if (File.Exists(Model.Utils.Updater.NewName + ".exe"))
+                    if (File.Exists(Model.Utils.DialerUpdater.NewName + ".exe"))
                     {
                         Model.Utils.Log4Net.WriteLog("重命名 .new.exe to .exe");
-                        WaitProcess(Model.Utils.Updater.NewName);
-                        File.Move(Model.Utils.Updater.NewName + ".exe", Model.Utils.Updater.NoExtName + ".exe");
-                        Process.Start(Model.Utils.Updater.NoExtName + ".exe");
+                        WaitProcess(Model.Utils.DialerUpdater.NewName);
+                        File.Move(Model.Utils.DialerUpdater.NewName + ".exe", Model.Utils.DialerUpdater.NoExtName + ".exe");
+                        Process.Start(Model.Utils.DialerUpdater.NoExtName + ".exe");
                         return true;
                     }
                     else
                     {
                         Model.Utils.Log4Net.WriteLog("未找到 .new.exe，尝试还原");
-                        File.Copy(Model.Utils.Updater.OldName + ".exe", Model.Utils.Updater.NoExtName + ".exe");
-                        Process.Start(Model.Utils.Updater.NoExtName + ".exe");
+                        File.Copy(Model.Utils.DialerUpdater.OldName + ".exe", Model.Utils.DialerUpdater.NoExtName + ".exe");
+                        Process.Start(Model.Utils.DialerUpdater.NoExtName + ".exe");
                         return true;
                     }
                 }

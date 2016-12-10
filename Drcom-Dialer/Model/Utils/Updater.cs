@@ -12,9 +12,9 @@ using System.Windows;
 namespace Drcom_Dialer.Model.Utils
 {
     /// <summary>
-    /// 升级器
+    /// 主程序升级器
     /// </summary>
-    internal static class Updater
+    internal static class DialerUpdater
     {
         public static readonly string NoExtName;
         public static readonly string NewSuffix = ".new";
@@ -22,7 +22,7 @@ namespace Drcom_Dialer.Model.Utils
         public static string NewName => NoExtName + NewSuffix;
         public static string OldName => NoExtName + OldSuffix;
 
-        static Updater()
+        static DialerUpdater()
         {
             NoExtName = AppDomain.CurrentDomain.FriendlyName;
             int idx = NoExtName.IndexOf('.');
@@ -32,54 +32,42 @@ namespace Drcom_Dialer.Model.Utils
 
         public static void TryUpdate()
         {
-            string MirrorHost = "https://api.github.com";
-            string MirrorUrl = "/repos/GDUT-Drcom/Drcom-Dialer/releases/latest";
-            string MirrorName = "Github";
+            string RemoteFileUrl = Updater.CheckUpdate("GDUT-Drcom/Drcom-Dialer", NoExtName, Version.GetVersion());
 
-            RestClient client = new RestClient(MirrorHost);
-            RestRequest request = new RestRequest(MirrorUrl);
-            IRestResponse response = client.Execute(request);
-
-            Log4Net.WriteLog($"正在从{MirrorName}检测EXE更新");
-            if (response != null &&
-                response.Content != "" &&
-                response.StatusCode == HttpStatusCode.OK)
+            if (RemoteFileUrl != null)
             {
-                JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
-                string remoteVersion = json["tag_name"] as string;
-                Log4Net.WriteLog($"远端EXE版本:{remoteVersion}");
-
-                // 无需更新
-                if (remoteVersion == Version.GetVersion())
+                if (Updater.DownloadFile(RemoteFileUrl, NewName))
+                {
+                    Log4Net.WriteLog($"成功更新主程序");
+                    ViewModel.ViewModel.View.ShowBalloonTip(
+                        3000,
+                        "应用更新",
+                        "程序更新成功，将在下次启动生效");
                     return;
-
-                // 需要更新
-                foreach (JsonObject asset in json["assets"] as JsonArray)
-                    if (asset["name"] as string == NoExtName)
-                        if (DownloadFile(asset["browser_download_url"] as string, NewName))
-                        {
-                            Log4Net.WriteLog($"EXE成功更新");
-                            ViewModel.ViewModel.View.ShowBalloonTip(
-                                3000,
-                                "应用更新",
-                                "程序已经成功下载更新，下次启动将进行更新");
-                            return;
-                        }
-            }
-            else
-            {
-                Log4Net.WriteLog($"{MirrorName}源获取失败");
+                }
             }
         }
+    }
 
-        // ctrl-c ctrl-v 了，要重构，提取函数了
+    /// <summary>
+    /// 升级公共类
+    /// </summary>
+    internal static class Updater
+    {
+        public enum UpdateState
+        {
+            UpToDate,
+            Updated,
+            Failed
+        }
+
         /// <summary>
         /// 下载文件
         /// </summary>
         /// <param name="url">链接</param>
         /// <param name="path">本地文件</param>
         /// <returns></returns>
-        private static bool DownloadFile(string url, string path)
+        public static bool DownloadFile(string url, string path)
         {
             int index = url.IndexOf("/", 10); //懒的用其他的了，这是第三个/的出现的位置
 
@@ -94,13 +82,11 @@ namespace Drcom_Dialer.Model.Utils
             }
             try
             {
-                GDUT_Drcom.Unload();
                 using (FileStream stream = new FileStream(path, FileMode.Create))
                 {
                     stream.Write(result, 0, result.Length);
                 }
-                GDUT_Drcom.Load();
-                Log4Net.WriteLog($"更新成功({GDUT_Drcom.Version})");
+                Log4Net.WriteLog($"下载成功({path})");
             }
             catch (Exception e)
             {
@@ -109,6 +95,74 @@ namespace Drcom_Dialer.Model.Utils
             }
 
             return true;
+        }
+
+        /// <summary>
+        ///     使用指定的Mirror检测更新
+        /// </summary>
+        /// <param name="mirrorHost">Mirror主机</param>
+        /// <param name="mirrorUrl">RestfulAPI的URL</param>
+        /// <param name="mirrorName">Mirror名称</param>
+        /// <param name="fileName">文件名</param>
+        /// <param name="currentVersion">当前版本</param>
+        /// <returns></returns>
+        public static String CheckUpdate(string mirrorHost, string mirrorUrl, string mirrorName, string fileName, string currentVersion)
+        {
+            var client = new RestClient(mirrorHost);
+            var request = new RestRequest(mirrorUrl);
+            var response = client.Execute(request);
+
+
+            Log4Net.WriteLog($"[{fileName}]正在从{mirrorName}检测更新");
+            try
+            {
+                if (!string.IsNullOrEmpty(response?.Content) &&
+                    (response.StatusCode == HttpStatusCode.OK))
+                {
+                    JsonObject json = SimpleJson.DeserializeObject(response.Content) as JsonObject;
+                    string remoteVersion = json["tag_name"] as string;
+                    Log4Net.WriteLog($"远端版本:{remoteVersion}");
+
+                    // 无需更新
+                    if (remoteVersion == currentVersion)
+                    {
+                        return null;
+                    }
+
+                    // 需要更新
+                    foreach (JsonObject asset in json["assets"] as JsonArray)
+                    {
+                        if (asset["name"] as string == fileName)
+                        {
+                            return asset["browser_download_url"] as string;
+                        }
+                    }
+                }
+                else
+                {
+                    Log4Net.WriteLog($"{mirrorName}源获取失败");
+                }
+            }
+            catch (Exception e)//更新网络数据不是想要的
+            {
+                Log4Net.WriteLog($"{mirrorName}源获取失败", e);
+            }
+            return null;
+        }
+        /// <summary>
+        ///     从Github获取更新
+        /// </summary>
+        /// <param name="githubRepoPath">库路径(e.g. GDUT-Drcom/Drcom-Dialer)</param>
+        /// <param name="fileName">文件名</param>
+        /// <param name="currentVersion">当前版本</param>
+        /// <returns>url</returns>
+        public static string CheckUpdate(string githubRepoPath, string fileName, string currentVersion)
+        {
+            return CheckUpdate("https://api.github.com",
+                $"/repos/{githubRepoPath}/releases/latest",
+                "Github",
+                fileName,
+                currentVersion);
         }
     }
 }
