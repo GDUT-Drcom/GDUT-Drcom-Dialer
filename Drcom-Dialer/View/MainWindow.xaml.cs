@@ -100,6 +100,7 @@ namespace Drcom_Dialer.View
         private void MetroWindow_Closing(object sender, CancelEventArgs e)
         {
             View.Hangup();
+            DialerConfig.SaveConfig();
         }
 
         /// <summary>

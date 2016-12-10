@@ -9,7 +9,7 @@
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         WindowStartupLocation="CenterScreen"
-        Title="Setting" Height="320" Width="240" Icon="/Drcom-Dialer;component/Resource/Settings.ico">
+        Title="Setting" Height="340" Width="240" Icon="/Drcom-Dialer;component/Resource/Settings.ico">
     <Grid>
         <StackPanel Margin="10,10,10,10">
             <TextBlock Text="校区选择:" Margin="5,5,5,5"/>
@@ -37,6 +37,10 @@
                       Content="欠费前提醒" 
                       VerticalAlignment="Center" 
                       Click="ExpireNotifyCheckBox_Click" />
+            <CheckBox x:Name="AutoUpdateCheckBox" Margin="30,5,30,5"
+                      Content="自动更新" 
+                      VerticalAlignment="Center" 
+                      Click="AutoUpdateCheckBox_Click" />
             <TextBlock x:Name="OtherTextBlock"
                       Text="其他:"  Margin="5,5,5,5"/>
             <CheckBox x:Name="ReportCheckBox" Margin="30,5,30,0"
