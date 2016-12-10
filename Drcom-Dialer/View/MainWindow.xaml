@@ -15,7 +15,7 @@
         BorderBrush="{DynamicResource AccentColorBrush}"
         DataContext="{Binding Source={StaticResource ViewModel},Path=View}"
         BorderThickness="1"
-        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico" ShowIconOnTitleBar="False" TitleCharacterCasing="Normal">
+        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico" ShowIconOnTitleBar="False" TitleCharacterCasing="Normal" Loaded="MetroWindow_Loaded">
 
     <Window.Resources>
         <Image x:Key="SettingImage" Source="/Drcom-Dialer;component/Resource/Settings.ico" />

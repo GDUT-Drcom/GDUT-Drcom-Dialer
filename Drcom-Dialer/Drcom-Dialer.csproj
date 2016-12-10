@@ -252,9 +252,6 @@
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="gdut-drcom.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <PublishFile Include="DotRas">
       <Visible>False</Visible>
       <Group>

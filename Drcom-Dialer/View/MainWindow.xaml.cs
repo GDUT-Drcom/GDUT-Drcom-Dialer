@@ -163,5 +163,11 @@ namespace Drcom_Dialer.View
             AccountInfoWindow accountInfo = new AccountInfoWindow();
             accountInfo.ShowDialog();
         }
+
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DialerConfig.isAutoLogin)
+                View.DialOrHangup();
+        }
     }
 }
