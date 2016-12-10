@@ -9,7 +9,7 @@
         Title="Account" Height="138" Width="300" ResizeMode="NoResize"
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
-        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico">
+        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/Resource/AccountInfo.ico">
     <Grid>
         <StackPanel HorizontalAlignment="Left" Height="87" Margin="10,10,0,0" VerticalAlignment="Top" Width="272">
             <StackPanel Height="30" Orientation="Horizontal">
