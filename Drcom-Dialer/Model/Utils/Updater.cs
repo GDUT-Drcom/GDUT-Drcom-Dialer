@@ -57,38 +57,19 @@ namespace Drcom_Dialer.Model.Utils
                 foreach (JsonObject asset in json["assets"] as JsonArray)
                     if (asset["name"] as string == NoExtName)
                         if (DownloadFile(asset["browser_download_url"] as string, NewName))
-                            if (MessageBox.Show(
-                                "程序更新完成,是否立即重启?",
-                                "更新",
-                                MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                            {
-                                Log4Net.WriteLog($"Exe Updated");
-                                RebootForUpdate();
-                            }
+                        {
+                            Log4Net.WriteLog($"EXE成功更新");
+                            ViewModel.ViewModel.View.ShowBalloonTip(
+                                3000,
+                                "应用更新",
+                                "程序已经成功下载更新，下次启动将进行更新");
+                            return;
+                        }
             }
             else
             {
                 Log4Net.WriteLog($"{MirrorName}源获取失败");
             }
-        }
-
-        /// <summary>
-        /// 重启更新
-        /// </summary>
-        private static void RebootForUpdate()
-        {
-            Process proc = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    FileName = NewName
-                }
-            };
-            proc.Start();
-
-            // 搞事搞事
-            Application.Current.Shutdown();
-            Environment.Exit(0);
         }
 
         // ctrl-c ctrl-v 了，要重构，提取函数了

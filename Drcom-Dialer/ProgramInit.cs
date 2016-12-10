@@ -53,8 +53,7 @@ namespace Drcom_Dialer
             {
                 return;
             }
-
-
+            
             //修复VPN
             if (Model.DialerConfig.isFixVPN)
             {
