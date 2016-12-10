@@ -117,9 +117,9 @@ namespace Drcom_Dialer.ViewModel
         //}
 
         /// <summary>
-        /// 按钮是否可以按下
-        /// true 可以按下
-        /// false 不可以按下
+        ///     按钮是否可以按下
+        ///     true 可以按下
+        ///     false 不可以按下
         /// </summary>
         public bool DialBtnEnable
         {
@@ -135,9 +135,15 @@ namespace Drcom_Dialer.ViewModel
         }
 
         /// <summary>
-        /// 按钮内容
+        ///     按钮内容
         /// </summary>
-        public string DialBtnContent => _dialOrHangup ? "拨号" : "断开";
+        public string DialBtnContent => DialStatus == DialHangupStatus.Disconnect ? "拨号" : "断开";
+
+        public NotifyIcon TrayIcon
+        {
+            set;
+            get;
+        }
 
         ///// <summary>
         ///// false 拨号
@@ -170,6 +176,53 @@ namespace Drcom_Dialer.ViewModel
             }
         }
 
+        /// <summary>
+        ///     显示气泡
+        /// </summary>
+        /// <param name="timeout">消失时间（毫秒）</param>
+        /// <param name="title">标题</param>
+        /// <param name="text">内容</param>
+        /// <param name="icon">图标</param>
+        public void ShowBalloonTip(int timeout, string title,
+            string text, ToolTipIcon icon = ToolTipIcon.Info)
+        {
+            TrayIcon.ShowBalloonTip(timeout, title, text, icon);
+        }
+
+        public void Hangup()
+        {
+            try
+            {
+                DialBtnEnable = false;
+                NetworkCheck.StopCheck();
+                PPPoE.Hangup();
+                //DialStatus=DialHangupStatus.Disconnect;
+            }
+            catch (Exception e)
+            {
+                Log4Net.WriteLog(e.Message, e);
+            }
+        }
+
+        private bool _dialBtnEnable = true;
+
+
+        private DialHangupStatus _dialStatus;
+
+        //private bool _dialOrHangup = true;
+
+        //private bool _enable;
+
+        private bool _isAutoLogin;
+
+        private bool _isRememberPassword;
+
+        private string _password;
+
+        private StatusPresenterModel _statusPresenterModel;
+
+        private string _userName;
+
         private DialHangupStatus DialStatus
         {
             set
@@ -182,37 +235,6 @@ namespace Drcom_Dialer.ViewModel
             {
                 return _dialStatus;
             }
-        }
-
-
-
-        private DialHangupStatus _dialStatus;
-
-        private enum DialHangupStatus
-        {
-            //断开
-            Disconnect,
-            //连接
-            Connect
-        }
-
-        public NotifyIcon TrayIcon
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
-        ///     显示气泡
-        /// </summary>
-        /// <param name="timeout">消失时间（毫秒）</param>
-        /// <param name="title">标题</param>
-        /// <param name="text">内容</param>
-        /// <param name="icon">图标</param>
-        public void ShowBalloonTip(int timeout, string title,
-            string text, ToolTipIcon icon = ToolTipIcon.Info)
-        {
-            TrayIcon.ShowBalloonTip(timeout, title, text, icon);
         }
 
         /// <summary>
@@ -260,37 +282,6 @@ namespace Drcom_Dialer.ViewModel
             }).Start();
         }
 
-        public void Hangup()
-        {
-            try
-            {
-                DialBtnEnable = false;
-                NetworkCheck.StopCheck();
-                PPPoE.Hangup();
-                //DialStatus=DialHangupStatus.Disconnect;
-            }
-            catch (Exception e)
-            {
-                Log4Net.WriteLog(e.Message, e);
-            }
-        }
-
-        private bool _dialBtnEnable = true;
-
-        private bool _dialOrHangup = true;
-
-        //private bool _enable;
-
-        private bool _isAutoLogin;
-
-        private bool _isRememberPassword;
-
-        private string _password;
-
-        private StatusPresenterModel _statusPresenterModel;
-
-        private string _userName;
-
         /// <summary>
         ///     从配置获字段
         /// </summary>
@@ -335,7 +326,7 @@ namespace Drcom_Dialer.ViewModel
         }
 
         /// <summary>
-        /// 重新Dial
+        ///     重新Dial
         /// </summary>
         private void Redial()
         {
@@ -398,6 +389,14 @@ namespace Drcom_Dialer.ViewModel
             {
                 StatusPresenterModel.Status = "拨号成功";
             };
+        }
+
+        private enum DialHangupStatus
+        {
+            //断开
+            Disconnect,
+            //连接
+            Connect
         }
     }
 }

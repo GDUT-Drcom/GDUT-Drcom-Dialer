@@ -50,7 +50,9 @@ namespace Drcom_Dialer
 
             //更新
             if (Update())
+            {
                 return;
+            }
 
 
             //修复VPN
@@ -107,7 +109,9 @@ namespace Drcom_Dialer
                     return true;
                 }
                 else
+                {
                     return false; // 正常流程
+                }
             }
             else
             {
