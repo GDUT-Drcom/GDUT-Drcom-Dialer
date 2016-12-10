@@ -73,11 +73,13 @@ namespace Drcom_Dialer
 
         private static void WaitProcess(string name)
         {
-            Process[] ps;
-            do
+            foreach (var ps in Process.GetProcessesByName(name))
             {
-                ps = Process.GetProcessesByName(name);
-            } while (ps.Length > 0);
+                if (!ps.WaitForExit(3000))
+                {
+                    ps.Kill();
+                }
+            }
         }
 
         /// <summary>
