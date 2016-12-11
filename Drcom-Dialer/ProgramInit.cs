@@ -18,9 +18,17 @@ namespace Drcom_Dialer
         [STAThread]
         private static void Main(string[] args)
         {
-            //基本上是程序的根基，放在最前面初始化
+            //初始化Log
             Model.Utils.Log4Net.SetConfig();
+
+            //初始化配置
             Model.DialerConfig.Init();
+
+            //Model.Utils.NetSharing ns = new Model.Utils.NetSharing();
+            //if (ns.Start())
+            //    Console.WriteLine("233");
+            //else
+            //    Console.WriteLine("555");
 
             //解析启动参数
             //不把更新放在这个之前也是因为考虑到可能使用带参启动的问题
@@ -29,8 +37,8 @@ namespace Drcom_Dialer
                 switch (args[0])
                 {
                     case Model.Utils.VPNFixer.StartupArgs:
-                         Model.Utils.VPNFixer.AddRouteRule();
-                         return;
+                        Model.Utils.VPNFixer.AddRouteRule();
+                        return;
                     default:
                         Model.Utils.Log4Net.WriteLog("未知的启动参数: " + args);
                         break;
@@ -38,22 +46,14 @@ namespace Drcom_Dialer
             }
 
             //防止多启
-            //在修复VPN的情况下，有可能需要启动两个实例
-            //所以将这个放后面
-            string mutexName = Properties.Resources.ProgramTitle + "Mutex";
-            singleInstanceWatcher = new Mutex(false, mutexName, out createdNew);
-            if (!createdNew)
-            {
-                MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                Environment.Exit(-1);
-            }
+            Singleton();
 
             //更新
             if (Update())
             {
                 return;
             }
-            
+
             //修复VPN
             if (Model.DialerConfig.isFixVPN)
             {
@@ -69,6 +69,23 @@ namespace Drcom_Dialer
             App app = new App();
             app.InitializeComponent();
             app.Run();
+        }
+
+        private static void Singleton()
+        {
+            int count = Process.GetProcessesByName(Model.Utils.DialerUpdater.NoExtName).Length;
+            if (count > 1)
+            {
+                MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(-1);
+            }
+            //string mutexName = Properties.Resources.ProgramTitle + "Mutex";
+            //singleInstanceWatcher = new Mutex(false, mutexName, out createdNew);
+            //if (!createdNew)
+            //{
+            //    MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    Environment.Exit(-1);
+            //}
         }
 
         private static void WaitProcess(string name)

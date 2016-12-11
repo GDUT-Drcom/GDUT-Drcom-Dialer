@@ -80,7 +80,6 @@ namespace Drcom_Dialer.Model.Utils
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = "route",
-                // TODO 认证地址需要获取
                 Arguments = $"add {DialerConfig.AuthIP} mask 255.255.255.255 {gateway} metric 5",
                 CreateNoWindow = true
             };

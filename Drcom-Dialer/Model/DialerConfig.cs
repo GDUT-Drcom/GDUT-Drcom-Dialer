@@ -135,8 +135,6 @@ namespace Drcom_Dialer.Model
         /// </summary>
         public static void Init()
         {
-            if (AppDomain.CurrentDomain.FriendlyName != Utils.DialerUpdater.NoExtName + ".exe")
-                return;
             cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ReadConfig();
         }
