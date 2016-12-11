@@ -21,9 +21,6 @@ namespace Drcom_Dialer
             //初始化Log
             Model.Utils.Log4Net.SetConfig();
 
-            //初始化配置
-            Model.DialerConfig.Init();
-
             //Model.Utils.NetSharing ns = new Model.Utils.NetSharing();
             //if (ns.Start())
             //    Console.WriteLine("233");
@@ -37,6 +34,8 @@ namespace Drcom_Dialer
                 switch (args[0])
                 {
                     case Model.Utils.VPNFixer.StartupArgs:
+                        //初始化配置
+                        Model.DialerConfig.Init();
                         Model.Utils.VPNFixer.AddRouteRule();
                         return;
                     default:
@@ -53,6 +52,9 @@ namespace Drcom_Dialer
             {
                 return;
             }
+
+            //初始化配置
+            Model.DialerConfig.Init();
 
             //修复VPN
             if (Model.DialerConfig.isFixVPN)
