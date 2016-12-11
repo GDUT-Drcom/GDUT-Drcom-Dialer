@@ -193,9 +193,12 @@ namespace Drcom_Dialer.ViewModel
         {
             try
             {
-                DialBtnEnable = false;
-                NetworkCheck.StopCheck();
-                PPPoE.Hangup();
+                if(DialStatus == DialHangupStatus.Connect)
+                {
+                    DialBtnEnable = false;
+                    NetworkCheck.StopCheck();
+                    PPPoE.Hangup();
+                }
                 //DialStatus=DialHangupStatus.Disconnect;
             }
             catch (Exception e)
