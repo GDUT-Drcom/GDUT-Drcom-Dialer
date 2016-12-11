@@ -56,6 +56,11 @@ namespace Drcom_Dialer.Model
         public static bool isNotifyWhenExpire = true;
 
         /// <summary>
+        /// 自动更新
+        /// </summary>
+        public static bool isAutoUpdate = true;
+
+        /// <summary>
         /// GUID
         /// 用于发送反馈
         /// </summary>
@@ -64,7 +69,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 配置文件版本
         /// </summary>
-        public static int configVer = 1;
+        public static int configVer = 2;
 
         /// <summary>
         /// 校区枚举项
@@ -165,6 +170,7 @@ namespace Drcom_Dialer.Model
                 cfa.AppSettings.Settings[nameof(isFixVPN)].Value = isFixVPN ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(isFeedback)].Value = isFeedback ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(isNotifyWhenExpire)].Value = isNotifyWhenExpire ? "Y" : "N";
+                cfa.AppSettings.Settings[nameof(isAutoUpdate)].Value = isAutoUpdate ? "Y" : "N";
                 cfa.AppSettings.Settings[nameof(guid)].Value = guid;
                 cfa.AppSettings.Settings[nameof(zone)].Value = ((int)zone).ToString();
                 cfa.AppSettings.Settings[nameof(configVer)].Value = configVer.ToString();
@@ -214,6 +220,9 @@ namespace Drcom_Dialer.Model
                         cfa.AppSettings.Settings.Add(nameof(configVer), configVer.ToString());
                         goto case 1;
                     case 1:
+                        cfa.AppSettings.Settings.Add(nameof(isAutoUpdate), ConvertBoolYN(isAutoUpdate));
+                        goto case 2;
+                    case 2:
                         break;
                     default:
                         goto case 0;
@@ -248,6 +257,7 @@ namespace Drcom_Dialer.Model
                     isFixVPN = cfa.AppSettings.Settings[nameof(isFixVPN)].Value == "Y";
                     isFeedback = cfa.AppSettings.Settings[nameof(isFeedback)].Value == "Y";
                     isNotifyWhenExpire = cfa.AppSettings.Settings[nameof(isNotifyWhenExpire)].Value == "Y";
+                    isAutoUpdate = cfa.AppSettings.Settings[nameof(isAutoUpdate)].Value == "Y";
                     guid = cfa.AppSettings.Settings[nameof(guid)].Value;
                     zone = (Campus)int.Parse(cfa.AppSettings.Settings[nameof(zone)].Value);
                 }

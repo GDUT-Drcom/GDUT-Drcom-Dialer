@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Drcom_Dialer.Model;
 // To access MetroWindow, add the following reference
 using MahApps.Metro.Controls;
@@ -33,19 +22,6 @@ namespace Drcom_Dialer.View
             InitTrayIcon();
         }
 
-        /// <summary>
-        ///     显示气泡
-        ///     需要弄成MVVM
-        /// </summary>
-        /// <param name="timeout">消失时间（毫秒）</param>
-        /// <param name="title">标题</param>
-        /// <param name="text">内容</param>
-        /// <param name="icon">图标</param>
-        public static void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon = ToolTipIcon.Info)
-        {
-            _trayIcon.ShowBalloonTip(timeout, title, text, icon);
-        }
-
         private ViewModel.ViewModel View
         {
             set;
@@ -59,7 +35,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void btn_dial_Click(object sender, RoutedEventArgs e)
         {
-            View.Dial();
+            View.DialOrHangup();
         }
 
         /// <summary>
@@ -104,26 +80,6 @@ namespace Drcom_Dialer.View
             }
         }
 
-        ///// <summary>
-        /////     密码输入处理 
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void pb_password_PasswordChanged(object sender, RoutedEventArgs e)
-        //{
-        //    DialerConfig.password = pb_password.Password;
-        //}
-
-        ///// <summary>
-        /////     账号输入处理
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void tb_username_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    DialerConfig.username = tb_username.Text;
-        //}
-
         /// <summary>
         ///     关于按钮
         /// </summary>
@@ -143,9 +99,8 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void MetroWindow_Closing(object sender, CancelEventArgs e)
         {
-            //TODO:add code here 注销
-            PPPoE.Hangup();
-            //hangup
+            View.Hangup();
+            DialerConfig.SaveConfig();
         }
 
         /// <summary>
@@ -156,7 +111,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void MetroWindow_Closed(object sender, EventArgs e)
         {
-            _trayIcon.Visible = false;
+            View.TrayIcon.Visible = false;
         }
 
         /// <summary>
@@ -179,24 +134,16 @@ namespace Drcom_Dialer.View
         /// </summary>
         private void InitTrayIcon()
         {
-            _trayIcon = new NotifyIcon
+            View.TrayIcon.MouseClick += (obj, e) =>
             {
-                Text = Properties.Resources.ProgramTitle,
-                Icon = System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath)
-            };
-
-            _trayIcon.MouseClick += (obj, e) =>
-            {
-                if ((e.Button == MouseButtons.Left) && (WindowState == WindowState.Minimized))
+                if ((e.Button == MouseButtons.Left) && 
+                (WindowState == WindowState.Minimized))
                 {
                     Show();
                     Activate();
                     WindowState = WindowState.Normal;
                 }
-                //todo:关闭显示
-                // trayIcon.Visible = false;
             };
-            _trayIcon.Visible = true;
         }
 
         /// <summary>
@@ -211,6 +158,16 @@ namespace Drcom_Dialer.View
             setting.ShowDialog();
         }
 
-        private static NotifyIcon _trayIcon;
+        private void AccountInfo_Button_Click(object sender, RoutedEventArgs e)
+        {
+            AccountInfoWindow accountInfo = new AccountInfoWindow();
+            accountInfo.ShowDialog();
+        }
+
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DialerConfig.isAutoLogin)
+                View.DialOrHangup();
+        }
     }
 }

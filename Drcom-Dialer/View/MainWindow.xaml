@@ -8,22 +8,44 @@
         xmlns:viewModels="clr-namespace:Drcom_Dialer.ViewModel"
         mc:Ignorable="d"
                                    
-        Title="广工Dr.com"
+        Title="广工Dr.COM"
         Height="330" Width="300" ResizeMode="CanMinimize"
         Closing="MetroWindow_Closing" Closed="MetroWindow_Closed" 
         StateChanged="MetroWindow_StateChanged"
         BorderBrush="{DynamicResource AccentColorBrush}"
         DataContext="{Binding Source={StaticResource ViewModel},Path=View}"
         BorderThickness="1"
-        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico">
+        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico" ShowIconOnTitleBar="False" TitleCharacterCasing="Normal" Loaded="MetroWindow_Loaded">
 
     <Window.Resources>
         <Image x:Key="SettingImage" Source="/Drcom-Dialer;component/Resource/Settings.ico" />
+        <Image x:Key="AccountInfoImage" Source="/Drcom-Dialer;component/Resource/AccountInfo.ico" />
+        <Image x:Key="AboutImage" Source="/Drcom-Dialer;component/Resource/About.ico" />
     </Window.Resources>
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="关于" Click="About_Button_Click"/>
+            <Button Click="About_Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource AboutImage}"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+
+            </Button>
+            <Button Click="AccountInfo_Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource AccountInfoImage}"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+            </Button>
             <Button Click="Setting_Button_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
@@ -65,7 +87,7 @@
                        VerticalAlignment="Center"  />
                 <!--不需要用Password-->
                 <TextBox x:Name="pb_password" Margin="0,1,0,0" Width="180px" 
-                             Controls:TextBoxHelper.Watermark="123456"
+                             Controls:TextBoxHelper.Watermark="***"
                          Text="{Binding Path=Password,Mode=TwoWay}"
                              BorderThickness="0,0,0,1"
                              VerticalAlignment="Center"   
@@ -95,8 +117,8 @@
             <StackPanel Margin="10,0,10,5" Height="36" Orientation="Horizontal"  
                         HorizontalAlignment="Center">
                 <Button x:Name="btn_dial" Style="{StaticResource AccentedSquareButtonStyle}" Width="150"
-                        Content="拨号"  
-                        Click="btn_dial_Click" />
+                        Content="{Binding Path=DialBtnContent,Mode=OneWay}"  
+                        Click="btn_dial_Click" IsEnabled="{Binding Path=DialBtnEnable,Mode=TwoWay}" />
             </StackPanel>
         </StackPanel>
         <StatusBar Margin="0" Height="30" 

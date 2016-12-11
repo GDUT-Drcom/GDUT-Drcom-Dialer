@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
 namespace Drcom_Dialer.Model.Utils
 {
@@ -49,7 +51,6 @@ namespace Drcom_Dialer.Model.Utils
                 Log4Net.WriteLog(e.Message, e);
                 return Status.Expection;
             }
-
         }
     }
 
@@ -62,6 +63,26 @@ namespace Drcom_Dialer.Model.Utils
         /// 最大重试次数
         /// </summary>
         public static int MaxRetry = 3;
+        /// <summary>
+        /// 内网断网事件
+        /// </summary>
+        public static EventHandler InnerNetworkCheckFailed;
+        /// <summary>
+        /// 外网断网事件
+        /// </summary>
+        public static EventHandler OuterNetworkCheckFailed;
+        /// <summary>
+        /// 外网又连上的事件
+        /// </summary>
+        public static EventHandler OuterNetworkCheckSuccessed;
+
+        private static Task pingThread
+        {
+            set;
+            get;
+        }
+
+        private static bool _exit = false;
 
         /// <summary>
         /// 检测
@@ -69,55 +90,94 @@ namespace Drcom_Dialer.Model.Utils
         /// </summary>
         /// <param name="InnerIPAddr">内网IP</param>
         /// <param name="OuterIPAddr">外网IP</param>
-        public static void Check(string InnerIPAddr = "10.0.3.2",string OuterIPAddr = "119.29.29.29")
+        private static void Check(string InnerIPAddr = "10.0.3.2", string OuterIPAddr = "119.29.29.29")
         {
-            int innerRetry = 0,outerRetry = 0;
-
-            switch (SimplePing.Ping(InnerIPAddr))
+            int innerRetry = 0, outerRetry = 0;
+            _exit = false;
+            while (!_exit)
             {
-                case SimplePing.Status.Success:
-                    innerRetry = 0;
-                    break;
-                case SimplePing.Status.Timeout:
-                case SimplePing.Status.Fail:
-                    innerRetry++;
-                    break;
-                case SimplePing.Status.Expection:
-                    //这就很尴尬了
-                    break;
+                switch (SimplePing.Ping(InnerIPAddr))
+                {
+                    case SimplePing.Status.Success:
+                        innerRetry = 0;
+                        break;
+                    case SimplePing.Status.Timeout:
+                    case SimplePing.Status.Fail:
+                        innerRetry++;
+                        break;
+                    case SimplePing.Status.Expection:
+                        //这就很尴尬了
+                        break;
+                }
+
+                switch (SimplePing.Ping(OuterIPAddr))
+                {
+                    case SimplePing.Status.Success:
+                        if (outerRetry > MaxRetry)
+                        {
+                            OuterNetworkCheckSuccessed?.Invoke(null, null);
+                        }
+                        outerRetry = 0;
+                        break;
+                    case SimplePing.Status.Timeout:
+                    case SimplePing.Status.Fail:
+                        outerRetry++;
+                        break;
+                    case SimplePing.Status.Expection:
+                        //这就很尴尬了
+                        break;
+                }
+
+                if (innerRetry > MaxRetry)
+                {
+                    //事件通知下主线程，重新拨号
+                    InnerNetworkCheckFailed.Invoke(null, null);
+                    return;
+                }
+                if (outerRetry == MaxRetry + 1)//仅仅产生一次提示事件
+                {
+                    //事件提示下外网断了
+                    OuterNetworkCheckFailed?.Invoke(null, null);
+                }
             }
-
-            switch (SimplePing.Ping(OuterIPAddr))
+        }
+        /// <summary>
+        /// 循环检测
+        /// </summary>
+        public static void LoopCheck()
+        {
+            try
             {
-                case SimplePing.Status.Success:
-                    if(outerRetry > MaxRetry)
-                    {
-                        //todo: 通知外部连上了
-                    }
-                    outerRetry = 0;
-                    break;
-                case SimplePing.Status.Timeout:
-                case SimplePing.Status.Fail:
-                    outerRetry++;
-                    break;
-                case SimplePing.Status.Expection:
-                    //这就很尴尬了
-                    break;
+                if (pingThread != null)
+                {
+                    _exit = true;
+                    pingThread.Dispose();
+                }
             }
-
-            if(innerRetry> MaxRetry)
+            catch(Exception e)
             {
-                //事件通知下主线程，重新拨号
+                Log4Net.WriteLog(e.Message, e);
+            }
+          
+            pingThread = new Task(() =>
+            {
+                Check(DialerConfig.AuthIP);
+            });
+            pingThread.Start();
+        }
+
+        /// <summary>
+        /// 停止ping检测
+        /// </summary>
+        public static void StopCheck()
+        {
+            if (pingThread == null)
+            {
                 return;
             }
-            if (outerRetry == MaxRetry + 1)//仅仅产生一次提示事件
-            {
-                //事件提示下外网断了
-                //不要停止检测
 
-            }
-
+            _exit = true;
+            pingThread.Dispose();
         }
-        //这需要个事件
     }
 }

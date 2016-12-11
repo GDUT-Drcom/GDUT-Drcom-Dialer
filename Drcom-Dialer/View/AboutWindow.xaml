@@ -9,7 +9,7 @@
         Title="About" Height="420" Width="300" ResizeMode="NoResize"
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
-        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/DogCom_64.ico">
+        WindowStartupLocation="CenterScreen" Icon="/Drcom-Dialer;component/Resource/About.ico">
     <Grid>
         <StackPanel Margin="10,10,10,10">
             <Label x:Name="Version" Content="Dr.COM三方客户端广工大专版1.0.3.284"/>
@@ -56,6 +56,5 @@
                            RequestNavigate="Hyperlink_RequestNavigate">检测更新</Hyperlink>
             </TextBlock>
         </StackPanel>
-
     </Grid>
 </Controls:MetroWindow>

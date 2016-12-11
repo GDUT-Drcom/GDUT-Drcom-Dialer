@@ -34,7 +34,7 @@ namespace Drcom_Dialer.Model
         {
             switch (Utils.HeartBeatUpdate.TryUpdate())
             {
-                case Utils.HeartBeatUpdate.UpdateState.Failed:
+                case Utils.Updater.UpdateState.Failed:
                     Utils.Log4Net.WriteLog("更新失败");
                     break;
                 default:
@@ -54,6 +54,7 @@ namespace Drcom_Dialer.Model
                 else
                 {
                     HeartBeatProxy.HeadBeatStatus stat = HeartBeatProxy.Heartbeat();
+                    Utils.DialerUpdater.TryUpdate();
                 }
 
                 //发送反馈
