@@ -101,13 +101,13 @@
                           Content="记住密码" 
                           VerticalAlignment="Center"  
                           IsChecked="{Binding Path=IsRememberPassword,Mode=TwoWay}"
-                          Click="cb_remember_Click"/>
+                          Click="cb_remember_Click" FontFamily="Microsoft YaHei UI Light"/>
                 <CheckBox x:Name="cb_autoLogin" 
                           Margin="30,0,30,0"
                           Content="自动登录" 
                           VerticalAlignment="Center"  
                           IsChecked="{Binding Path=IsAutoLogin,Mode=TwoWay}"
-                          Click="cb_autoLogin_Click"/>
+                          Click="cb_autoLogin_Click" FontFamily="Microsoft YaHei UI Light"/>
             </StackPanel>
             <StackPanel Margin="10,0,10,5" Height="25" Orientation="Horizontal"  
                         Visibility="Hidden"
@@ -124,7 +124,7 @@
         <StatusBar Margin="0" Height="30" 
                    VerticalAlignment="Bottom" 
                    DataContext="{Binding Source={StaticResource ViewModel},Path=StatusPresenterModel}">
-            <TextBlock x:Name="lbl_status" Foreground="White" 
+            <TextBlock x:Name="lbl_status" Foreground="White" Margin="5,0,5,0"
                        Text="{Binding Status,Mode=TwoWay}"  />
         </StatusBar>
 
