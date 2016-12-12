@@ -226,7 +226,7 @@ namespace Drcom_Dialer.ViewModel
 
         private string _userName;
 
-        private DialHangupStatus DialStatus
+        public DialHangupStatus DialStatus
         {
             set
             {
@@ -353,7 +353,6 @@ namespace Drcom_Dialer.ViewModel
                 StatusPresenterModel.Status = "拨号成功，IP: " + e.Message;
 
                 DialBtnEnable = true;
-                //DialOrHangup = false;
                 DialStatus = DialHangupStatus.Connect;
 
                 if (DialerConfig.isReDialOnFail)
@@ -365,14 +364,12 @@ namespace Drcom_Dialer.ViewModel
             {
                 StatusPresenterModel.Status = "拨号已断开";
                 DialBtnEnable = true;
-                //DialOrHangup = true;
                 DialStatus = DialHangupStatus.Disconnect;
             };
             PPPoE.PPPoEHangupFailEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = e.Message;
                 DialBtnEnable = true;
-                //DialOrHangup = true;
                 DialStatus = DialHangupStatus.Disconnect;
             };
             HeartBeatProxy.HeartbeatExited += (s, code) =>
@@ -394,7 +391,7 @@ namespace Drcom_Dialer.ViewModel
             };
         }
 
-        private enum DialHangupStatus
+        public enum DialHangupStatus
         {
             //断开
             Disconnect,

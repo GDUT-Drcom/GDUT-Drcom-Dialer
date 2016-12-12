@@ -66,6 +66,7 @@ namespace Drcom_Dialer
             Model.PPPoE.Init();
             Model.Dial.Init();
             Model.Utils.GDUT_Drcom.Load();
+            Model.Utils.DialerUpdater.LaterCheckUpdate();
 
             //初始化界面
             App app = new App();

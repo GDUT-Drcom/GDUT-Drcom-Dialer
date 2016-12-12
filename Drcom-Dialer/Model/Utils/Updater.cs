@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 
 namespace Drcom_Dialer.Model.Utils
@@ -21,6 +21,8 @@ namespace Drcom_Dialer.Model.Utils
         public static readonly string OldSuffix = ".old";
         public static string NewName => NoExtName + NewSuffix;
         public static string OldName => NoExtName + OldSuffix;
+
+        public static Timer UpdateTimer;
 
         static DialerUpdater()
         {
@@ -45,6 +47,47 @@ namespace Drcom_Dialer.Model.Utils
                         "程序更新成功，将在下次启动生效");
                     return;
                 }
+            }
+        }
+        /// <summary>
+        /// 等会再检测
+        /// </summary>
+        public static void LaterCheckUpdate()
+        {
+            try
+            {
+                if (UpdateTimer == null)
+                {
+                    UpdateTimer = new Timer(new TimerCallback((state) =>
+                    {
+                        if (ViewModel.ViewModel.View.DialStatus == ViewModel.ViewModel.DialHangupStatus.Connect)
+                            TryUpdate();
+                        StopCheckUpdateTimer();
+                    }), null, 1000 * 60 * 10, -1);
+                }
+            }
+            catch(Exception e)
+            {
+                Log4Net.WriteLog(e.Message, e);
+            }
+        }
+
+        /// <summary>
+        /// 停止检测
+        /// </summary>
+        public static void StopCheckUpdateTimer()
+        {
+            try
+            {
+                if (UpdateTimer != null)
+                {
+                    UpdateTimer.Change(-1, -1);
+                    UpdateTimer = null;
+                }
+            }
+            catch (Exception e)
+            {
+                Log4Net.WriteLog(e.Message, e);
             }
         }
     }
