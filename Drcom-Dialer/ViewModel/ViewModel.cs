@@ -210,7 +210,7 @@ namespace Drcom_Dialer.ViewModel
         private bool _dialBtnEnable = true;
 
 
-        private DialHangupStatus _dialStatus;
+        private DialHangupStatus _dialStatus = DialHangupStatus.Disconnect;
 
         //private bool _dialOrHangup = true;
 

@@ -34,7 +34,7 @@ namespace Drcom_Dialer.Model.Utils
 
         public static void TryUpdate()
         {
-            string RemoteFileUrl = Updater.CheckUpdate("GDUT-Drcom/Drcom-Dialer", NoExtName, Version.GetVersion());
+            string RemoteFileUrl = Updater.CheckUpdate("GDUT-Drcom/Drcom-Dialer", NoExtName + ".exe", Version.GetVersion());
 
             if (RemoteFileUrl != null)
             {
@@ -60,13 +60,14 @@ namespace Drcom_Dialer.Model.Utils
                 {
                     UpdateTimer = new Timer(new TimerCallback((state) =>
                     {
+                        StopCheckUpdateTimer();
                         if (ViewModel.ViewModel.View.DialStatus == ViewModel.ViewModel.DialHangupStatus.Connect)
                             TryUpdate();
-                        StopCheckUpdateTimer();
-                    }), null, 1000 * 60 * 10, -1);
+
+                    }), null, 1000 * 60 * 10, 1000 * 60 * 10);//10min
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log4Net.WriteLog(e.Message, e);
             }
@@ -82,6 +83,7 @@ namespace Drcom_Dialer.Model.Utils
                 if (UpdateTimer != null)
                 {
                     UpdateTimer.Change(-1, -1);
+                    UpdateTimer.Dispose();
                     UpdateTimer = null;
                 }
             }
