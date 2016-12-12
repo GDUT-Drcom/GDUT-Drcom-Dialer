@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Drcom_Dialer.Model;
@@ -362,6 +363,7 @@ namespace Drcom_Dialer.ViewModel
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {
+                Thread.Sleep(1000);
                 StatusPresenterModel.Status = "拨号已断开";
                 DialBtnEnable = true;
                 DialStatus = DialHangupStatus.Disconnect;
