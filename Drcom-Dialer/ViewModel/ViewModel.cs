@@ -355,11 +355,7 @@ namespace Drcom_Dialer.ViewModel
 
                 DialBtnEnable = true;
                 DialStatus = DialHangupStatus.Connect;
-
-                if (DialerConfig.isReDialOnFail)
-                {
-                    NetworkCheck.LoopCheck();
-                }
+                NetworkCheck.LoopCheck();
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {
@@ -380,7 +376,10 @@ namespace Drcom_Dialer.ViewModel
             };
             NetworkCheck.InnerNetworkCheckFailed += (s, e) =>
             {
-                Redial();
+                if (DialerConfig.isReDialOnFail)
+                    Redial();
+                else
+                    Hangup();
             };
             NetworkCheck.OuterNetworkCheckFailed += (s, e) =>
             {
