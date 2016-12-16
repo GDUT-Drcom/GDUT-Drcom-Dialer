@@ -80,7 +80,7 @@ namespace Drcom_Dialer.Model.Utils
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = "route",
-                Arguments = $"add {DialerConfig.AuthIP} mask 255.255.255.255 {gateway} metric 5",
+                Arguments = $"add {DialerConfig.AuthIP} mask 255.255.255.255 0.0.0.0 metric 5",
                 CreateNoWindow = true
             };
             Process proc = Process.Start(psi);
