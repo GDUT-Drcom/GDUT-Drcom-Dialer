@@ -120,8 +120,8 @@ namespace Drcom_Dialer.Model
                 foreach (RasConnection conn in RasConnection.GetActiveConnections())
                 {
                     conn.HangUp();
-                    PPPoEHangupSuccessEvent?.Invoke(null, null);
                 }
+                PPPoEHangupSuccessEvent?.Invoke(null, null);
             }
             catch (Exception e)
             {

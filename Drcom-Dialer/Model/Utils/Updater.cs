@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 
 namespace Drcom_Dialer.Model.Utils
@@ -22,6 +22,8 @@ namespace Drcom_Dialer.Model.Utils
         public static string NewName => NoExtName + NewSuffix;
         public static string OldName => NoExtName + OldSuffix;
 
+        public static Timer UpdateTimer;
+
         static DialerUpdater()
         {
             NoExtName = AppDomain.CurrentDomain.FriendlyName;
@@ -32,7 +34,7 @@ namespace Drcom_Dialer.Model.Utils
 
         public static void TryUpdate()
         {
-            string RemoteFileUrl = Updater.CheckUpdate("GDUT-Drcom/Drcom-Dialer", NoExtName, Version.GetVersion());
+            string RemoteFileUrl = Updater.CheckUpdate("GDUT-Drcom/Drcom-Dialer", NoExtName + ".exe", Version.GetVersion());
 
             if (RemoteFileUrl != null)
             {
@@ -45,6 +47,49 @@ namespace Drcom_Dialer.Model.Utils
                         "程序更新成功，将在下次启动生效");
                     return;
                 }
+            }
+        }
+        /// <summary>
+        /// 等会再检测
+        /// </summary>
+        public static void LaterCheckUpdate()
+        {
+            try
+            {
+                if (UpdateTimer == null)
+                {
+                    UpdateTimer = new Timer(new TimerCallback((state) =>
+                    {
+                        StopCheckUpdateTimer();
+                        if (ViewModel.ViewModel.View.DialStatus == ViewModel.ViewModel.DialHangupStatus.Connect)
+                            TryUpdate();
+
+                    }), null, 1000 * 60 * 10, 1000 * 60 * 10);//10min
+                }
+            }
+            catch (Exception e)
+            {
+                Log4Net.WriteLog(e.Message, e);
+            }
+        }
+
+        /// <summary>
+        /// 停止检测
+        /// </summary>
+        public static void StopCheckUpdateTimer()
+        {
+            try
+            {
+                if (UpdateTimer != null)
+                {
+                    UpdateTimer.Change(-1, -1);
+                    UpdateTimer.Dispose();
+                    UpdateTimer = null;
+                }
+            }
+            catch (Exception e)
+            {
+                Log4Net.WriteLog(e.Message, e);
             }
         }
     }

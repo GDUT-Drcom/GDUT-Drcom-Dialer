@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Drcom_Dialer.Model;
@@ -34,6 +35,7 @@ namespace Drcom_Dialer.ViewModel
             set
             {
                 _password = value;
+                DialerConfig.password = value;
                 OnPropertyChanged();
             }
             get
@@ -47,6 +49,7 @@ namespace Drcom_Dialer.ViewModel
             set
             {
                 _userName = value;
+                DialerConfig.username = value;
                 OnPropertyChanged();
             }
             get
@@ -197,6 +200,8 @@ namespace Drcom_Dialer.ViewModel
                 {
                     DialBtnEnable = false;
                     NetworkCheck.StopCheck();
+                    HeartBeatProxy.Kill();
+                    Thread.Sleep(1000);
                     PPPoE.Hangup();
                 }
                 //DialStatus=DialHangupStatus.Disconnect;
@@ -210,7 +215,7 @@ namespace Drcom_Dialer.ViewModel
         private bool _dialBtnEnable = true;
 
 
-        private DialHangupStatus _dialStatus;
+        private DialHangupStatus _dialStatus = DialHangupStatus.Disconnect;
 
         //private bool _dialOrHangup = true;
 
@@ -226,7 +231,7 @@ namespace Drcom_Dialer.ViewModel
 
         private string _userName;
 
-        private DialHangupStatus DialStatus
+        public DialHangupStatus DialStatus
         {
             set
             {
@@ -258,9 +263,6 @@ namespace Drcom_Dialer.ViewModel
                 Notify("请输入密码");
                 return;
             }
-
-            DialerConfig.password = Password;
-            DialerConfig.username = UserName;
 
             //开始拨号
             Notify("开始拨号");
@@ -353,26 +355,19 @@ namespace Drcom_Dialer.ViewModel
                 StatusPresenterModel.Status = "拨号成功，IP: " + e.Message;
 
                 DialBtnEnable = true;
-                //DialOrHangup = false;
                 DialStatus = DialHangupStatus.Connect;
-
-                if (DialerConfig.isReDialOnFail)
-                {
-                    NetworkCheck.LoopCheck();
-                }
+                NetworkCheck.LoopCheck();
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = "拨号已断开";
                 DialBtnEnable = true;
-                //DialOrHangup = true;
                 DialStatus = DialHangupStatus.Disconnect;
             };
             PPPoE.PPPoEHangupFailEvent += (s, e) =>
             {
                 StatusPresenterModel.Status = e.Message;
                 DialBtnEnable = true;
-                //DialOrHangup = true;
                 DialStatus = DialHangupStatus.Disconnect;
             };
             HeartBeatProxy.HeartbeatExited += (s, code) =>
@@ -381,12 +376,15 @@ namespace Drcom_Dialer.ViewModel
             };
             NetworkCheck.InnerNetworkCheckFailed += (s, e) =>
             {
-                Redial();
+                if (DialerConfig.isReDialOnFail)
+                    Redial();
+                else
+                    Hangup();
             };
             NetworkCheck.OuterNetworkCheckFailed += (s, e) =>
             {
                 StatusPresenterModel.Status = "似乎无法连接到外网";
-                Redial();
+                //Redial();
             };
             NetworkCheck.OuterNetworkCheckSuccessed += (s, e) =>
             {
@@ -394,7 +392,7 @@ namespace Drcom_Dialer.ViewModel
             };
         }
 
-        private enum DialHangupStatus
+        public enum DialHangupStatus
         {
             //断开
             Disconnect,

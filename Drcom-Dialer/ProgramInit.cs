@@ -12,12 +12,12 @@ namespace Drcom_Dialer
 {
     internal static class ProgramInit
     {
-        private static Mutex singleInstanceWatcher;
-        private static bool createdNew;
-
         [STAThread]
         private static void Main(string[] args)
         {
+            string exePath = System.Windows.Forms.Application.ExecutablePath;
+            Environment.CurrentDirectory = Path.GetDirectoryName(exePath);
+
             //初始化Log
             Model.Utils.Log4Net.SetConfig();
 
@@ -66,6 +66,7 @@ namespace Drcom_Dialer
             Model.PPPoE.Init();
             Model.Dial.Init();
             Model.Utils.GDUT_Drcom.Load();
+            Model.Utils.DialerUpdater.LaterCheckUpdate();
 
             //初始化界面
             App app = new App();

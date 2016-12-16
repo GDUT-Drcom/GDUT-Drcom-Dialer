@@ -54,7 +54,6 @@ namespace Drcom_Dialer.Model
                 else
                 {
                     HeartBeatProxy.HeadBeatStatus stat = HeartBeatProxy.Heartbeat();
-                    Utils.DialerUpdater.TryUpdate();
                 }
 
                 //发送反馈
@@ -84,7 +83,7 @@ namespace Drcom_Dialer.Model
         /// <param name="e"></param>
         private static void OnPPPoEHangup(object obj, EventArgs e)
         {
-            HeartBeatProxy.Kill();
+            //HeartBeatProxy.Kill();
         }
     }
 }

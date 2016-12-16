@@ -30,11 +30,11 @@
     <SupportUrl>https://github.com/GDUT-Drcom/Drcom-Dialer/wiki</SupportUrl>
     <ErrorReportUrl>https://github.com/GDUT-Drcom/Drcom-Dialer/issues</ErrorReportUrl>
     <ProductName>DrCOM拨号器</ProductName>
-    <PublisherName>广东工业大学</PublisherName>
+    <PublisherName>宇宙工业大学</PublisherName>
     <SuiteName>GDUT-DrCOM</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>86</ApplicationRevision>
-    <ApplicationVersion>1.0.0.86</ApplicationVersion>
+    <ApplicationRevision>105</ApplicationRevision>
+    <ApplicationVersion>1.0.0.105</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>

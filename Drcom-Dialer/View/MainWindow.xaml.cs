@@ -101,6 +101,7 @@ namespace Drcom_Dialer.View
         {
             View.Hangup();
             DialerConfig.SaveConfig();
+            Model.Utils.DialerUpdater.StopCheckUpdateTimer();
         }
 
         /// <summary>
