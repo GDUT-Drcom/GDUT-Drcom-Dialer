@@ -67,12 +67,17 @@ namespace Drcom_Dialer.ViewModel
         {
             new Task(() =>
             {
-                var info = AccountStatus.GetAccountInfomation();
-                if (info.Status == "success")
+                if(AccountStatus.AccInfo==null)
+                    AccountStatus.AccInfo = AccountStatus.GetAccountInfomation();
+                if (AccountStatus.AccInfo.Status == "success")
                 {
-                    Username = info.Username;
-                    Money = info.LeftMoney;
-                    Overdata = info.OverDate.ToString("yyyy-MM-dd");
+                    Username = AccountStatus.AccInfo.Username;
+                    Money = AccountStatus.AccInfo.LeftMoney;
+                    Overdata = AccountStatus.AccInfo.OverDate.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    Username = AccountStatus.AccInfo.Status;
                 }
             }).Start();
         }

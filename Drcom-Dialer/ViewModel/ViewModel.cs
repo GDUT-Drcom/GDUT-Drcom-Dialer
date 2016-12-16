@@ -35,6 +35,7 @@ namespace Drcom_Dialer.ViewModel
             set
             {
                 _password = value;
+                DialerConfig.password = value;
                 OnPropertyChanged();
             }
             get
@@ -48,6 +49,7 @@ namespace Drcom_Dialer.ViewModel
             set
             {
                 _userName = value;
+                DialerConfig.username = value;
                 OnPropertyChanged();
             }
             get
@@ -198,6 +200,8 @@ namespace Drcom_Dialer.ViewModel
                 {
                     DialBtnEnable = false;
                     NetworkCheck.StopCheck();
+                    HeartBeatProxy.Kill();
+                    Thread.Sleep(1000);
                     PPPoE.Hangup();
                 }
                 //DialStatus=DialHangupStatus.Disconnect;
@@ -259,9 +263,6 @@ namespace Drcom_Dialer.ViewModel
                 Notify("请输入密码");
                 return;
             }
-
-            DialerConfig.password = Password;
-            DialerConfig.username = UserName;
 
             //开始拨号
             Notify("开始拨号");
@@ -359,7 +360,6 @@ namespace Drcom_Dialer.ViewModel
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {
-                Thread.Sleep(1000);
                 StatusPresenterModel.Status = "拨号已断开";
                 DialBtnEnable = true;
                 DialStatus = DialHangupStatus.Disconnect;
@@ -384,7 +384,7 @@ namespace Drcom_Dialer.ViewModel
             NetworkCheck.OuterNetworkCheckFailed += (s, e) =>
             {
                 StatusPresenterModel.Status = "似乎无法连接到外网";
-                Redial();
+                //Redial();
             };
             NetworkCheck.OuterNetworkCheckSuccessed += (s, e) =>
             {

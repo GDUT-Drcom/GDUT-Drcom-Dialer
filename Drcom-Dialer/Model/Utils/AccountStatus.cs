@@ -22,6 +22,15 @@ namespace Drcom_Dialer.Model.Utils
         {
             try
             {
+                AccountInfomation acci = new AccountInfomation();
+
+                if(DialerConfig.username == "" || DialerConfig.password == "")
+                {
+                    acci.Status = "用户名或密码为空";
+                    return acci;
+                }
+
+
                 //构造Cookie
                 RestClient client = new RestClient("http://222.200.98.8:1800");
                 client.CookieContainer = new System.Net.CookieContainer();
@@ -48,19 +57,29 @@ namespace Drcom_Dialer.Model.Utils
                 authRequest.AddParameter("checkcode", code);
                 authRequest.AddParameter("Submit", "登录");
 
+
                 //认证
                 IRestResponse authResponse = client.Execute(authRequest);
+                if (authResponse.Content.Contains("登录密码不正确"))
+                {
+                    acci.Status = "用户名或密码不正确";
+                    return acci;
+                }
+                if (authResponse.Content.Contains("账号为空请正确填写"))
+                {
+                    acci.Status = "未知的登录错误";
+                    return acci;
+                }
+
 
                 //获取账户信息
                 RestRequest infoRequest = new RestRequest("Self/refreshaccount");
                 IRestResponse<accountInfomation> infoResponse = client.Execute<accountInfomation>(infoRequest);
 
                 //转换数据格式
-                AccountInfomation acci = new AccountInfomation();
-
                 if (infoResponse.Data == null)
                 {
-                    acci.Status = "fail";
+                    acci.Status = "未知的获取错误";
                     return acci;
                 }
                 acci.Status = infoResponse.Data.date;
@@ -82,22 +101,24 @@ namespace Drcom_Dialer.Model.Utils
             {
                 Log4Net.WriteLog(e.Message, e);
                 AccountInfomation acci = new AccountInfomation();
-                acci.Status = "fail";
+                acci.Status = "内部错误";
                 return acci;
             }
         }
+
+        public static AccountInfomation AccInfo;
 
         /// <summary>
         /// 账户信息相关功能
         /// </summary>
         public static void AccountInfo()
         {
-            AccountInfomation accInfo = GetAccountInfomation();
-            if(accInfo != null && accInfo.Status == "success")
+            AccInfo = GetAccountInfomation();
+            if(AccInfo != null && AccInfo.Status == "success")
             {
                 if (DialerConfig.isNotifyWhenExpire)
                 {
-                    DateTime overDate = accInfo.OverDate;
+                    DateTime overDate = AccInfo.OverDate;
                     TimeSpan left = overDate.Subtract(DateTime.Today);
                     if (left.TotalDays <= 7)
                     {
@@ -108,25 +129,25 @@ namespace Drcom_Dialer.Model.Utils
 
                 if(DialerConfig.zone == DialerConfig.Campus.Unknown)
                 {
-                    if (accInfo.Service.Contains("大学城"))
+                    if (AccInfo.Service.Contains("大学城"))
                     {
                         DialerConfig.zone = DialerConfig.Campus.HEMC;
                     }
-                    else if (accInfo.Service.Contains("东风路"))
+                    else if (AccInfo.Service.Contains("东风路"))
                     {
                         DialerConfig.zone = DialerConfig.Campus.DongfengRd;
                     }
-                    else if (accInfo.Service.Contains("龙洞"))
+                    else if (AccInfo.Service.Contains("龙洞"))
                     {
                         DialerConfig.zone = DialerConfig.Campus.LongDong;
                     }
-                    else if (accInfo.Service.Contains("番禺"))
+                    else if (AccInfo.Service.Contains("番禺"))
                     {
                         DialerConfig.zone = DialerConfig.Campus.Panyu;
                     }
                     else
                     {
-                        Log4Net.WriteLog("无法匹配的校区字符串：" + accInfo.Service);
+                        Log4Net.WriteLog("无法匹配的校区字符串：" + AccInfo.Service);
                     }
                 }
             }
