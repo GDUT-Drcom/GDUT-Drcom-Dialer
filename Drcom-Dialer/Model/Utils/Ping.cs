@@ -139,6 +139,9 @@ namespace Drcom_Dialer.Model.Utils
                     //事件提示下外网断了
                     OuterNetworkCheckFailed?.Invoke(null, null);
                 }
+
+                // 休息下
+                Thread.Sleep(5 * 1000);
             }
         }
         /// <summary>
@@ -177,6 +180,7 @@ namespace Drcom_Dialer.Model.Utils
             }
 
             _exit = true;
+            pingThread.Wait();
             pingThread.Dispose();
         }
     }
