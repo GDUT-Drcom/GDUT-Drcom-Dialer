@@ -96,6 +96,6 @@ namespace Drcom_Dialer.Model.Utils
 
     internal class ObjId
     {
-        public string objectId;
+        public string objectId { get; set; }
     }
 }
