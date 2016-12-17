@@ -35,6 +35,8 @@ namespace Drcom_Dialer.Model.Utils
         public static void TryUpdate()
         {
             string RemoteFileUrl = Updater.CheckUpdate("GDUT-Drcom/Drcom-Dialer", NoExtName + ".exe", Version.GetVersion());
+            if(RemoteFileUrl == null)
+                RemoteFileUrl = Updater.CheckUpdate("https://tools.bigkeer.cn/", "drcom/dialer.json","bigkeer", NoExtName + ".exe", Version.GetVersion());
 
             if (RemoteFileUrl != null)
             {

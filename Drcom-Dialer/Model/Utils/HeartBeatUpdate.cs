@@ -33,6 +33,8 @@ namespace Drcom_Dialer.Model.Utils
             try
             {
                 string RemoteFileUrl = Updater.CheckUpdate("chenhaowen01/gdut-drcom", DllName, GDUT_Drcom.Version);
+                if(RemoteFileUrl == null)
+                    RemoteFileUrl = Updater.CheckUpdate("https://tools.bigkeer.cn/", "drcom/heartbeat.json", "bigkeer", DllName, GDUT_Drcom.Version);
 
                 if (RemoteFileUrl != null)
                 {
