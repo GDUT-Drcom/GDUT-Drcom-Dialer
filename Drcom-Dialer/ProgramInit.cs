@@ -62,6 +62,8 @@ namespace Drcom_Dialer
             Model.Utils.GDUT_Drcom.Load();
             Model.Utils.DialerUpdater.LaterCheckUpdate();
 
+            Model.Utils.Log4Net.WriteLog("初始化程序成功");
+
             //初始化界面
             App app = new App();
             app.InitializeComponent();

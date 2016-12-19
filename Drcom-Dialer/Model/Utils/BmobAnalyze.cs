@@ -33,31 +33,49 @@ namespace Drcom_Dialer.Model.Utils
                 data.Username = ToHexString(mdResult, mdResult.Length);
             }
             data.CampusZone = (int)DialerConfig.zone;
-            
-            //发送/更新用户信息
-            if (DialerConfig.guid == "")
+            data.Version = Version.GetVersion();
+
+            try
             {
-                RestRequest request = new RestRequest("/1/classes/analyze",Method.POST); //post
-                request.AddHeader("X-Bmob-Application-Id", "6402f2d047a6728395bc8df1f918b340");
-                request.AddHeader("X-Bmob-REST-API-Key", "a0069d330057d662b7a1af4245e8f882");
-                request.AddJsonBody(data);
-                IRestResponse<ObjId> objId = client.Execute<ObjId>(request);
-                if(objId.ResponseStatus == ResponseStatus.Completed)
+                //发送/更新用户信息
+                if (DialerConfig.guid == "")
                 {
-                    DialerConfig.guid = objId.Data.objectId;
-                    DialerConfig.SaveConfig();
+                    RestRequest request = new RestRequest("/1/classes/analyze", Method.POST); //post
+                    request.AddHeader("X-Bmob-Application-Id", "6402f2d047a6728395bc8df1f918b340");
+                    request.AddHeader("X-Bmob-REST-API-Key", "a0069d330057d662b7a1af4245e8f882");
+                    request.AddJsonBody(data);
+                    IRestResponse<ObjId> objId = client.Execute<ObjId>(request);
+                    if (objId.ResponseStatus == ResponseStatus.Completed)
+                    {
+                        DialerConfig.guid = objId.Data.objectId;
+                        DialerConfig.SaveConfig();
+                    }
+                }
+                else
+                {
+                    //update
+                    RestRequest request = new RestRequest($"/1/classes/analyze/{DialerConfig.guid}", Method.PUT);
+                    request.AddHeader("X-Bmob-Application-Id", "6402f2d047a6728395bc8df1f918b340");
+                    request.AddHeader("X-Bmob-REST-API-Key", "a0069d330057d662b7a1af4245e8f882");
+                    request.AddHeader("Content-Type", "application/json");
+                    request.AddJsonBody(data);
+                    IRestResponse<ObjId> response = client.Execute<ObjId>(request);
+                    if (response.ResponseStatus == ResponseStatus.Completed && response.Data.code != null)
+                    {
+                        if(response.Data.code == 101)
+                        {
+                            DialerConfig.guid = "";
+                            DialerConfig.SaveConfig();
+                            SendAnalyze();
+                        }  
+                    }
                 }
             }
-            else
+            catch (Exception e)
             {
-                //update
-                RestRequest request = new RestRequest("/1/classes/analyze/{id}", Method.PUT);
-                request.AddHeader("X-Bmob-Application-Id", "6402f2d047a6728395bc8df1f918b340");
-                request.AddHeader("X-Bmob-REST-API-Key", "a0069d330057d662b7a1af4245e8f882");
-                request.AddParameter("id", DialerConfig.guid);
-                request.AddJsonBody(data);
-                client.Execute(request);
+                Log4Net.WriteLog(e.Message, e);
             }
+
 
         }
         /// <summary>
@@ -92,10 +110,12 @@ namespace Drcom_Dialer.Model.Utils
     {
         public string Username;
         public int CampusZone;
+        public string Version;
     }
 
     internal class ObjId
     {
         public string objectId { get; set; }
+        public int code { set; get; }
     }
 }

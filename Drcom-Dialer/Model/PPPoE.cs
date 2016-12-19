@@ -83,12 +83,8 @@ namespace Drcom_Dialer.Model
 
                 RasHandle hRas = dialer.Dial();
 
-                //连接失败
-                //while (hRas.IsInvalid)
-                //{
-                //    //TODO: Add code here
-                //    //继续连接
-                //}
+                //应该是等待一会，防止出问题
+                while (hRas.IsInvalid) ;
 
                 if (!hRas.IsInvalid)
                 {

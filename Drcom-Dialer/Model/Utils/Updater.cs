@@ -35,8 +35,33 @@ namespace Drcom_Dialer.Model.Utils
         public static void TryUpdate()
         {
             string RemoteFileUrl = Updater.CheckUpdate("GDUT-Drcom/Drcom-Dialer", NoExtName + ".exe", Version.GetVersion());
-            if(RemoteFileUrl == null)
-                RemoteFileUrl = Updater.CheckUpdate("https://tools.bigkeer.cn/", "drcom/dialer.json","bigkeer", NoExtName + ".exe", Version.GetVersion());
+
+            if (RemoteFileUrl == "")
+            {
+                Log4Net.WriteLog("无需更新");
+                return;
+            }
+
+            if (RemoteFileUrl != null)
+            {
+                if (Updater.DownloadFile(RemoteFileUrl, NewName))
+                {
+                    Log4Net.WriteLog($"成功更新主程序");
+                    ViewModel.ViewModel.View.ShowBalloonTip(
+                        3000,
+                        "应用更新",
+                        "程序更新成功，将在下次启动生效");
+                    return;
+                }
+            }
+
+            RemoteFileUrl = Updater.CheckUpdate("https://tools.bigkeer.cn/", "drcom/dialer.json", "bigkeer", NoExtName + ".exe", Version.GetVersion());
+
+            if (RemoteFileUrl == "")
+            {
+                Log4Net.WriteLog("无需更新");
+                return;
+            }
 
             if (RemoteFileUrl != null)
             {
@@ -121,14 +146,16 @@ namespace Drcom_Dialer.Model.Utils
             RestClient client = new RestClient(url.Substring(0, index));
             RestRequest request = new RestRequest(url.Substring(index, url.Length - index));
 
-            byte[] result = client.DownloadData(request);
-            if (result.Length < 1024)
-            {
-                Log4Net.WriteLog($"下载失败: 太少数据({result.Length}b)");
-                return false;
-            }
+            client.Timeout = 20 * 1000;
             try
             {
+                byte[] result = client.DownloadData(request);
+                if (result.Length < 1024)
+                {
+                    Log4Net.WriteLog($"下载失败: 太少数据({result.Length}b)");
+                    return false;
+                }
+
                 using (FileStream stream = new FileStream(path, FileMode.Create))
                 {
                     stream.Write(result, 0, result.Length);
@@ -152,7 +179,7 @@ namespace Drcom_Dialer.Model.Utils
         /// <param name="mirrorName">Mirror名称</param>
         /// <param name="fileName">文件名</param>
         /// <param name="currentVersion">当前版本</param>
-        /// <returns></returns>
+        /// <returns>URL。无需更新返回空，出错返回null</returns>
         public static String CheckUpdate(string mirrorHost, string mirrorUrl, string mirrorName, string fileName, string currentVersion)
         {
             var client = new RestClient(mirrorHost);
@@ -171,9 +198,9 @@ namespace Drcom_Dialer.Model.Utils
                     Log4Net.WriteLog($"远端版本:{remoteVersion}");
 
                     // 无需更新
-                    if (remoteVersion == currentVersion)
+                    if (!CompareVersion(currentVersion, remoteVersion))
                     {
-                        return null;
+                        return "";
                     }
 
                     // 需要更新
@@ -210,6 +237,54 @@ namespace Drcom_Dialer.Model.Utils
                 "Github",
                 fileName,
                 currentVersion);
+        }
+
+        /// <summary>
+        /// 比较两个版本以确定是否需要升级
+        /// </summary>
+        /// <param name="baseVer">本地版本</param>
+        /// <param name="remoteVer">远端版本</param>
+        /// <returns></returns>
+        public static bool CompareVersion(string baseVer, string remoteVer)
+        {
+            try
+            {
+                string[] bv = baseVer.Split(".".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                string[] rv = remoteVer.Split(".".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                bool revert = bv.Length >= rv.Length;
+                string[] v1, v2;
+
+                if (revert)
+                {
+                    v1 = rv;
+                    v2 = bv;
+                }
+                else
+                {
+                    v1 = bv;
+                    v2 = rv;
+                }
+                for (int i = 0; i < v1.Length; i++)
+                {
+                    int digit1, digit2;
+                    digit1 = int.Parse(v1[i]);
+                    digit2 = int.Parse(v2[i]);
+
+                    if (digit1 != digit2)
+                    {
+                        return (digit2 > digit1) ^ revert; //revert变量决定结果翻转
+                    }
+                }
+
+                // 当remote长度大于base时返回true
+                return !revert;
+
+            }
+            catch (Exception e)
+            {
+                Log4Net.WriteLog(e.Message, e);
+                return true;
+            }
         }
     }
 }
