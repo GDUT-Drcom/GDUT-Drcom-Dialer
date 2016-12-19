@@ -40,7 +40,7 @@ namespace Drcom_Dialer.Model.Utils
         /// 重启进程提升权限
         /// 这会导致自身退出
         /// </summary>
-        public static void Elevate()
+        public static void Fix()
         {
             ProcessStartInfo psi = new ProcessStartInfo
             {
@@ -76,11 +76,12 @@ namespace Drcom_Dialer.Model.Utils
                 throw new InvalidOperationException("没有足够权限");
             }
             string gateway = FindGateway();
-
+            string IF = FindInterface();
+            string args = $"add {DialerConfig.AuthIP} mask 255.255.255.255 0.0.0.0 metric 5 IF {IF}";
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = "route",
-                Arguments = $"add {DialerConfig.AuthIP} mask 255.255.255.255 0.0.0.0 metric 5",
+                Arguments = args,
                 CreateNoWindow = true
             };
             Process proc = Process.Start(psi);
@@ -107,6 +108,24 @@ namespace Drcom_Dialer.Model.Utils
             Regex reg = new Regex(@"(0\.0\.0\.0\s+){2}(\d+\.\d+\.\d+\.\d)+");
             var mc = reg.Matches(rout);
             return mc[0].Groups[2].Value;
+        }
+
+        private static string FindInterface()
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "route",
+                Arguments = "print",
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
+            Process proc = Process.Start(psi);
+            proc?.WaitForExit();
+            string rout = proc.StandardOutput.ReadToEnd();
+            Regex reg = new Regex($@"(\d+)\.+{Properties.Resources.RasConnectionName}");
+            var mc = reg.Matches(rout);
+            return mc[0].Groups[1].Value;
         }
 
         public const string StartupArgs = "fixvpn";
