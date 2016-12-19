@@ -86,6 +86,11 @@ namespace Drcom_Dialer.Model.Utils
             };
             Process proc = Process.Start(psi);
             proc?.WaitForExit();
+            int metric = CheckMetric();
+            if (metric > 100)
+            {
+                MessageBox.Show($"VPN跃点数过大，可能修复失败，如失败请断线重试(metric={metric})");
+            }
         }
 
         /// <summary>
@@ -94,23 +99,52 @@ namespace Drcom_Dialer.Model.Utils
         /// <returns>Gateway</returns>
         private static string FindGateway()
         {
-            ProcessStartInfo psi = new ProcessStartInfo
+            try
             {
-                FileName = "route",
-                Arguments = "print",
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true
-            };
-            Process proc = Process.Start(psi);
-            proc?.WaitForExit();
-            string rout = proc.StandardOutput.ReadToEnd();
-            Regex reg = new Regex(@"(0\.0\.0\.0\s+){2}(\d+\.\d+\.\d+\.\d)+");
-            var mc = reg.Matches(rout);
-            return mc[0].Groups[2].Value;
+                string rout = ExcRoutePrint();
+                Regex reg = new Regex(@"(0\.0\.0\.0\s+){2}(\d+\.\d+\.\d+\.\d)+");
+                var mc = reg.Matches(rout);
+                return mc[0].Groups[2].Value;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
         }
 
         private static string FindInterface()
+        {
+            try
+            {
+                string rout = ExcRoutePrint();
+                Regex reg = new Regex($@"(\d+)\.+{Properties.Resources.RasConnectionName}");
+                var mc = reg.Matches(rout);
+                return mc[0].Groups[1].Value;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
+
+        private static int CheckMetric()
+        {
+            try
+            {
+                string rout = ExcRoutePrint();
+                string re = DialerConfig.AuthIP.Replace(".", "\\.");
+                re += @"\s+255\.255\.255\.255\s+[^\s]+\s+\d+\.\d+\.\d+\.\d+\s+(\d+)";
+                Regex reg = new Regex(re);
+                var mc = reg.Matches(rout);
+                return int.Parse(mc[0].Groups[1].Value);
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+        }
+
+        private static string ExcRoutePrint()
         {
             ProcessStartInfo psi = new ProcessStartInfo
             {
@@ -122,10 +156,7 @@ namespace Drcom_Dialer.Model.Utils
             };
             Process proc = Process.Start(psi);
             proc?.WaitForExit();
-            string rout = proc.StandardOutput.ReadToEnd();
-            Regex reg = new Regex($@"(\d+)\.+{Properties.Resources.RasConnectionName}");
-            var mc = reg.Matches(rout);
-            return mc[0].Groups[1].Value;
+            return proc.StandardOutput.ReadToEnd();
         }
 
         public const string StartupArgs = "fixvpn";
