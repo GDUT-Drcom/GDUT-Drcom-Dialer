@@ -166,6 +166,9 @@
     <Compile Include="View\AccountInfoWindow.xaml.cs">
       <DependentUpon>AccountInfoWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Controls\HintPassBox.xaml.cs">
+      <DependentUpon>HintPassBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -181,6 +184,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AccountInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\HintPassBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -232,7 +239,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="View\Controls\" />
     <Folder Include="View\Themes\" />
   </ItemGroup>
   <ItemGroup>
@@ -351,6 +357,8 @@
     <Content Include="gdut-drcom.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resource\Show.ico" />
+    <Resource Include="Resource\ShowDark.ico" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NETCONLib">

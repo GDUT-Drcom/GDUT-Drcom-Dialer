@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
+        xmlns:user="clr-namespace:Drcom_Dialer.View.Controls"
         xmlns:viewModels="clr-namespace:Drcom_Dialer.ViewModel"
         mc:Ignorable="d"
                                    
@@ -85,13 +86,14 @@
                 <TextBlock x:Name="lbl_password" Margin="15,0,15,0"
                        Text="密码:" 
                        VerticalAlignment="Center"  />
-                <!--不需要用Password-->
+                <!--不需要用Password
                 <TextBox x:Name="pb_password" Margin="0,1,0,0" Width="180px" 
                              Controls:TextBoxHelper.Watermark="***"
                          Text="{Binding Path=Password,Mode=TwoWay}"
                              BorderThickness="0,0,0,1"
                              VerticalAlignment="Center"   
-                             />
+                             />-->
+                <user:HintPassBox x:Name="pb_password" Width="180px" Watermark="***" Password="{Binding Path=Password,Mode=TwoWay}"/>
                 <!--PasswordChanged="pb_password_PasswordChanged"-->
             </StackPanel>
             <StackPanel Height="25" Margin="10,0,10,5" 
