@@ -53,7 +53,7 @@ namespace Drcom_Dialer.View.Controls
 
         private void btn_see_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            tb_text.Text = Password;
+            //tb_text.Text = Password;
             btn_see.Source = new BitmapImage(new Uri("/Drcom-Dialer;component/Resource/ShowDark.ico", UriKind.Relative));
             tb_text.Visibility = Visibility.Visible;
         }
