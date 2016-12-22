@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Drcom_Dialer.ViewModel;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,10 +48,11 @@ namespace Drcom_Dialer.Model.Utils
                 if (Updater.DownloadFile(RemoteFileUrl, NewName))
                 {
                     Log4Net.WriteLog($"成功更新主程序");
-                    ViewModel.ViewModel.View.ShowBalloonTip(
+                    Binder.ModelBinder.ShowBalloonTip(
                         3000,
                         "应用更新",
-                        "程序更新成功，将在下次启动生效");
+                        "程序更新成功，将在下次启动生效",
+                        System.Windows.Forms.ToolTipIcon.Info);
                     return;
                 }
             }
@@ -68,10 +70,11 @@ namespace Drcom_Dialer.Model.Utils
                 if (Updater.DownloadFile(RemoteFileUrl, NewName))
                 {
                     Log4Net.WriteLog($"成功更新主程序");
-                    ViewModel.ViewModel.View.ShowBalloonTip(
+                    Binder.ModelBinder.ShowBalloonTip(
                         3000,
                         "应用更新",
-                        "程序更新成功，将在下次启动生效");
+                        "程序更新成功，将在下次启动生效",
+                        System.Windows.Forms.ToolTipIcon.Info);
                     return;
                 }
             }
@@ -88,7 +91,7 @@ namespace Drcom_Dialer.Model.Utils
                     UpdateTimer = new Timer(new TimerCallback((state) =>
                     {
                         StopCheckUpdateTimer();
-                        if (ViewModel.ViewModel.View.DialStatus == ViewModel.ViewModel.DialHangupStatus.Connect)
+                        if (Binder.ModelBinder.IsConnected)
                             TryUpdate();
 
                     }), null, 1000 * 60 * 10, 1000 * 60 * 10);//10min

@@ -63,10 +63,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>DogCom_64.ico</ApplicationIcon>
+    <ApplicationIcon>Resource\DogCom_64.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Drcom_Dialer.ProgramInit</StartupObject>
+    <StartupObject>Drcom_Dialer.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -140,22 +140,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Dial.cs" />
-    <Compile Include="Model\DialerConfig.cs" />
-    <Compile Include="Model\HeartBeatProxy.cs" />
-    <Compile Include="Model\PPPoE.cs" />
-    <Compile Include="Model\Utils\AccountStatus.cs" />
-    <Compile Include="Model\Utils\BmobAnalyze.cs" />
-    <Compile Include="Model\Utils\gdut-drcom.cs" />
-    <Compile Include="Model\Utils\HeartBeatUpdate.cs" />
-    <Compile Include="Model\Utils\Log4Net.cs" />
-    <Compile Include="Model\Utils\NetSharing.cs" />
-    <Compile Include="Model\Utils\Ping.cs" />
-    <Compile Include="Model\Utils\RunOnStartup.cs" />
-    <Compile Include="Model\Utils\Updater.cs" />
-    <Compile Include="Model\Utils\Version.cs" />
-    <Compile Include="Model\Utils\VPNFixer.cs" />
-    <Compile Include="ProgramInit.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="ViewModel\AccountInfoModel.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
     <Compile Include="ViewModel\StatusPresenter.cs" />
@@ -214,8 +199,6 @@
     <Fakes Include="Fakes\DotRas.fakes">
       <SubType>Designer</SubType>
     </Fakes>
-    <None Include="Model\README.md" />
-    <None Include="Model\Utils\README.md" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -239,7 +222,7 @@
     <Resource Include="Resource\banner.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="DogCom_64.ico" />
+    <Resource Include="Resource\DogCom_64.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resource\Settings.ico" />
@@ -363,6 +346,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <Import Project="..\Drcom-Dialer.Core\Drcom-Dialer.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
