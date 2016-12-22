@@ -21,12 +21,6 @@ namespace Drcom_Dialer
             //初始化Log
             Model.Utils.Log4Net.SetConfig();
 
-            //Model.Utils.NetSharing ns = new Model.Utils.NetSharing();
-            //if (ns.Start())
-            //    Console.WriteLine("233");
-            //else
-            //    Console.WriteLine("555");
-
             //解析启动参数
             //不把更新放在这个之前也是因为考虑到可能使用带参启动的问题
             if (args.Length > 0)
@@ -78,13 +72,6 @@ namespace Drcom_Dialer
                 MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(-1);
             }
-            //string mutexName = Properties.Resources.ProgramTitle + "Mutex";
-            //singleInstanceWatcher = new Mutex(false, mutexName, out createdNew);
-            //if (!createdNew)
-            //{
-            //    MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    Environment.Exit(-1);
-            //}
         }
 
         private static void WaitProcess(string name)

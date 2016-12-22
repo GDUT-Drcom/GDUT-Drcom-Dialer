@@ -140,21 +140,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Dial.cs" />
-    <Compile Include="Model\DialerConfig.cs" />
-    <Compile Include="Model\HeartBeatProxy.cs" />
-    <Compile Include="Model\PPPoE.cs" />
-    <Compile Include="Model\Utils\AccountStatus.cs" />
-    <Compile Include="Model\Utils\BmobAnalyze.cs" />
-    <Compile Include="Model\Utils\gdut-drcom.cs" />
-    <Compile Include="Model\Utils\HeartBeatUpdate.cs" />
-    <Compile Include="Model\Utils\Log4Net.cs" />
-    <Compile Include="Model\Utils\NetSharing.cs" />
-    <Compile Include="Model\Utils\Ping.cs" />
-    <Compile Include="Model\Utils\RunOnStartup.cs" />
-    <Compile Include="Model\Utils\Updater.cs" />
-    <Compile Include="Model\Utils\Version.cs" />
-    <Compile Include="Model\Utils\VPNFixer.cs" />
+    <Compile Include="LiteWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LiteWindow.Designer.cs">
+      <DependentUpon>LiteWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProgramInit.cs" />
     <Compile Include="ViewModel\AccountInfoModel.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
@@ -207,6 +198,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="LiteWindow.resx">
+      <DependentUpon>LiteWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -214,8 +208,6 @@
     <Fakes Include="Fakes\DotRas.fakes">
       <SubType>Designer</SubType>
     </Fakes>
-    <None Include="Model\README.md" />
-    <None Include="Model\Utils\README.md" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -363,6 +355,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <Import Project="..\Drcom-Dialer.Core\Drcom-Dialer.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
