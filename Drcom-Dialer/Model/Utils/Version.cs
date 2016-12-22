@@ -15,6 +15,8 @@ namespace Drcom_Dialer.Model.Utils
         /// <returns></returns>
         public static string GetVersion()
         {
+            // 仅使用软件版本，不使用部署版本
+            /**
             try
             {
                 return ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
@@ -22,7 +24,8 @@ namespace Drcom_Dialer.Model.Utils
             catch (Exception e)
             {
                 Log4Net.WriteLog(e.Message, e);
-            }
+            }**/
+
             return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }

@@ -34,6 +34,12 @@ namespace Drcom_Dialer.Model.Utils
             {
                 string RemoteFileUrl = Updater.CheckUpdate("chenhaowen01/gdut-drcom", DllName, GDUT_Drcom.Version);
 
+                if (RemoteFileUrl == "")
+                {
+                    Log4Net.WriteLog("无需更新");
+                    return Updater.UpdateState.UpToDate;
+                }
+
                 if (RemoteFileUrl != null)
                 {
                     GDUT_Drcom.Unload();
@@ -44,11 +50,34 @@ namespace Drcom_Dialer.Model.Utils
                     }
                     else
                     {
+                        GDUT_Drcom.Load();
+                    }
+                }
+
+                RemoteFileUrl = Updater.CheckUpdate("https://tools.bigkeer.cn/", "drcom/heartbeat.json", "bigkeer", DllName, GDUT_Drcom.Version);
+
+                if (RemoteFileUrl == "")
+                {
+                    Log4Net.WriteLog("无需更新");
+                    return Updater.UpdateState.UpToDate;
+                }
+
+                if (RemoteFileUrl != null)
+                {
+                    GDUT_Drcom.Unload();
+                    if (Updater.DownloadFile(RemoteFileUrl, DllName))
+                    {
+                        GDUT_Drcom.Load();
+                        return Updater.UpdateState.Updated;
+                    }
+                    else
+                    {
+                        GDUT_Drcom.Load();
                         return Updater.UpdateState.Failed;
                     }
                 }
 
-                return Updater.UpdateState.UpToDate;
+                return Updater.UpdateState.Failed;
             }
             catch(Exception e)
             {

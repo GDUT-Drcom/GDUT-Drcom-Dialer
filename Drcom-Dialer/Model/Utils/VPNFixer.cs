@@ -40,7 +40,7 @@ namespace Drcom_Dialer.Model.Utils
         /// 重启进程提升权限
         /// 这会导致自身退出
         /// </summary>
-        public static void Elevate()
+        public static void Fix()
         {
             ProcessStartInfo psi = new ProcessStartInfo
             {
@@ -59,6 +59,7 @@ namespace Drcom_Dialer.Model.Utils
                 Log4Net.WriteLog("用户拒绝提升权限");
                 // TODO : 提醒用户需要允许UAC
                 //MessageBox.Show("需要UAC");
+                ViewModel.ViewModel.View.ShowBalloonTip(3000, "错误", "需要管理员权限以修复VPN", ToolTipIcon.Error);
                 return;
             }
             //还是不要退出比较好
@@ -76,15 +77,23 @@ namespace Drcom_Dialer.Model.Utils
                 throw new InvalidOperationException("没有足够权限");
             }
             string gateway = FindGateway();
-
+            string IF = FindInterface();
+            string args = $"add {DialerConfig.AuthIP} mask 255.255.255.255 0.0.0.0 metric 5 IF {IF}";
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = "route",
-                Arguments = $"add {DialerConfig.AuthIP} mask 255.255.255.255 0.0.0.0 metric 5",
+                Arguments = args,
                 CreateNoWindow = true
             };
             Process proc = Process.Start(psi);
             proc?.WaitForExit();
+            int metric = CheckMetric();
+            if (metric > 100)
+            {
+                ViewModel.ViewModel.View.ShowBalloonTip(3000, "错误",
+                    $"VPN跃点数过大，可能修复失败，如失败请断线重试(metric={metric})",
+                    ToolTipIcon.Warning);
+            }
         }
 
         /// <summary>
@@ -92,6 +101,53 @@ namespace Drcom_Dialer.Model.Utils
         /// </summary>
         /// <returns>Gateway</returns>
         private static string FindGateway()
+        {
+            try
+            {
+                string rout = ExcRoutePrint();
+                Regex reg = new Regex(@"(0\.0\.0\.0\s+){2}(\d+\.\d+\.\d+\.\d)+");
+                var mc = reg.Matches(rout);
+                return mc[0].Groups[2].Value;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
+
+        private static string FindInterface()
+        {
+            try
+            {
+                string rout = ExcRoutePrint();
+                Regex reg = new Regex($@"(\d+)\.+{Properties.Resources.RasConnectionName}");
+                var mc = reg.Matches(rout);
+                return mc[0].Groups[1].Value;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
+
+        private static int CheckMetric()
+        {
+            try
+            {
+                string rout = ExcRoutePrint();
+                string re = DialerConfig.AuthIP.Replace(".", "\\.");
+                re += @"\s+255\.255\.255\.255\s+[^\s]+\s+\d+\.\d+\.\d+\.\d+\s+(\d+)";
+                Regex reg = new Regex(re);
+                var mc = reg.Matches(rout);
+                return int.Parse(mc[0].Groups[1].Value);
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+        }
+
+        private static string ExcRoutePrint()
         {
             ProcessStartInfo psi = new ProcessStartInfo
             {
@@ -103,10 +159,7 @@ namespace Drcom_Dialer.Model.Utils
             };
             Process proc = Process.Start(psi);
             proc?.WaitForExit();
-            string rout = proc.StandardOutput.ReadToEnd();
-            Regex reg = new Regex(@"(0\.0\.0\.0\s+){2}(\d+\.\d+\.\d+\.\d)+");
-            var mc = reg.Matches(rout);
-            return mc[0].Groups[2].Value;
+            return proc.StandardOutput.ReadToEnd();
         }
 
         public const string StartupArgs = "fixvpn";

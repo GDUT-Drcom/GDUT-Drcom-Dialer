@@ -64,6 +64,12 @@ namespace Drcom_Dialer.Model
                 Utils.Log4Net.WriteLog("心跳DLL缺失且更新失败");
                 //ViewModel.ViewModel.View.StatusPresenterModel.Status = "心跳DLL缺失/更新失败";
             }
+            
+            //修复VPN
+            if (DialerConfig.isFixVPN)
+            {
+                Utils.VPNFixer.Fix();
+            }
         }
 
         /// <summary>

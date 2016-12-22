@@ -56,17 +56,13 @@ namespace Drcom_Dialer
             //初始化配置
             Model.DialerConfig.Init();
 
-            //修复VPN
-            if (Model.DialerConfig.isFixVPN)
-            {
-                Model.Utils.VPNFixer.Elevate();
-            }
-
             //初始化必要组件
             Model.PPPoE.Init();
             Model.Dial.Init();
             Model.Utils.GDUT_Drcom.Load();
             Model.Utils.DialerUpdater.LaterCheckUpdate();
+
+            Model.Utils.Log4Net.WriteLog("初始化程序成功");
 
             //初始化界面
             App app = new App();
