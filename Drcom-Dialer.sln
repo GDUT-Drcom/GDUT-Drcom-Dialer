@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drcom-Dialer", "Drcom-Dialer\Drcom-Dialer.csproj", "{31B8D06C-6B0C-47D1-A0D7-069A5C39DAED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drcom-Dialer.WPF", "Drcom-Dialer\Drcom-Dialer.WPF.csproj", "{31B8D06C-6B0C-47D1-A0D7-069A5C39DAED}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Drcom-Dialer.Core", "Drcom-Dialer.Core\Drcom-Dialer.Core.shproj", "{59CDCE7E-950D-41A4-97EE-9DFEC8C2B4F8}"
 EndProject

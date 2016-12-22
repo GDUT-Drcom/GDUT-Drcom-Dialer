@@ -63,10 +63,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>DogCom_64.ico</ApplicationIcon>
+    <ApplicationIcon>Resource\DogCom_64.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Drcom_Dialer.ProgramInit</StartupObject>
+    <StartupObject>Drcom_Dialer.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -140,13 +140,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LiteWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LiteWindow.Designer.cs">
-      <DependentUpon>LiteWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ProgramInit.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="ViewModel\AccountInfoModel.cs" />
     <Compile Include="ViewModel\NotifyProperty.cs" />
     <Compile Include="ViewModel\StatusPresenter.cs" />
@@ -198,9 +192,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="LiteWindow.resx">
-      <DependentUpon>LiteWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -231,7 +222,7 @@
     <Resource Include="Resource\banner.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="DogCom_64.ico" />
+    <Resource Include="Resource\DogCom_64.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resource\Settings.ico" />

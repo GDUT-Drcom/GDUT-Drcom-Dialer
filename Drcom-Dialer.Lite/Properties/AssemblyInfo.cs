@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Drcom-Dialer.Lite")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Drcom-Dialer(Lite)")]
+[assembly: AssemblyDescription("广工大DrCOM三方客户端(Lite)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Drcom-Dialer.Lite")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("GDUT-DrCOM")]
+[assembly: AssemblyProduct("Drcom-Dialer(Lite)")]
+[assembly: AssemblyCopyright("Copyright © GDUT-DrCOM 2016")]
+[assembly: AssemblyTrademark("GDUT-DrCOM")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

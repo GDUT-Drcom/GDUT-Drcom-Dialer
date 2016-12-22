@@ -60,7 +60,7 @@ namespace Drcom_Dialer.Model.Utils
                     request.AddHeader("Content-Type", "application/json");
                     request.AddJsonBody(data);
                     IRestResponse<ObjId> response = client.Execute<ObjId>(request);
-                    if (response.ResponseStatus == ResponseStatus.Completed && response.Data.code != null)
+                    if (response.ResponseStatus == ResponseStatus.Completed)
                     {
                         if(response.Data.code == 101)
                         {

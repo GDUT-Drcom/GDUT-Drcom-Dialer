@@ -12,11 +12,12 @@ using Drcom_Dialer.Properties;
 
 namespace Drcom_Dialer.ViewModel
 {
-    public class ViewModel : NotifyProperty
+    public class ViewModel : NotifyProperty, IModelBinder
     {
         public ViewModel()
         {
             View = this;
+            Binder.ModelBinder = this;
 
             //初始化
 
@@ -140,7 +141,7 @@ namespace Drcom_Dialer.ViewModel
         /// <summary>
         ///     按钮内容
         /// </summary>
-        public string DialBtnContent => DialStatus == DialHangupStatus.Disconnect ? "拨号" : "断开";
+        public string DialBtnContent => IsConnected ? "断开" : "拨号";
 
         public NotifyIcon TrayIcon
         {
@@ -196,7 +197,7 @@ namespace Drcom_Dialer.ViewModel
         {
             try
             {
-                if(DialStatus == DialHangupStatus.Connect)
+                if (IsConnected)
                 {
                     DialBtnEnable = false;
                     NetworkCheck.StopCheck();
@@ -244,6 +245,8 @@ namespace Drcom_Dialer.ViewModel
                 return _dialStatus;
             }
         }
+
+        public bool IsConnected => DialStatus == DialHangupStatus.Connect;
 
         /// <summary>
         ///     拨号
@@ -335,11 +338,11 @@ namespace Drcom_Dialer.ViewModel
         /// </summary>
         private void Redial()
         {
-            if (DialStatus == DialHangupStatus.Connect)
+            if (IsConnected)
             {
                 Hangup();
-                Dial();
             }
+            Dial();
         }
 
         private void NewStatusPresenterModel()

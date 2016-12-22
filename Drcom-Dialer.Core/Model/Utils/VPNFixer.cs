@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Drcom_Dialer.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -57,13 +58,9 @@ namespace Drcom_Dialer.Model.Utils
             catch // 用户拒绝了UAC
             {
                 Log4Net.WriteLog("用户拒绝提升权限");
-                // TODO : 提醒用户需要允许UAC
-                //MessageBox.Show("需要UAC");
-                ViewModel.ViewModel.View.ShowBalloonTip(3000, "错误", "需要管理员权限以修复VPN", ToolTipIcon.Error);
+                Binder.ModelBinder.ShowBalloonTip(3000, "错误", "需要管理员权限以修复VPN", ToolTipIcon.Error);
                 return;
             }
-            //还是不要退出比较好
-            //Application.Exit();
         }
 
         /// <summary>
@@ -90,7 +87,9 @@ namespace Drcom_Dialer.Model.Utils
             int metric = CheckMetric();
             if (metric > 100)
             {
-                ViewModel.ViewModel.View.ShowBalloonTip(3000, "错误",
+                Binder.ModelBinder.ShowBalloonTip(
+                    3000,
+                    "错误",
                     $"VPN跃点数过大，可能修复失败，如失败请断线重试(metric={metric})",
                     ToolTipIcon.Warning);
             }
@@ -109,7 +108,7 @@ namespace Drcom_Dialer.Model.Utils
                 var mc = reg.Matches(rout);
                 return mc[0].Groups[2].Value;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return "";
             }
@@ -124,7 +123,7 @@ namespace Drcom_Dialer.Model.Utils
                 var mc = reg.Matches(rout);
                 return mc[0].Groups[1].Value;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return "";
             }
@@ -141,7 +140,7 @@ namespace Drcom_Dialer.Model.Utils
                 var mc = reg.Matches(rout);
                 return int.Parse(mc[0].Groups[1].Value);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return -1;
             }

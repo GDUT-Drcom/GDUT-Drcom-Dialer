@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
 
 namespace Drcom_Dialer
 {
-    internal static class ProgramInit
+    public static class Initializer
     {
-        [STAThread]
-        private static void Main(string[] args)
+        public static bool Initialize(string[] args)
         {
-            string exePath = System.Windows.Forms.Application.ExecutablePath;
+            string exePath = Application.ExecutablePath;
             Environment.CurrentDirectory = Path.GetDirectoryName(exePath);
 
             //初始化Log
@@ -31,7 +27,7 @@ namespace Drcom_Dialer
                         //初始化配置
                         Model.DialerConfig.Init();
                         Model.Utils.VPNFixer.AddRouteRule();
-                        return;
+                        return false;
                     default:
                         Model.Utils.Log4Net.WriteLog("未知的启动参数: " + args);
                         break;
@@ -44,7 +40,7 @@ namespace Drcom_Dialer
             //更新
             if (Update())
             {
-                return;
+                return false;
             }
 
             //初始化配置
@@ -58,10 +54,7 @@ namespace Drcom_Dialer
 
             Model.Utils.Log4Net.WriteLog("初始化程序成功");
 
-            //初始化界面
-            App app = new App();
-            app.InitializeComponent();
-            app.Run();
+            return true;
         }
 
         private static void Singleton()
@@ -69,7 +62,7 @@ namespace Drcom_Dialer
             int count = Process.GetProcessesByName(Model.Utils.DialerUpdater.NoExtName).Length;
             if (count > 1)
             {
-                MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("程序已经运行!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
         }
