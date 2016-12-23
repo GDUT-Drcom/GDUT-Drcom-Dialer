@@ -19,6 +19,7 @@ namespace Drcom_Dialer.Lite
             InitializeComponent();
 
             RegisterEventHandler();
+            InitializeFieldFormDialerConfig();
         }
 
         private void RegisterEventHandler()
@@ -51,6 +52,23 @@ namespace Drcom_Dialer.Lite
             NetworkCheck.OuterNetworkCheckSuccessed += (s, e) => { };
         }
 
+        private void InitializeFieldFormDialerConfig()
+        {
+            if (!string.IsNullOrEmpty(DialerConfig.password))
+            {
+                paswText.Text = DialerConfig.password;
+            }
+
+            if (!string.IsNullOrEmpty(DialerConfig.username))
+            {
+                userText.Text = DialerConfig.username;
+            }
+
+            remPaswCheckBox.Checked = DialerConfig.isRememberPassword;
+
+            autoLoginCheckBox.Checked = DialerConfig.isAutoLogin;
+        }
+
         private async void dialBtn_Click(object sender, EventArgs e)
         {
             await Task.Factory.StartNew(() =>
@@ -61,7 +79,7 @@ namespace Drcom_Dialer.Lite
 
         private void settingBtn_Click(object sender, EventArgs e)
         {
-
+            new SettingWindow().ShowDialog();
         }
 
         private void aboutBtn_Click(object sender, EventArgs e)
@@ -71,12 +89,32 @@ namespace Drcom_Dialer.Lite
 
         private void remPaswCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-
+            DialerConfig.isRememberPassword = remPaswCheckBox.Checked;
+            DialerConfig.SaveConfig();
         }
 
         private void autoLoginCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            DialerConfig.isAutoLogin = autoLoginCheckBox.Checked;
+            DialerConfig.SaveConfig();
+        }
 
+        private void viewPaswBtn_Click(object sender, EventArgs e)
+        {
+            if (paswText.PasswordChar == '*')
+                paswText.PasswordChar = '\0';
+            else
+                paswText.PasswordChar = '*';
+        }
+
+        private void userText_TextChanged(object sender, EventArgs e)
+        {
+            DialerConfig.username = userText.Text;
+        }
+
+        private void paswText_TextChanged(object sender, EventArgs e)
+        {
+            DialerConfig.password = paswText.Text;
         }
     }
 }

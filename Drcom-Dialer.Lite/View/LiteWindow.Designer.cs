@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LiteWindow));
             this.userLab = new System.Windows.Forms.Label();
             this.PaswLab = new System.Windows.Forms.Label();
@@ -40,6 +41,8 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.remPaswCheckBox = new System.Windows.Forms.CheckBox();
             this.autoLoginCheckBox = new System.Windows.Forms.CheckBox();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.viewPaswBtn = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,13 +70,16 @@
             this.userText.Name = "userText";
             this.userText.Size = new System.Drawing.Size(223, 20);
             this.userText.TabIndex = 2;
+            this.userText.TextChanged += new System.EventHandler(this.userText_TextChanged);
             // 
             // paswText
             // 
             this.paswText.Location = new System.Drawing.Point(49, 38);
             this.paswText.Name = "paswText";
-            this.paswText.Size = new System.Drawing.Size(223, 20);
+            this.paswText.PasswordChar = '*';
+            this.paswText.Size = new System.Drawing.Size(194, 20);
             this.paswText.TabIndex = 3;
+            this.paswText.TextChanged += new System.EventHandler(this.paswText_TextChanged);
             // 
             // dialBtn
             // 
@@ -143,12 +149,28 @@
             this.autoLoginCheckBox.UseVisualStyleBackColor = true;
             this.autoLoginCheckBox.CheckedChanged += new System.EventHandler(this.autoLoginCheckBox_CheckedChanged);
             // 
+            // notifyIcon
+            // 
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "GDUT-Dr.Com(Lite)";
+            this.notifyIcon.Visible = true;
+            // 
+            // viewPaswBtn
+            // 
+            this.viewPaswBtn.Location = new System.Drawing.Point(249, 38);
+            this.viewPaswBtn.Name = "viewPaswBtn";
+            this.viewPaswBtn.Size = new System.Drawing.Size(23, 23);
+            this.viewPaswBtn.TabIndex = 10;
+            this.viewPaswBtn.UseVisualStyleBackColor = true;
+            this.viewPaswBtn.Click += new System.EventHandler(this.viewPaswBtn_Click);
+            // 
             // LiteWindow
             // 
             this.AcceptButton = this.dialBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 140);
+            this.Controls.Add(this.viewPaswBtn);
             this.Controls.Add(this.autoLoginCheckBox);
             this.Controls.Add(this.remPaswCheckBox);
             this.Controls.Add(this.statusStrip);
@@ -184,6 +206,8 @@
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.CheckBox remPaswCheckBox;
         private System.Windows.Forms.CheckBox autoLoginCheckBox;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.Button viewPaswBtn;
     }
 }
 
