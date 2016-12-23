@@ -38,40 +38,19 @@ namespace Drcom_Dialer.Model.Utils
         }
 
         /// <summary>
-        /// 重启进程提升权限
-        /// 这会导致自身退出
+        /// 修复VPN
         /// </summary>
         public static void Fix()
         {
-            ProcessStartInfo psi = new ProcessStartInfo
-            {
-                UseShellExecute = true,
-                WorkingDirectory = Environment.CurrentDirectory,
-                FileName = Application.ExecutablePath,
-                Verb = "runas",
-                Arguments = StartupArgs
-            };
-            try
-            {
-                Process.Start(psi);
-            }
-            catch // 用户拒绝了UAC
-            {
-                Log4Net.WriteLog("用户拒绝提升权限");
-                Binder.BaseBinder.ShowBalloonTip(3000, "错误", "需要管理员权限以修复VPN", ToolTipIcon.Error);
-                return;
-            }
-        }
-
-        /// <summary>
-        /// VPN 修复
-        /// 向路由表添加一条规则
-        /// </summary>
-        public static void AddRouteRule()
-        {
             if (!IsElevated)
             {
-                throw new InvalidOperationException("没有足够权限");
+                Log4Net.WriteLog(nameof(Fix), new InvalidOperationException("没有足够权限"));
+                MessageBox.Show(
+                    "需要管理员权限以修复VPN(请重启并允许UAC)",
+                    "错误",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
             }
             string gateway = FindGateway();
             string IF = FindInterface();
@@ -85,13 +64,13 @@ namespace Drcom_Dialer.Model.Utils
             Process proc = Process.Start(psi);
             proc?.WaitForExit();
             int metric = CheckMetric();
-            if (metric > 100)
+            if (metric > 128)
             {
-                Binder.BaseBinder.ShowBalloonTip(
-                    3000,
-                    "错误",
+                MessageBox.Show(
                     $"VPN跃点数过大，可能修复失败，如失败请断线重试(metric={metric})",
-                    ToolTipIcon.Warning);
+                    "错误",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
             }
         }
 

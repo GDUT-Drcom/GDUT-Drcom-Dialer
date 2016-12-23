@@ -13,26 +13,9 @@ namespace Drcom_Dialer
         {
             string exePath = Application.ExecutablePath;
             Environment.CurrentDirectory = Path.GetDirectoryName(exePath);
-
+            
             //初始化Log
             Model.Utils.Log4Net.SetConfig();
-
-            //解析启动参数
-            //不把更新放在这个之前也是因为考虑到可能使用带参启动的问题
-            if (args.Length > 0)
-            {
-                switch (args[0])
-                {
-                    case Model.Utils.VPNFixer.StartupArgs:
-                        //初始化配置
-                        Model.DialerConfig.Init();
-                        Model.Utils.VPNFixer.AddRouteRule();
-                        return false;
-                    default:
-                        Model.Utils.Log4Net.WriteLog("未知的启动参数: " + args);
-                        break;
-                }
-            }
 
             //防止多启
             Singleton();
@@ -46,12 +29,36 @@ namespace Drcom_Dialer
             //初始化配置
             Model.DialerConfig.Init();
 
+            //VPN修复
+            if (Model.DialerConfig.isFixVPN && !Model.Utils.VPNFixer.IsElevated)
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = Application.ExecutablePath,
+                        WorkingDirectory = Environment.CurrentDirectory,
+                        Verb = "runas"
+                    });
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    Model.Utils.Log4Net.WriteLog(e.Message, e);
+                    MessageBox.Show(
+                        "需要管理员权限以修复VPN",
+                        "错误",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+
             //初始化必要组件
             Model.PPPoE.Init();
             Model.Dial.Init();
             Model.Utils.GDUT_Drcom.Load();
-            
-            if(Model.DialerConfig.isAutoUpdate)
+
+            if (Model.DialerConfig.isAutoUpdate)
                 Model.Utils.DialerUpdater.LaterCheckUpdate();
 
             Model.Utils.Log4Net.WriteLog("初始化程序成功");
