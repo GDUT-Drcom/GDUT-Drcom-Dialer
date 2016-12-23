@@ -38,11 +38,22 @@ namespace Drcom_Dialer.Lite
 
         private void remPaswCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            if(autoLoginCheckBox.Checked && !remPaswCheckBox.Checked)
+            {
+                autoLoginCheckBox.Checked = false;
+                autoLoginCheckBox_CheckedChanged(sender, e);
+            }
+
             DialerConfig.isRememberPassword = remPaswCheckBox.Checked;
         }
 
         private void autoLoginCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            if (autoLoginCheckBox.Checked && !remPaswCheckBox.Checked)
+            {
+                remPaswCheckBox.Checked = true;
+                remPaswCheckBox_CheckedChanged(sender, e);
+            }
             DialerConfig.isAutoLogin = autoLoginCheckBox.Checked;
         }
 

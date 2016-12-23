@@ -27,7 +27,7 @@ namespace Drcom_Dialer
         {
             PPPoE.PPPoEDialSuccessEvent += (s, e) =>
             {
-                Notify("拨号成功");
+                Notify("拨号成功，IP: " + e.Message);
                 window.dialBtn.Invoke((MethodInvoker)(() =>
                 {
                     window.dialBtn.Text = "断开";
@@ -44,7 +44,7 @@ namespace Drcom_Dialer
                 }));
                 IsConnected = false;
             };
-            PPPoE.PPPoEDialFailEvent += (s, e) => Notify("拨号失败");
+            PPPoE.PPPoEDialFailEvent += (s, e) => Notify(e.Message);
             PPPoE.PPPoEHangupFailEvent += (s, e) => Notify("断开失败");
             HeartBeatProxy.HeartbeatExited += (s, code) => Notify($"心跳停止({code})");
             NetworkCheck.InnerNetworkCheckFailed += (s, e) => Notify("InnerNetworkCheckFailed");
@@ -152,7 +152,8 @@ namespace Drcom_Dialer
 
         private void Dial()
         {
-            PPPoE.Dial("\r\n" + DialerConfig.username, DialerConfig.password);
+            // PPPoE.Dial("\r\n" + DialerConfig.username, DialerConfig.password);
+            Model.Dial.Auth();
         }
 
         private void Notify(string str)
