@@ -50,7 +50,9 @@ namespace Drcom_Dialer
             Model.PPPoE.Init();
             Model.Dial.Init();
             Model.Utils.GDUT_Drcom.Load();
-            Model.Utils.DialerUpdater.LaterCheckUpdate();
+            
+            if(Model.DialerConfig.isAutoUpdate)
+                Model.Utils.DialerUpdater.LaterCheckUpdate();
 
             Model.Utils.Log4Net.WriteLog("初始化程序成功");
 
