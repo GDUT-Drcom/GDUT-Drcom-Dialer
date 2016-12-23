@@ -48,7 +48,7 @@ namespace Drcom_Dialer.Model.Utils
                 if (Updater.DownloadFile(RemoteFileUrl, NewName))
                 {
                     Log4Net.WriteLog($"成功更新主程序");
-                    Binder.ModelBinder.ShowBalloonTip(
+                    Binder.BaseBinder.ShowBalloonTip(
                         3000,
                         "应用更新",
                         "程序更新成功，将在下次启动生效",
@@ -70,7 +70,7 @@ namespace Drcom_Dialer.Model.Utils
                 if (Updater.DownloadFile(RemoteFileUrl, NewName))
                 {
                     Log4Net.WriteLog($"成功更新主程序");
-                    Binder.ModelBinder.ShowBalloonTip(
+                    Binder.BaseBinder.ShowBalloonTip(
                         3000,
                         "应用更新",
                         "程序更新成功，将在下次启动生效",
@@ -91,7 +91,7 @@ namespace Drcom_Dialer.Model.Utils
                     UpdateTimer = new Timer(new TimerCallback((state) =>
                     {
                         StopCheckUpdateTimer();
-                        if (Binder.ModelBinder.IsConnected)
+                        if (Binder.BaseBinder.IsConnected)
                             TryUpdate();
 
                     }), null, 1000 * 60 * 10, 1000 * 60 * 10);//10min

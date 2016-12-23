@@ -58,7 +58,7 @@ namespace Drcom_Dialer.Model.Utils
             catch // 用户拒绝了UAC
             {
                 Log4Net.WriteLog("用户拒绝提升权限");
-                Binder.ModelBinder.ShowBalloonTip(3000, "错误", "需要管理员权限以修复VPN", ToolTipIcon.Error);
+                Binder.BaseBinder.ShowBalloonTip(3000, "错误", "需要管理员权限以修复VPN", ToolTipIcon.Error);
                 return;
             }
         }
@@ -87,7 +87,7 @@ namespace Drcom_Dialer.Model.Utils
             int metric = CheckMetric();
             if (metric > 100)
             {
-                Binder.ModelBinder.ShowBalloonTip(
+                Binder.BaseBinder.ShowBalloonTip(
                     3000,
                     "错误",
                     $"VPN跃点数过大，可能修复失败，如失败请断线重试(metric={metric})",

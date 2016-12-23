@@ -12,12 +12,12 @@ using Drcom_Dialer.Properties;
 
 namespace Drcom_Dialer.ViewModel
 {
-    public class ViewModel : NotifyProperty, IModelBinder
+    public class ViewModel : NotifyProperty, IBaseBinder
     {
         public ViewModel()
         {
             View = this;
-            Binder.ModelBinder = this;
+            Binder.BaseBinder = this;
 
             //初始化
 

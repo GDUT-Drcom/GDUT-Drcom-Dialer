@@ -123,7 +123,7 @@ namespace Drcom_Dialer.Model.Utils
                     TimeSpan left = overDate.Subtract(DateTime.Today);
                     if (left.TotalDays <= 7)
                     {
-                        Binder.ModelBinder.ShowBalloonTip(
+                        Binder.BaseBinder.ShowBalloonTip(
                             5000,
                             "提示",
                             "校园网账户将于" + overDate.ToString("yyyy-MM-dd") + "过期，请尽快充值",

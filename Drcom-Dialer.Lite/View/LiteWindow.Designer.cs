@@ -197,17 +197,17 @@
 
         private System.Windows.Forms.Label userLab;
         private System.Windows.Forms.Label PaswLab;
-        private System.Windows.Forms.TextBox userText;
-        private System.Windows.Forms.TextBox paswText;
-        private System.Windows.Forms.Button dialBtn;
         private System.Windows.Forms.Button settingBtn;
         private System.Windows.Forms.Button aboutBtn;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
-        private System.Windows.Forms.CheckBox remPaswCheckBox;
-        private System.Windows.Forms.CheckBox autoLoginCheckBox;
-        private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.Button viewPaswBtn;
+        internal System.Windows.Forms.NotifyIcon notifyIcon;
+        internal System.Windows.Forms.ToolStripStatusLabel statusLabel;
+        internal System.Windows.Forms.TextBox userText;
+        internal System.Windows.Forms.TextBox paswText;
+        internal System.Windows.Forms.CheckBox remPaswCheckBox;
+        internal System.Windows.Forms.CheckBox autoLoginCheckBox;
+        internal System.Windows.Forms.Button dialBtn;
     }
 }
 

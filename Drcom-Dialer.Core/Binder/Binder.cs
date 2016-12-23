@@ -5,14 +5,21 @@ using System.Windows.Forms;
 
 namespace Drcom_Dialer.ViewModel
 {
-    interface IModelBinder
+    interface IBaseBinder
     {
         void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon);
         bool IsConnected { get; }
+
+        void DialOrHangup();
+
+        string Password { set; get; }
+        string UserName { set; get; }
+        bool IsRememberPassword { set; get; }
+        bool IsAutoLogin { set; get; }
     }
 
     internal class Binder
     {
-        public static IModelBinder ModelBinder { set; get; }
+        public static IBaseBinder BaseBinder { set; get; }
     }
 }

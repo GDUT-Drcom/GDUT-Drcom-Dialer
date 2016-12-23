@@ -1,5 +1,6 @@
 ﻿using Drcom_Dialer.Model;
 using Drcom_Dialer.Model.Utils;
+using Drcom_Dialer.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,64 +18,12 @@ namespace Drcom_Dialer.Lite
         public LiteWindow()
         {
             InitializeComponent();
-
-            RegisterEventHandler();
-            InitializeFieldFormDialerConfig();
+            Binder.BaseBinder = new LiteBinder(this);
         }
 
-        private void RegisterEventHandler()
+        private void dialBtn_Click(object sender, EventArgs e)
         {
-            PPPoE.PPPoEDialSuccessEvent += (s, e) =>
-            {
-                statusLabel.Text = "拨号成功";
-                dialBtn.Invoke((MethodInvoker)(() => { Text = "断开"; }));
-                DialerConfig.SaveConfig();
-            };
-            PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
-            {
-                statusLabel.Text = "断开成功";
-                dialBtn.Invoke((MethodInvoker)(() => { Text = "拨号"; }));
-            };
-            PPPoE.PPPoEDialFailEvent += (s, e) =>
-            {
-                statusLabel.Text = "拨号失败";
-            };
-            PPPoE.PPPoEHangupFailEvent += (s, e) =>
-            {
-                statusLabel.Text = "断开失败";
-            };
-            HeartBeatProxy.HeartbeatExited += (s, code) =>
-            {
-                statusLabel.Text = $"心跳停止({code})";
-            };
-            NetworkCheck.InnerNetworkCheckFailed += (s, e) => { };
-            NetworkCheck.OuterNetworkCheckFailed += (s, e) => { };
-            NetworkCheck.OuterNetworkCheckSuccessed += (s, e) => { };
-        }
-
-        private void InitializeFieldFormDialerConfig()
-        {
-            if (!string.IsNullOrEmpty(DialerConfig.password))
-            {
-                paswText.Text = DialerConfig.password;
-            }
-
-            if (!string.IsNullOrEmpty(DialerConfig.username))
-            {
-                userText.Text = DialerConfig.username;
-            }
-
-            remPaswCheckBox.Checked = DialerConfig.isRememberPassword;
-
-            autoLoginCheckBox.Checked = DialerConfig.isAutoLogin;
-        }
-
-        private async void dialBtn_Click(object sender, EventArgs e)
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                PPPoE.Dial("\r\n" + userText.Text, paswText.Text);
-            });
+            Binder.BaseBinder.DialOrHangup();
         }
 
         private void settingBtn_Click(object sender, EventArgs e)
@@ -90,21 +39,11 @@ namespace Drcom_Dialer.Lite
         private void remPaswCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             DialerConfig.isRememberPassword = remPaswCheckBox.Checked;
-            DialerConfig.SaveConfig();
         }
 
         private void autoLoginCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             DialerConfig.isAutoLogin = autoLoginCheckBox.Checked;
-            DialerConfig.SaveConfig();
-        }
-
-        private void viewPaswBtn_Click(object sender, EventArgs e)
-        {
-            if (paswText.PasswordChar == '*')
-                paswText.PasswordChar = '\0';
-            else
-                paswText.PasswordChar = '*';
         }
 
         private void userText_TextChanged(object sender, EventArgs e)
@@ -115,6 +54,14 @@ namespace Drcom_Dialer.Lite
         private void paswText_TextChanged(object sender, EventArgs e)
         {
             DialerConfig.password = paswText.Text;
+        }
+
+        private void viewPaswBtn_Click(object sender, EventArgs e)
+        {
+            if (paswText.PasswordChar == '*')
+                paswText.PasswordChar = '\0';
+            else
+                paswText.PasswordChar = '*';
         }
     }
 }
