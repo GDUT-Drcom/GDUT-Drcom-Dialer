@@ -9,7 +9,7 @@
     <Import_RootNamespace>Drcom_Dialer</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Dial.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Authenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\DialerConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\HeartBeatProxy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Initializer.cs" />

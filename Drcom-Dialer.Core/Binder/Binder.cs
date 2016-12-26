@@ -8,6 +8,7 @@ namespace Drcom_Dialer.ViewModel
     interface IBaseBinder
     {
         void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon);
+        void ShowStatus(string status);
         bool IsConnected { get; }
 
         void DialOrHangup();

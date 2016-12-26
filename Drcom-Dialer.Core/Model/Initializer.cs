@@ -55,7 +55,7 @@ namespace Drcom_Dialer
 
             //初始化必要组件
             Model.PPPoE.Init();
-            Model.Dial.Init();
+            Model.Authenticator.Init();
             Model.Utils.GDUT_Drcom.Load();
 
             if (Model.DialerConfig.isAutoUpdate)

@@ -83,8 +83,19 @@ namespace Drcom_Dialer.Model
             }
             if (HeartBeatThread.IsAlive)
             {
-                int res = GDUT_Drcom.exit_auth?.Invoke() ?? -123;
-                HeartbeatExited?.Invoke(null, res);
+                bool wait = true;
+                EventHandler<int> waitLambda = (s, e) => { wait = false; };
+                HeartbeatExited += waitLambda;
+                int res = GDUT_Drcom.exit_auth?.Invoke() ?? 0x7f7f7f7f;
+                if (res == 0x7f7f7f7f)
+                {
+                    Log4Net.WriteLog($"exit_auth Failed({res})");
+                }
+                else
+                {
+                    while (wait) ;
+                }
+                HeartbeatExited -= waitLambda;
             }
             HeartBeatThread = null;
         }

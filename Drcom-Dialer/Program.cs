@@ -10,9 +10,16 @@ namespace Drcom_Dialer
             if (!Initializer.Initialize(args))
                 return;
 
-            App app = new App();
-            app.InitializeComponent();
-            app.Run();
+            try
+            {
+                App app = new App();
+                app.InitializeComponent();
+                app.Run();
+            }
+            catch (Exception e)
+            {
+                Model.Utils.Log4Net.WriteLog("顶级异常", e);
+            }
         }
     }
 }

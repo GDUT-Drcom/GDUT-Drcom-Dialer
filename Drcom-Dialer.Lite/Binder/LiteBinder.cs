@@ -147,18 +147,22 @@ namespace Drcom_Dialer
 
         private void Hangup()
         {
-            PPPoE.Hangup();
+            Authenticator.Deauthenticate();
         }
 
         private void Dial()
         {
-            // PPPoE.Dial("\r\n" + DialerConfig.username, DialerConfig.password);
-            Model.Dial.Auth();
+            Authenticator.Authenticate();
         }
 
         private void Notify(string str)
         {
             window.statusLabel.Text = str;
+        }
+
+        public void ShowStatus(string status)
+        {
+            Notify(status);
         }
     }
 }
