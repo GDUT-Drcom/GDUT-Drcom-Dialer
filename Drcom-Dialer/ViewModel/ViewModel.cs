@@ -198,6 +198,7 @@ namespace Drcom_Dialer.ViewModel
             {
                 if (IsConnected)
                 {
+                    Notify("正在断开连接");
                     DialBtnEnable = false;
                     Authenticator.Deauthenticate();
                 }
