@@ -200,7 +200,9 @@ namespace Drcom_Dialer.ViewModel
                 {
                     Notify("正在断开连接");
                     DialBtnEnable = false;
+#pragma warning disable 4014 // no await required
                     Authenticator.Deauthenticate();
+#pragma warning restore 4014
                 }
             }
             catch (Exception e)

@@ -132,15 +132,22 @@ namespace Drcom_Dialer
         {
             await Task.Factory.StartNew(() =>
             {
-                if (IsConnected)
+                try
                 {
-                    Notify("正在断开");
-                    Hangup();
+                    if (IsConnected)
+                    {
+                        Notify("正在断开");
+                        Hangup();
+                    }
+                    else
+                    {
+                        Notify("正在拨号");
+                        Dial();
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    Notify("正在拨号");
-                    Dial();
+                    Log4Net.WriteLog(e.Message, e);
                 }
             });
         }

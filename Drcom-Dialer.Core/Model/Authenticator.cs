@@ -29,10 +29,10 @@ namespace Drcom_Dialer.Model
         /// <summary>
         /// 断开
         /// </summary>
-        public static void Deauthenticate()
+        public static async Task Deauthenticate()
         {
             NetworkCheck.StopCheck();
-            HeartBeatProxy.Kill();
+            await HeartBeatProxy.Kill();
             PPPoE.Hangup();
         }
 

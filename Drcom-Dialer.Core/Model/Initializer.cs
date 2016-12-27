@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Drcom_Dialer
@@ -13,7 +14,10 @@ namespace Drcom_Dialer
         {
             string exePath = Application.ExecutablePath;
             Environment.CurrentDirectory = Path.GetDirectoryName(exePath);
-            
+
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             //初始化Log
             Model.Utils.Log4Net.SetConfig();
 
@@ -64,6 +68,18 @@ namespace Drcom_Dialer
             Model.Utils.Log4Net.WriteLog("初始化程序成功");
 
             return true;
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = e.ExceptionObject as Exception ?? new Exception(nameof(e.ExceptionObject));
+            Model.Utils.Log4Net.WriteLog(e.ExceptionObject.ToString(), ex);
+        }
+
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            Model.Utils.Log4Net.WriteLog(e.Exception.Message, e.Exception);
+            e.SetObserved();
         }
 
         private static void Singleton()

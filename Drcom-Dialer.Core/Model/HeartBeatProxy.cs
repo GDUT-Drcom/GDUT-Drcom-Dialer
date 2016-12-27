@@ -73,7 +73,7 @@ namespace Drcom_Dialer.Model
         /// <summary>
         ///     终止线程
         /// </summary>
-        public static async void Kill()
+        public static async Task Kill()
         {
             if (HeartbeatThread == null)
             {
