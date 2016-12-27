@@ -58,12 +58,10 @@ namespace Drcom_Dialer.Model
         {
             try
             {
-                HeartBeatThread = new Thread(() =>
+                HeartbeatThread = Task.Factory.StartNew(() =>
                 {
-                    int res = GDUT_Drcom.auth();
-                    HeartbeatExited?.Invoke(null, res);
+                    HeartbeatExitCode = GDUT_Drcom.auth();
                 });
-                HeartBeatThread.Start();
                 return HeadBeatStatus.Success;
             }
             catch
@@ -75,29 +73,25 @@ namespace Drcom_Dialer.Model
         /// <summary>
         ///     终止线程
         /// </summary>
-        public static void Kill()
+        public static async void Kill()
         {
-            if (HeartBeatThread == null)
+            if (HeartbeatThread == null)
             {
                 return;
             }
-            if (HeartBeatThread.IsAlive)
+
+            int ec = GDUT_Drcom.exit_auth?.Invoke() ?? 0x7f7f7f7f;
+            if (ec == 0x7f7f7f7f)
             {
-                bool wait = true;
-                EventHandler<int> waitLambda = (s, e) => { wait = false; };
-                HeartbeatExited += waitLambda;
-                int res = GDUT_Drcom.exit_auth?.Invoke() ?? 0x7f7f7f7f;
-                if (res == 0x7f7f7f7f)
-                {
-                    Log4Net.WriteLog($"exit_auth Failed({res})");
-                }
-                else
-                {
-                    while (wait) ;
-                }
-                HeartbeatExited -= waitLambda;
+                Log4Net.WriteLog($"exit_auth Failed({ec})");
             }
-            HeartBeatThread = null;
+            else
+            {
+                await HeartbeatThread;
+                HeartbeatExited?.Invoke(null, HeartbeatExitCode);
+            }
+
+            HeartbeatThread = null;
         }
 
         /// <summary>
@@ -111,10 +105,12 @@ namespace Drcom_Dialer.Model
         /// <summary>
         ///     心跳线程
         /// </summary>
-        private static Thread HeartBeatThread
+        private static Task HeartbeatThread
         {
             set;
             get;
         }
+
+        private static int HeartbeatExitCode;
     }
 }
