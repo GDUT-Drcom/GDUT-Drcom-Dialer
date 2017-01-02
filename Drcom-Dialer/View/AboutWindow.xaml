@@ -53,7 +53,10 @@
                 <Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer/wiki" 
                            RequestNavigate="Hyperlink_RequestNavigate">使用帮助</Hyperlink> |
                 <Hyperlink NavigateUri="https://github.com/GDUT-Drcom/Drcom-Dialer/releases"
-                           RequestNavigate="Hyperlink_RequestNavigate">检测更新</Hyperlink>
+                           RequestNavigate="Hyperlink_RequestNavigate">检测更新</Hyperlink> |
+                <LineBreak/>
+                <Hyperlink NavigateUri="DogCom.log"
+                           RequestNavigate="Hyperlink_File">程序日志</Hyperlink>
             </TextBlock>
         </StackPanel>
     </Grid>

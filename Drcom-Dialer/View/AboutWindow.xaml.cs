@@ -21,5 +21,11 @@ namespace Drcom_Dialer.View
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
+
+        private void Hyperlink_File(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("file:\\\\"+Environment.CurrentDirectory + "\\"+ e.Uri));
+            e.Handled = true;
+        }
     }
 }
