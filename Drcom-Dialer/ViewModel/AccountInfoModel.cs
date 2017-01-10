@@ -67,7 +67,7 @@ namespace Drcom_Dialer.ViewModel
         {
             new Task(() =>
             {
-                if(AccountStatus.AccInfo==null)
+                if (AccountStatus.AccInfo == null)
                     AccountStatus.AccInfo = AccountStatus.GetAccountInfomation();
                 if (AccountStatus.AccInfo.Status == "success")
                 {

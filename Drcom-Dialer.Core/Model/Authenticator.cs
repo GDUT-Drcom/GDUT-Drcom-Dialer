@@ -56,13 +56,21 @@ namespace Drcom_Dialer.Model
             if (HeartBeatUpdate.CheckDLL())
             {
                 //获取账户信息
-                AccountStatus.AccountInfo();
+                //除非不知道校区
+                //否则延迟获取
+                bool delay = DialerConfig.zone != DialerConfig.Campus.Unknown;
+                if (!delay)
+                    AccountStatus.AccountInfo();
 
                 //开始心跳
                 if (!MakeHeartbeat(e.Message))
                 {
                     return;
                 }
+
+                //获取账户信息
+                if (delay)
+                    AccountStatus.AccountInfo();
 
                 //断网检查
                 NetworkCheck.LoopCheck();
