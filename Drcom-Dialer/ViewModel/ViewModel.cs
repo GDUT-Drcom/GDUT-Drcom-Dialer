@@ -12,11 +12,12 @@ using Drcom_Dialer.Properties;
 
 namespace Drcom_Dialer.ViewModel
 {
-    public class ViewModel : NotifyProperty
+    public class ViewModel : NotifyProperty, IBaseBinder
     {
         public ViewModel()
         {
             View = this;
+            Binder.BaseBinder = this;
 
             //初始化
 
@@ -140,7 +141,7 @@ namespace Drcom_Dialer.ViewModel
         /// <summary>
         ///     按钮内容
         /// </summary>
-        public string DialBtnContent => DialStatus == DialHangupStatus.Disconnect ? "拨号" : "断开";
+        public string DialBtnContent => IsConnected ? "断开" : "拨号";
 
         public NotifyIcon TrayIcon
         {
@@ -186,8 +187,7 @@ namespace Drcom_Dialer.ViewModel
         /// <param name="title">标题</param>
         /// <param name="text">内容</param>
         /// <param name="icon">图标</param>
-        public void ShowBalloonTip(int timeout, string title,
-            string text, ToolTipIcon icon = ToolTipIcon.Info)
+        public void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon)
         {
             TrayIcon.ShowBalloonTip(timeout, title, text, icon);
         }
@@ -196,15 +196,14 @@ namespace Drcom_Dialer.ViewModel
         {
             try
             {
-                if(DialStatus == DialHangupStatus.Connect)
+                if (IsConnected)
                 {
+                    Notify("正在断开连接");
                     DialBtnEnable = false;
-                    NetworkCheck.StopCheck();
-                    HeartBeatProxy.Kill();
-                    Thread.Sleep(1000);
-                    PPPoE.Hangup();
+#pragma warning disable 4014 // no await required
+                    Authenticator.Deauthenticate();
+#pragma warning restore 4014
                 }
-                //DialStatus=DialHangupStatus.Disconnect;
             }
             catch (Exception e)
             {
@@ -245,6 +244,8 @@ namespace Drcom_Dialer.ViewModel
             }
         }
 
+        public bool IsConnected => DialStatus == DialHangupStatus.Connect;
+
         /// <summary>
         ///     拨号
         /// </summary>
@@ -276,7 +277,7 @@ namespace Drcom_Dialer.ViewModel
                 {
                     //后台保存
                     DialerConfig.SaveConfig();
-                    Model.Dial.Auth();
+                    Model.Authenticator.Authenticate();
                 }
                 catch (Exception e)
                 {
@@ -330,16 +331,21 @@ namespace Drcom_Dialer.ViewModel
             StatusPresenterModel.Status = str;
         }
 
+        public void ShowStatus(string status)
+        {
+            Notify(status);
+        }
+
         /// <summary>
         ///     重新Dial
         /// </summary>
         private void Redial()
         {
-            if (DialStatus == DialHangupStatus.Connect)
+            if (IsConnected)
             {
                 Hangup();
-                Dial();
             }
+            Dial();
         }
 
         private void NewStatusPresenterModel()
@@ -352,11 +358,8 @@ namespace Drcom_Dialer.ViewModel
             };
             PPPoE.PPPoEDialSuccessEvent += (s, e) =>
             {
-                StatusPresenterModel.Status = "拨号成功，IP: " + e.Message;
-
                 DialBtnEnable = true;
                 DialStatus = DialHangupStatus.Connect;
-                NetworkCheck.LoopCheck();
             };
             PPPoE.PPPoEHangupSuccessEvent += (s, e) =>
             {

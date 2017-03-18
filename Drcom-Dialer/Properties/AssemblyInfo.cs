@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("GDUT-DrCOM")]
 [assembly: AssemblyProduct("Drcom-Dialer")]
-[assembly: AssemblyCopyright("Copyright © GDUT-DrCOM 2016")]
+[assembly: AssemblyCopyright("Copyright © GDUT-DrCOM 2016-2017")]
 [assembly: AssemblyTrademark("GDUT-DrCOM")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.1.111")]
-[assembly: AssemblyFileVersion("1.0.1.111")]
+[assembly: AssemblyVersion("1.0.2.131")]
+[assembly: AssemblyFileVersion("1.0.2.131")]

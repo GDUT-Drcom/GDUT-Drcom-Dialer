@@ -141,7 +141,8 @@ namespace Drcom_Dialer.Model.Utils
                 }
 
                 // 休息下
-                Thread.Sleep(5 * 1000);
+                if (innerRetry == 0 || outerRetry == 0)
+                    Thread.Sleep(5 * 1000);
             }
         }
         /// <summary>

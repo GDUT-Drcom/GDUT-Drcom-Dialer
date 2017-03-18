@@ -79,7 +79,7 @@ namespace Drcom_Dialer.Model.Utils
 
                 return Updater.UpdateState.Failed;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log4Net.WriteLog(e.Message, e);
                 return Updater.UpdateState.Failed;

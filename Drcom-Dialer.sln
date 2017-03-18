@@ -3,9 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drcom-Dialer", "Drcom-Dialer\Drcom-Dialer.csproj", "{31B8D06C-6B0C-47D1-A0D7-069A5C39DAED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drcom-Dialer.WPF", "Drcom-Dialer\Drcom-Dialer.WPF.csproj", "{31B8D06C-6B0C-47D1-A0D7-069A5C39DAED}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Drcom-Dialer.Core", "Drcom-Dialer.Core\Drcom-Dialer.Core.shproj", "{59CDCE7E-950D-41A4-97EE-9DFEC8C2B4F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drcom-Dialer.Lite", "Drcom-Dialer.Lite\Drcom-Dialer.Lite.csproj", "{AD82E606-9370-46F6-AB14-13CFAA7CDD38}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Drcom-Dialer.Core\Drcom-Dialer.Core.projitems*{31b8d06c-6b0c-47d1-a0d7-069a5c39daed}*SharedItemsImports = 4
+		Drcom-Dialer.Core\Drcom-Dialer.Core.projitems*{59cdce7e-950d-41a4-97ee-9dfec8c2b4f8}*SharedItemsImports = 13
+		Drcom-Dialer.Core\Drcom-Dialer.Core.projitems*{ad82e606-9370-46f6-ab14-13cfaa7cdd38}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -15,6 +24,10 @@ Global
 		{31B8D06C-6B0C-47D1-A0D7-069A5C39DAED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31B8D06C-6B0C-47D1-A0D7-069A5C39DAED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31B8D06C-6B0C-47D1-A0D7-069A5C39DAED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD82E606-9370-46F6-AB14-13CFAA7CDD38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD82E606-9370-46F6-AB14-13CFAA7CDD38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD82E606-9370-46F6-AB14-13CFAA7CDD38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD82E606-9370-46F6-AB14-13CFAA7CDD38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

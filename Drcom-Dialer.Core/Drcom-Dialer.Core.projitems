@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>59cdce7e-950d-41a4-97ee-9dfec8c2b4f8</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Drcom_Dialer</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Authenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\DialerConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\HeartBeatProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Initializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\PPPoE.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\AccountStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\BmobAnalyze.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\gdut-drcom.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\HeartBeatUpdate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\Log4Net.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\NetSharing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\Ping.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\RunOnStartup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\Updater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\Version.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Utils\VPNFixer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Binder\Binder.cs" />
+  </ItemGroup>
+</Project>

@@ -2,47 +2,24 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
 
 namespace Drcom_Dialer
 {
-    internal static class ProgramInit
+    public static class Initializer
     {
-        [STAThread]
-        private static void Main(string[] args)
+        public static bool Initialize(string[] args)
         {
-            string exePath = System.Windows.Forms.Application.ExecutablePath;
+            string exePath = Application.ExecutablePath;
             Environment.CurrentDirectory = Path.GetDirectoryName(exePath);
+
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             //初始化Log
             Model.Utils.Log4Net.SetConfig();
-
-            //Model.Utils.NetSharing ns = new Model.Utils.NetSharing();
-            //if (ns.Start())
-            //    Console.WriteLine("233");
-            //else
-            //    Console.WriteLine("555");
-
-            //解析启动参数
-            //不把更新放在这个之前也是因为考虑到可能使用带参启动的问题
-            if (args.Length > 0)
-            {
-                switch (args[0])
-                {
-                    case Model.Utils.VPNFixer.StartupArgs:
-                        //初始化配置
-                        Model.DialerConfig.Init();
-                        Model.Utils.VPNFixer.AddRouteRule();
-                        return;
-                    default:
-                        Model.Utils.Log4Net.WriteLog("未知的启动参数: " + args);
-                        break;
-                }
-            }
 
             //防止多启
             Singleton();
@@ -50,24 +27,59 @@ namespace Drcom_Dialer
             //更新
             if (Update())
             {
-                return;
+                return false;
             }
 
             //初始化配置
             Model.DialerConfig.Init();
 
+            //VPN修复
+            if (Model.DialerConfig.isFixVPN && !Model.Utils.VPNFixer.IsElevated)
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = Application.ExecutablePath,
+                        WorkingDirectory = Environment.CurrentDirectory,
+                        Verb = "runas"
+                    });
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    Model.Utils.Log4Net.WriteLog(e.Message, e);
+                    MessageBox.Show(
+                        "需要管理员权限以修复VPN",
+                        "错误",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+
             //初始化必要组件
             Model.PPPoE.Init();
-            Model.Dial.Init();
+            Model.Authenticator.Init();
             Model.Utils.GDUT_Drcom.Load();
-            Model.Utils.DialerUpdater.LaterCheckUpdate();
+
+            if (Model.DialerConfig.isAutoUpdate)
+                Model.Utils.DialerUpdater.LaterCheckUpdate();
 
             Model.Utils.Log4Net.WriteLog("初始化程序成功");
 
-            //初始化界面
-            App app = new App();
-            app.InitializeComponent();
-            app.Run();
+            return true;
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = e.ExceptionObject as Exception ?? new Exception(nameof(e.ExceptionObject));
+            Model.Utils.Log4Net.WriteLog(e.ExceptionObject.ToString(), ex);
+        }
+
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            Model.Utils.Log4Net.WriteLog(e.Exception.Message, e.Exception);
+            e.SetObserved();
         }
 
         private static void Singleton()
@@ -75,16 +87,9 @@ namespace Drcom_Dialer
             int count = Process.GetProcessesByName(Model.Utils.DialerUpdater.NoExtName).Length;
             if (count > 1)
             {
-                MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("程序已经运行!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
-            //string mutexName = Properties.Resources.ProgramTitle + "Mutex";
-            //singleInstanceWatcher = new Mutex(false, mutexName, out createdNew);
-            //if (!createdNew)
-            //{
-            //    MessageBox.Show("程序已经运行!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    Environment.Exit(-1);
-            //}
         }
 
         private static void WaitProcess(string name)

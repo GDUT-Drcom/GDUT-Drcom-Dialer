@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using RestSharp;
+using Drcom_Dialer.ViewModel;
 
 namespace Drcom_Dialer.Model.Utils
 {
@@ -122,8 +123,11 @@ namespace Drcom_Dialer.Model.Utils
                     TimeSpan left = overDate.Subtract(DateTime.Today);
                     if (left.TotalDays <= 7)
                     {
-                        ViewModel.ViewModel.View.ShowBalloonTip(5000, "提示", "校园网账户将于" +
-                            overDate.ToString("yyyy-MM-dd") + "过期，请尽快充值");
+                        Binder.BaseBinder.ShowBalloonTip(
+                            5000,
+                            "提示",
+                            "校园网账户将于" + overDate.ToString("yyyy-MM-dd") + "过期，请尽快充值",
+                            System.Windows.Forms.ToolTipIcon.Warning);
                     }
                 }
 
