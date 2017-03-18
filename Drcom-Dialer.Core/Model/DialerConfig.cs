@@ -114,7 +114,7 @@ namespace Drcom_Dialer.Model
                     case Campus.HEMC:
                         return "10.0.3.2";
                     case Campus.LongDong:
-                        return "10.0.3.2";
+                        return "10.0.3.6";
                     case Campus.DongfengRd:
                         return "10.0.3.6";
                     case Campus.Panyu:

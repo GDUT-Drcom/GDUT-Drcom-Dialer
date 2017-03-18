@@ -69,7 +69,7 @@ namespace Drcom_Dialer.Model
                 }
 
                 //获取账户信息
-                if (delay)
+                if (delay && DialerConfig.isNotifyWhenExpire)
                     AccountStatus.AccountInfo();
 
                 //断网检查
