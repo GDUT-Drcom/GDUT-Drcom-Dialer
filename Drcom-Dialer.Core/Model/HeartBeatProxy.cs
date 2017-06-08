@@ -87,6 +87,7 @@ namespace Drcom_Dialer.Model
             }
             else
             {
+                Log4Net.WriteLog($"wait heartbeat exit");
                 await HeartbeatThread;
                 HeartbeatExited?.Invoke(null, HeartbeatExitCode);
             }

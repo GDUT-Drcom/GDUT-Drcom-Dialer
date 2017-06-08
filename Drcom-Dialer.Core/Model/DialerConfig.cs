@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace Drcom_Dialer.Model
 {
@@ -159,6 +160,11 @@ namespace Drcom_Dialer.Model
         /// </summary>
         private static void saveConfig()
         {
+            if (Environment.GetCommandLineArgs().Length > 1)
+            {
+                Utils.Log4Net.WriteLog($"'{nameof(saveConfig)}' is ignored because stratup from cmd");
+                return;
+            }
             try
             {
                 cfa.AppSettings.Settings[nameof(username)].Value = username;
@@ -265,6 +271,30 @@ namespace Drcom_Dialer.Model
                 {
                     //创建一个配置文件
                     CreateConfig(0);
+                }
+
+                // cmd-arguments overwrite config
+                Regex userpat = new Regex(@"^u=(\d+)");
+                Regex pswpat = new Regex(@"^p=(\w+)");
+                foreach(var opt in Environment.GetCommandLineArgs())
+                {
+                    switch (opt)
+                    {
+                        case "con": // connect
+                            isAutoLogin = true;
+                            break;
+                        case "vpn": // fix vpn
+                            isFixVPN = true;
+                            break;
+                        default: // user | psw
+                            var m0 = userpat.Match(opt);
+                            var m1 = pswpat.Match(opt);
+                            if (m0.Success)
+                                username = m0.Groups[1].Value;
+                            else if (m1.Success)
+                                password = m1.Groups[1].Value;
+                            break;
+                    }
                 }
             }
             catch (Exception e)
