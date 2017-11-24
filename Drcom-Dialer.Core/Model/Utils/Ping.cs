@@ -181,7 +181,10 @@ namespace Drcom_Dialer.Model.Utils
             }
 
             _exit = true;
-            pingThread.Wait();
+            if(!pingThread.Wait(3000))
+            {
+                Log4Net.WriteLog("wait ping thread exit timed out");
+            }
             pingThread.Dispose();
         }
     }
