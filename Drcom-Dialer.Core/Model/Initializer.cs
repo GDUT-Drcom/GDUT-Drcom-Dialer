@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Drcom_Dialer
 {
@@ -84,10 +85,12 @@ namespace Drcom_Dialer
 
         private static void Singleton()
         {
-            int count = Process.GetProcessesByName(Model.Utils.DialerUpdater.NoExtName).Length;
+            var ps = Process.GetProcessesByName(Model.Utils.DialerUpdater.NoExtName);
+            int count = ps.Length;
             if (count > 1)
             {
-                MessageBox.Show("程序已经运行!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string msg = $"程序已经运行!\n{ps.Select(p => p.ProcessName).Aggregate((a, b) => $"{a}\n{b}")}";
+                MessageBox.Show(msg, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
         }

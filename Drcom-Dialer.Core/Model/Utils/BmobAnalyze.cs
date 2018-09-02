@@ -18,7 +18,7 @@ namespace Drcom_Dialer.Model.Utils
         /// </summary>
         public static void SendAnalyze()
         {
-            RestClient client = new RestClient("https://api.bmob.cn");
+            RestClient client = new RestClient("https://api2.bmob.cn");
 
             //填充用户信息
             AnalyzeData data = new AnalyzeData();

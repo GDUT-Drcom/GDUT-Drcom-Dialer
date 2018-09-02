@@ -34,8 +34,9 @@
     <PublisherName>宇宙工业大学</PublisherName>
     <SuiteName>GDUT-DrCOM</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>111</ApplicationRevision>
-    <ApplicationVersion>1.0.1.111</ApplicationVersion>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>144</ApplicationRevision>
+    <ApplicationVersion>1.0.3.144</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>

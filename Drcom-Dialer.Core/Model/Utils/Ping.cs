@@ -82,7 +82,7 @@ namespace Drcom_Dialer.Model.Utils
             get;
         }
 
-        private static bool _exit = false;
+        private static CancellationTokenSource cancleToken = new CancellationTokenSource();
 
         /// <summary>
         /// 检测
@@ -93,8 +93,7 @@ namespace Drcom_Dialer.Model.Utils
         private static void Check(string InnerIPAddr = "10.0.3.2", string OuterIPAddr = "119.29.29.29")
         {
             int innerRetry = 0, outerRetry = 0;
-            _exit = false;
-            while (!_exit)
+            while (!cancleToken.IsCancellationRequested)
             {
                 switch (SimplePing.Ping(InnerIPAddr))
                 {
@@ -128,7 +127,7 @@ namespace Drcom_Dialer.Model.Utils
                         break;
                 }
 
-                if (innerRetry > MaxRetry)
+                if (innerRetry > MaxRetry && outerRetry > MaxRetry)
                 {
                     //事件通知下主线程，重新拨号
                     InnerNetworkCheckFailed.Invoke(null, null);
@@ -152,21 +151,21 @@ namespace Drcom_Dialer.Model.Utils
         {
             try
             {
-                if (pingThread != null)
+                if (cancleToken != null)
                 {
-                    _exit = true;
-                    pingThread.Dispose();
+                    cancleToken.Cancel();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log4Net.WriteLog(e.Message, e);
             }
-          
-            pingThread = new Task(() =>
-            {
+
+            cancleToken = new CancellationTokenSource();
+
+            pingThread = new Task(() => {
                 Check(DialerConfig.AuthIP);
-            });
+            }, cancleToken.Token);
             pingThread.Start();
         }
 
@@ -175,14 +174,19 @@ namespace Drcom_Dialer.Model.Utils
         /// </summary>
         public static void StopCheck()
         {
-            if (pingThread == null)
+            if (cancleToken != null)
             {
-                return;
+                try
+                {
+                    cancleToken.Cancel();
+                    cancleToken = null;
+                }
+                catch(Exception e)
+                {
+                    Log4Net.WriteLog(e.Message, e);
+                }
             }
-
-            _exit = true;
-            pingThread.Wait();
-            pingThread.Dispose();
+            Log4Net.WriteLog("ping thread exit successfully.");
         }
     }
 }
