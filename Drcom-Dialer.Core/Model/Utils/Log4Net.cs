@@ -1,4 +1,8 @@
 ﻿using System;
+using log4net;
+using log4net.Config;
+using log4net.Appender;
+using log4net.Layout;
 
 namespace Drcom_Dialer.Model.Utils
 {
@@ -13,8 +17,8 @@ namespace Drcom_Dialer.Model.Utils
         public static void SetConfig()
         {
             //log4net.Config.XmlConfigurator.Configure();
-            log4net.Appender.FileAppender fAppender = new log4net.Appender.FileAppender();
-            log4net.Layout.PatternLayout layout = new log4net.Layout.PatternLayout
+            RollingFileAppender fAppender = new RollingFileAppender();
+            PatternLayout layout = new PatternLayout
             {
                 ConversionPattern = "[%date] %thread -- %-5level -- %logger [%M] -- %message%newline"
             };
@@ -22,10 +26,12 @@ namespace Drcom_Dialer.Model.Utils
             layout.ActivateOptions();
 
             fAppender.File = "DogCom.log";
+            fAppender.MaxSizeRollBackups = 10;
+            fAppender.MaximumFileSize = "1M";
             fAppender.Layout = layout;
             fAppender.AppendToFile = true;
             fAppender.ActivateOptions();
-            log4net.Config.BasicConfigurator.Configure(fAppender);
+            BasicConfigurator.Configure(fAppender);
         }
 
         /// <summary>
