@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:local="clr-namespace:Drcom_Dialer.View"
         xmlns:viewModels="clr-namespace:Drcom_Dialer.ViewModel"
         mc:Ignorable="d"
@@ -50,14 +51,14 @@
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20"
                                Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                               <Rectangle.OpacityMask>
-                                    <VisualBrush Stretch="Fill" Visual="{StaticResource SettingImage}"/>
-                               </Rectangle.OpacityMask>
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource SettingImage}"/>
+                        </Rectangle.OpacityMask>
                     </Rectangle>
                 </StackPanel>
             </Button>
         </Controls:WindowCommands>
-        
+
     </Controls:MetroWindow.RightWindowCommands>
 
     <Grid>
@@ -86,12 +87,32 @@
                        Text="密码:" 
                        VerticalAlignment="Center"  />
                 <!--不需要用Password-->
-                <TextBox x:Name="pb_password" Margin="0,1,0,0" Width="180px" 
+
+                <WrapPanel Margin="0,1,0,0" Width="180px">
+                    <PasswordBox x:Name="pb_password"  
                              Controls:TextBoxHelper.Watermark="***"
-                         Text="{Binding Path=Password,Mode=TwoWay}"
                              BorderThickness="0,0,0,1"
-                             VerticalAlignment="Center"   
+                             Padding="0,0,30,0"
+                             VerticalAlignment="Center"
+                             Width="180px"
                              />
+                    <TextBox x:Name="pb_passhint" 
+                             Margin="0,-26,0,0" 
+                             Padding="0,0,30,0"
+                             Width="180px"
+                             BorderThickness="0,0,0,1" 
+                             VerticalAlignment="Center"
+                             Text="{Binding Path=Password,Mode=TwoWay}"
+                             Visibility="Hidden"/>
+                </WrapPanel>
+                <ToggleButton Margin="-30, 0, 0, 4" Width="30"
+                       Style="{StaticResource SquareButtonStyle}"
+                       BorderThickness="0"
+                       Padding="0"
+                       Checked="showPassword" 
+                       Unchecked="hidePassword">
+                    <iconPacks:PackIconModern Kind="Eye" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </ToggleButton>
                 <!--PasswordChanged="pb_password_PasswordChanged"-->
             </StackPanel>
             <StackPanel Height="25" Margin="10,0,10,5" 
