@@ -18,8 +18,11 @@ namespace Drcom_Dialer.View
         public MainWindow()
         {
             InitializeComponent();
-            View = (ViewModel.ViewModel) DataContext;
+            View = (ViewModel.ViewModel)DataContext;
             InitTrayIcon();
+
+            // load password from VM
+            Password = View.Password;
         }
 
         private ViewModel.ViewModel View
@@ -39,14 +42,29 @@ namespace Drcom_Dialer.View
         }
 
         /// <summary>
+        ///     输入框中保留的密码
+        /// </summary>
+        public string Password
+        {
+            get
+            {
+                return pb_password.Password;
+            }
+            set
+            {
+                pb_password.Password = value;
+            }
+        }
+
+        /// <summary>
         ///     自动登录点击事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void cb_autoLogin_Click(object sender, RoutedEventArgs e)
         {
-            if ((cb_autoLogin.IsChecked != null) && (cb_remember.IsChecked != null) && !(bool) cb_remember.IsChecked &&
-                (bool) cb_autoLogin.IsChecked)
+            if ((cb_autoLogin.IsChecked != null) && (cb_remember.IsChecked != null) && !(bool)cb_remember.IsChecked &&
+                (bool)cb_autoLogin.IsChecked)
             {
                 cb_remember.IsChecked = true;
                 cb_remember_Click(null, null);
@@ -54,7 +72,7 @@ namespace Drcom_Dialer.View
 
             if (cb_autoLogin.IsChecked != null)
             {
-                DialerConfig.isAutoLogin = (bool) cb_autoLogin.IsChecked;
+                DialerConfig.isAutoLogin = (bool)cb_autoLogin.IsChecked;
             }
         }
 
@@ -67,8 +85,8 @@ namespace Drcom_Dialer.View
         {
             if ((cb_autoLogin.IsChecked != null) &&
                 (cb_remember.IsChecked != null) &&
-                !(bool) cb_remember.IsChecked &&
-                (bool) cb_autoLogin.IsChecked)
+                !(bool)cb_remember.IsChecked &&
+                (bool)cb_autoLogin.IsChecked)
             {
                 cb_autoLogin.IsChecked = false;
                 cb_autoLogin_Click(null, null);
@@ -76,7 +94,7 @@ namespace Drcom_Dialer.View
 
             if (cb_remember.IsChecked != null)
             {
-                DialerConfig.isRememberPassword = (bool) cb_remember.IsChecked;
+                DialerConfig.isRememberPassword = (bool)cb_remember.IsChecked;
             }
         }
 
@@ -137,7 +155,7 @@ namespace Drcom_Dialer.View
         {
             View.TrayIcon.MouseClick += (obj, e) =>
             {
-                if ((e.Button == MouseButtons.Left) && 
+                if ((e.Button == MouseButtons.Left) &&
                 (WindowState == WindowState.Minimized))
                 {
                     Show();
@@ -169,6 +187,28 @@ namespace Drcom_Dialer.View
         {
             if (DialerConfig.isAutoLogin)
                 View.DialOrHangup();
+        }
+
+        /// <summary>
+        ///     显示密码
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void showPassword(object sender, RoutedEventArgs e)
+        {
+            View.Password = Password;
+            pb_passhint.Visibility = Visibility.Visible;
+        }
+
+        /// <summary>
+        /// 隐藏密码
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void hidePassword(object sender, RoutedEventArgs e)
+        {
+            Password = View.Password;
+            pb_passhint.Visibility = Visibility.Hidden;
         }
     }
 }
