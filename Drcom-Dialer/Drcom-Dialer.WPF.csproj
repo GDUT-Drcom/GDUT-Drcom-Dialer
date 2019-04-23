@@ -35,8 +35,8 @@
     <SuiteName>GDUT-DrCOM</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>145</ApplicationRevision>
-    <ApplicationVersion>1.0.4.145</ApplicationVersion>
+    <ApplicationRevision>146</ApplicationRevision>
+    <ApplicationVersion>1.0.4.146</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
