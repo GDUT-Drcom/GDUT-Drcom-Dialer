@@ -251,8 +251,6 @@ namespace Drcom_Dialer.ViewModel
         /// </summary>
         private void Dial()
         {
-            Password = View.Password;
-
             // 不想写Command
 
             if (string.IsNullOrEmpty(UserName))

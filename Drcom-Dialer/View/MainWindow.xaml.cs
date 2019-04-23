@@ -38,6 +38,7 @@ namespace Drcom_Dialer.View
         /// <param name="e"></param>
         private void btn_dial_Click(object sender, RoutedEventArgs e)
         {
+            View.Password = Password;
             View.DialOrHangup();
         }
 
@@ -209,6 +210,16 @@ namespace Drcom_Dialer.View
         {
             Password = View.Password;
             pb_passhint.Visibility = Visibility.Hidden;
+        }
+
+        /// <summary>
+        /// listen change event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Pb_password_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            View.Password = Password;
         }
     }
 }

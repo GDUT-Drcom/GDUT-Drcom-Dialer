@@ -95,6 +95,7 @@
                              Padding="0,0,30,0"
                              VerticalAlignment="Center"
                              Width="180px"
+                                 KeyUp="Pb_password_KeyUp"
                              />
                     <TextBox x:Name="pb_passhint" 
                              Margin="0,-26,0,0" 
