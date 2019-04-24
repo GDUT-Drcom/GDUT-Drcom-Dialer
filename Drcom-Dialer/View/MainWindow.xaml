@@ -94,7 +94,8 @@
                              Width="180px"
                                  KeyUp="Pb_password_KeyUp"
                              />
-                    <TextBox x:Name="pb_passhint" 
+                    <!-- 下面的 TextBox 用在用户点击显示密码的时候显示内容 -->
+                    <TextBox x:Name="PasswordTextBox" 
                              Margin="0,-26,0,0" 
                              Padding="0,0,30,0"
                              Width="180px"
