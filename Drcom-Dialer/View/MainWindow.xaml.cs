@@ -36,7 +36,7 @@ namespace Drcom_Dialer.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btn_dial_Click(object sender, RoutedEventArgs e)
+        private void DialButton_Click(object sender, RoutedEventArgs e)
         {
             View.Password = Password;
             View.DialOrHangup();
@@ -49,11 +49,11 @@ namespace Drcom_Dialer.View
         {
             get
             {
-                return pb_password.Password;
+                return PasswordBox.Password;
             }
             set
             {
-                pb_password.Password = value;
+                PasswordBox.Password = value;
             }
         }
 
@@ -62,42 +62,24 @@ namespace Drcom_Dialer.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cb_autoLogin_Click(object sender, RoutedEventArgs e)
+        private void AutoLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if ((cb_autoLogin.IsChecked != null) && (cb_remember.IsChecked != null) && !(bool)cb_remember.IsChecked &&
-                (bool)cb_autoLogin.IsChecked)
-            {
-                cb_remember.IsChecked = true;
-                cb_remember_Click(null, null);
-            }
-
-            if (cb_autoLogin.IsChecked != null)
-            {
-                DialerConfig.isAutoLogin = (bool)cb_autoLogin.IsChecked;
-            }
+            AutoLogin();
         }
+
+     
 
         /// <summary>
         ///     记住密码点击事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cb_remember_Click(object sender, RoutedEventArgs e)
+        private void RememberPasswordButton_Click(object sender, RoutedEventArgs e)
         {
-            if ((cb_autoLogin.IsChecked != null) &&
-                (cb_remember.IsChecked != null) &&
-                !(bool)cb_remember.IsChecked &&
-                (bool)cb_autoLogin.IsChecked)
-            {
-                cb_autoLogin.IsChecked = false;
-                cb_autoLogin_Click(null, null);
-            }
-
-            if (cb_remember.IsChecked != null)
-            {
-                DialerConfig.isRememberPassword = (bool)cb_remember.IsChecked;
-            }
+            RememberPassword();
         }
+
+
 
         /// <summary>
         ///     关于按钮
@@ -195,7 +177,7 @@ namespace Drcom_Dialer.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void showPassword(object sender, RoutedEventArgs e)
+        private void ShowPassword(object sender, RoutedEventArgs e)
         {
             View.Password = Password;
             pb_passhint.Visibility = Visibility.Visible;
@@ -206,7 +188,7 @@ namespace Drcom_Dialer.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void hidePassword(object sender, RoutedEventArgs e)
+        private void HidePassword(object sender, RoutedEventArgs e)
         {
             Password = View.Password;
             pb_passhint.Visibility = Visibility.Hidden;
@@ -220,6 +202,44 @@ namespace Drcom_Dialer.View
         private void Pb_password_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
             View.Password = Password;
+        }
+
+        /// <summary>
+        /// 自动登陆
+        /// </summary>
+        private void AutoLogin()
+        {
+            if ((AutoLoginButton.IsChecked != null) && (RememberPasswordButton.IsChecked != null) && !(bool) RememberPasswordButton.IsChecked &&
+                (bool) AutoLoginButton.IsChecked)
+            {
+                RememberPasswordButton.IsChecked = true;
+                RememberPassword();
+            }
+
+            if (AutoLoginButton.IsChecked != null)
+            {
+                DialerConfig.isAutoLogin = (bool) AutoLoginButton.IsChecked;
+            }
+        }
+
+        /// <summary>
+        /// 记住密码
+        /// </summary>
+        private void RememberPassword()
+        {
+            if ((AutoLoginButton.IsChecked != null) &&
+                (RememberPasswordButton.IsChecked != null) &&
+                !(bool) RememberPasswordButton.IsChecked &&
+                (bool) AutoLoginButton.IsChecked)
+            {
+                AutoLoginButton.IsChecked = false;
+                AutoLogin();
+            }
+
+            if (RememberPasswordButton.IsChecked != null)
+            {
+                DialerConfig.isRememberPassword = (bool) RememberPasswordButton.IsChecked;
+            }
         }
     }
 }
