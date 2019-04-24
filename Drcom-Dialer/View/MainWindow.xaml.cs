@@ -209,16 +209,19 @@ namespace Drcom_Dialer.View
         /// </summary>
         private void AutoLogin()
         {
-            if ((AutoLoginButton.IsChecked != null) && (RememberPasswordButton.IsChecked != null) && !(bool) RememberPasswordButton.IsChecked &&
-                (bool) AutoLoginButton.IsChecked)
+            // 这里的 AutoLoginButton.IsChecked 可能为 null 但是 null 不是 true 所以就不需要前面的 (AutoLoginButton.IsChecked != null) 判断
+            // 虽然 RememberPasswordButton.IsChecked 可能为 null 但是判断 null is false 判断是 false 也就是在为空的时候判断不为 false 的，可以简化一次判断
+            if (RememberPasswordButton.IsChecked is false
+                && AutoLoginButton.IsChecked is true)
             {
+                // 如果点击了自动登陆，此时记住密码没有勾选，那么协助勾选记住密码同时存放密码到文件
                 RememberPasswordButton.IsChecked = true;
                 RememberPassword();
             }
 
             if (AutoLoginButton.IsChecked != null)
             {
-                DialerConfig.isAutoLogin = (bool) AutoLoginButton.IsChecked;
+                DialerConfig.isAutoLogin = AutoLoginButton.IsChecked.Value;
             }
         }
 
@@ -227,13 +230,15 @@ namespace Drcom_Dialer.View
         /// </summary>
         private void RememberPassword()
         {
-            if ((AutoLoginButton.IsChecked != null) &&
-                (RememberPasswordButton.IsChecked != null) &&
-                !(bool) RememberPasswordButton.IsChecked &&
-                (bool) AutoLoginButton.IsChecked)
+            // 这里的 AutoLoginButton.IsChecked 可能为 null 但是 null 不是 true 所以就不需要前面的 (AutoLoginButton.IsChecked != null) 判断
+            // 虽然 RememberPasswordButton.IsChecked 可能为 null 但是判断 null is false 判断是 false 也就是在为空的时候判断不为 false 的，可以简化一次判断
+            if (RememberPasswordButton.IsChecked is false
+                && AutoLoginButton.IsChecked is true)
             {
+                // 点击的时候，如果设置了自动登陆了，但是用户选择不记住密码
+                // 需要先设置不自动登陆，然后写配置文件说不自动登陆
                 AutoLoginButton.IsChecked = false;
-                AutoLogin();
+                DialerConfig.isAutoLogin = false;
             }
 
             if (RememberPasswordButton.IsChecked != null)
