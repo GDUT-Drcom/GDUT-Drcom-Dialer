@@ -195,16 +195,6 @@ namespace Drcom_Dialer.View
         }
 
         /// <summary>
-        /// listen change event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Pb_password_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            View.Password = Password;
-        }
-
-        /// <summary>
         /// 自动登陆
         /// </summary>
         private void AutoLogin()
@@ -245,6 +235,11 @@ namespace Drcom_Dialer.View
             {
                 DialerConfig.isRememberPassword = (bool) RememberPasswordButton.IsChecked;
             }
+        }
+
+        private void PasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            View.Password = Password;
         }
     }
 }

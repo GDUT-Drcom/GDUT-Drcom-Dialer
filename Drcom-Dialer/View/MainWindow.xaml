@@ -92,8 +92,7 @@
                              Padding="0,0,30,0"
                              VerticalAlignment="Center"
                              Width="180px"
-                                 KeyUp="Pb_password_KeyUp"
-                             />
+                             PasswordChanged="PasswordBox_OnPasswordChanged"/>
                     <!-- 下面的 TextBox 用在用户点击显示密码的时候显示内容 -->
                     <TextBox x:Name="PasswordTextBox" 
                              Margin="0,-26,0,0" 
