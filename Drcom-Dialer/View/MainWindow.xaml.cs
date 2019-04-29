@@ -180,7 +180,7 @@ namespace Drcom_Dialer.View
         private void ShowPassword(object sender, RoutedEventArgs e)
         {
             View.Password = Password;
-            pb_passhint.Visibility = Visibility.Visible;
+            PasswordTextBox.Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -191,17 +191,7 @@ namespace Drcom_Dialer.View
         private void HidePassword(object sender, RoutedEventArgs e)
         {
             Password = View.Password;
-            pb_passhint.Visibility = Visibility.Hidden;
-        }
-
-        /// <summary>
-        /// listen change event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Pb_password_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            View.Password = Password;
+            PasswordTextBox.Visibility = Visibility.Hidden;
         }
 
         /// <summary>
@@ -245,6 +235,11 @@ namespace Drcom_Dialer.View
             {
                 DialerConfig.isRememberPassword = (bool) RememberPasswordButton.IsChecked;
             }
+        }
+
+        private void PasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            View.Password = Password;
         }
     }
 }
